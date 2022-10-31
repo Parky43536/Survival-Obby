@@ -10,7 +10,7 @@ General.RewardCash = 50
 General.EventsPerSecond = 10
 
 function General.TimerCalc(levelNum)
-    return math.clamp(5 * levelNum, 0, 60)
+    return math.clamp(6 + (2 * levelNum), 0, 60)
 end
 
 --Stats---------------------------------------------
