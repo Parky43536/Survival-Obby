@@ -32,8 +32,8 @@ local EventData = {
 
 		despawnTime = 10,
 		riseDelayTime = 0.5,
-		laserDelayTime = 0.5,
-		damage = 30,
+		laserDelayTime = 1,
+		damage = 25,
 	},
 	["SpeedingWall"] = {
 		chance = 45,
@@ -71,7 +71,7 @@ local EventData = {
 	},
 	-----------------------------------------------------
 	["SuperCoin"] = {
-		chance = 20,
+		chance = 30,
 		levels = {min = 50, max = General.Levels},
 		value = 20,
 		despawnTime = 30,
@@ -83,7 +83,7 @@ local EventData = {
 		despawnTime = 30,
 	},
 	["Coin"] = {
-		chance = 10,
+		chance = 15,
 		levels = {min = 2, max = 49},
 		value = 10,
 		despawnTime = 30,

@@ -27,7 +27,7 @@ function Event.Main(levelNum, level, data)
         ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * 17)
         ModelTweenService.TweenModuleCFrame(laserWall.Pillar2, tweenInfo, laserWall.Pillar2.PrimaryPart.CFrame + laserWall.Pillar2.PrimaryPart.CFrame.UpVector * 17)
 
-        task.wait(data.riseDelayTime)
+        task.wait(data.laserDelayTime)
 
         for _, beam in pairs(laserWall:GetDescendants()) do
             if beam.Name == "Beam" then

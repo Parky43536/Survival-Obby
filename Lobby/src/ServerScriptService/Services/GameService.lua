@@ -80,15 +80,40 @@ function GameService.SetUpSpawn(levelNum, level)
 end
 
 function GameService.SetUpGame()
-    local lastCFrame = CFrame.new(0, 0, 0)
+    local lastCFrame = workspace.Levels.Beginning:GetPivot()
+    local lastLevel
+
     for levelNum = 1 , General.Levels do
         levels[levelNum] = {Timer = General.TimerCalc(levelNum), Started = false, DoorOpened = false}
 
-        local level = Assets.Levels.Level:Clone()
-        local cframe, size = EventService.getBoundingBox(level)
+        local rng = Random.new(levelNum * 1000)
+        local totalLevels = Assets.Levels:GetChildren()
+        local touching = false
+        local level
+
+        repeat
+            local num = rng:NextInteger(1, #totalLevels)
+
+            if level then level:Destroy() end
+            level = totalLevels[num]:Clone()
+            level:PivotTo(lastCFrame)
+
+            table.remove(totalLevels, num)
+
+            touching = false
+            local Params = OverlapParams.new()
+            Params.FilterType = Enum.RaycastFilterType.Whitelist
+            Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
+            Params.MaxParts = 1
+            local touchingParts = workspace:GetPartBoundsInBox(level.Door.PrimaryPart.Attachment.WorldCFrame, Vector3.new(5, 5, 5), Params)
+            if next(touchingParts) then
+                touching = true
+            end
+        until touching == false and level.Name ~= lastLevel
+
+        lastCFrame = level.Door.PrimaryPart.Attachment.WorldCFrame
+        lastLevel = level.Name
         level.Name = levelNum
-        level:PivotTo(lastCFrame)
-        lastCFrame = level:GetPivot() + Vector3.new(0, 0, -size.Z)
 
         level.Door.Level.Front.Label.Text = levelNum
         level.Door.Level.Back.Label.Text = levelNum
