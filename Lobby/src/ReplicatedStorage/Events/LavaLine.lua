@@ -19,50 +19,41 @@ function Event.Main(levelNum, level, data)
         local rp = EventService.randomPoint(level, {model = {rpController.Instance}})
         if rp then
             local rng = Random.new()
+            local position1
+            local position2
+            local originCFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
+            originCFrame += originCFrame.UpVector * -0.1
+
+            if rng:NextInteger(1, 2) == 1 then
+                originCFrame *= CFrame.Angles(0, math.rad(90), 0)
+            end
 
             local Params = RaycastParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
-            Params.FilterDescendantsInstances = {rp.Instance}
+            Params.FilterDescendantsInstances = {EventService.getFloorGroup(rp.Instance)}
 
-            local lava = Assets.Obstacles.Lava:Clone()
-
-            if rng:NextInteger(1, 2) == 1 then
-                local RayOrigin = Vector3.new(rp.Position.X, rp.Instance.Position.Y + 100, rp.Instance.Position.Z)
-                local RayDirection = Vector3.new(0, -1000, 0)
-                local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-                if Result then
-                    local hitPoint = Vector3.new(rp.Position.X, Result.Position.Y, rp.Instance.Position.Z)
-                    lava.CFrame = CFrame.new(hitPoint, hitPoint + rp.Normal) * CFrame.Angles(math.rad(90), 0, 0)
-
-                    RayOrigin = (lava.CFrame + lava.CFrame.RightVector * 100).Position
-                    RayDirection = lava.CFrame.RightVector * -1000
-                    Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-                    if Result then
-                        lava.Size = Vector3.new((lava.Position - Result.Position).Magnitude * 2, lava.Size.Y, lava.Size.Z) - Vector3.new(0.01, 0, 0.01)
-                        lava.CFrame *= CFrame.Angles(0, 0, math.rad(180))
-                        lava.Parent = workspace.Misc
-                    end
-                end
-            else
-                local RayOrigin = Vector3.new(rp.Instance.Position.X, rp.Instance.Position.Y + 100, rp.Position.Z)
-                local RayDirection = Vector3.new(0, -1000, 0)
-                local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-                if Result then
-                    local hitPoint = Vector3.new(rp.Instance.Position.X, Result.Position.Y, rp.Position.Z)
-                    lava.CFrame = CFrame.new(hitPoint, hitPoint + rp.Normal) * CFrame.Angles(math.rad(90), 0, 0)
-
-                    RayOrigin = (lava.CFrame + lava.CFrame.LookVector * 50).Position
-                    RayDirection = lava.CFrame.LookVector * -100
-                    Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-                    if Result then
-                        lava.Size = Vector3.new(lava.Size.X, lava.Size.Y, (lava.Position - Result.Position).Magnitude * 2) - Vector3.new(0.01, 0, 0.01)
-                        lava.CFrame *= CFrame.Angles(0, 0, math.rad(180))
-                        lava.Parent = workspace.Misc
-                    end
-                end
+            local RayOrigin = (originCFrame + originCFrame.LookVector * 100).Position
+            local RayDirection = originCFrame.LookVector * -1000
+            local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+            if Result then
+                position1 = Result.Position
             end
 
-            if lava.Parent then
+            RayOrigin = (originCFrame + originCFrame.LookVector * -100).Position
+            RayDirection = originCFrame.LookVector * 1000
+            Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+            if Result then
+                position2 = Result.Position
+            end
+
+            if position1 and position2 then
+                local lava = Assets.Obstacles.Lava:Clone()
+                lava.Size = Vector3.new(lava.Size.X, lava.Size.Y, (position1 - position2).Magnitude)
+                lava.CFrame = CFrame.new(position1, position2) + CFrame.new(position1, position2).LookVector * lava.Size.Z / 2
+                lava.CFrame += lava.CFrame.UpVector * 0.1
+                lava.Size -= Vector3.new(0.01, 0, 0.01)
+                lava.Parent = workspace.Misc
+
                 local goal = {Transparency = 0.1}
                 local properties = {Time = data.delayTime}
                 TweenService.tween(lava, goal, properties)
@@ -90,8 +81,6 @@ function Event.Main(levelNum, level, data)
                     touchConnection:Disconnect()
                     lava:Destroy()
                 end
-            else
-                lava:Destroy()
             end
         end
     end

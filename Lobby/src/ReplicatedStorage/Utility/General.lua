@@ -58,14 +58,13 @@ General.Signs = {
     [1] = "Click the button and survive to open the door",
     [2] = "Watch out for bombs and other obstacles",
     [3] = "Complete levels and collect coins to buy upgrades",
-    [4] = "One person must be alive or the button will reset",
-    [5] = "Lava will now appear",
+    [5] = "One person must be alive or the button will reset",
     [10] = "Speeding Walls will now appear",
+    [15] = "Heals will now appear",
     [20] = "Laser Walls will now appear",
-    [30] = "Heals will now appear",
-    [40] = "Acid Puddles will now appear",
-    [50] = "Coins have become Super Coins",
-    [60] = "Rockets will now appear",
+    [30] = "Acid Puddles will now appear",
+    [40] = "Coins have become Super Coins",
+    [50] = "Rockets will now appear",
 }
 
 --Colors---------------------------------------------

@@ -114,6 +114,14 @@ function EventService.getBoundingBox(model, orientation)
 	return wCf, size
 end
 
+function EventService.getFloorGroup(part)
+    if part.Parent and part.Parent.Name == "FloorGroup" then
+        return part.Parent:GetChildren()
+    else
+        return part
+    end
+end
+
 function EventService.randomPoint(level, args)
     if not args then args = {} end
     if not args.offset then args.offset = 2 end
@@ -205,7 +213,7 @@ function EventService.getClosestPlayer(position, players)
     return closestPlayer
 end
 
-function EventService.positionVisual(position)
+function EventService.positionVisual(position, duration)
     local part = Instance.new("Part")
     part.Size = Vector3.new(1,1,1)
     part.BrickColor = BrickColor.new("Bright red")
@@ -216,6 +224,13 @@ function EventService.positionVisual(position)
         part.Position = position
     else
         part.CFrame = position
+    end
+
+    if duration then
+        task.spawn(function()
+            task.wait(duration)
+            part:Destroy()
+        end)
     end
 end
 

@@ -22,18 +22,17 @@ function Event.Main(levelNum, level, data)
             local touchConnection
 
             local acid = Assets.Obstacles.Acid:Clone()
-            acid.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(90), 0, 0)
+            acid.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
             acid.Parent = workspace.Misc
 
             local Params = RaycastParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
-            Params.FilterDescendantsInstances = {rp.Instance}
+            Params.FilterDescendantsInstances = {EventService.getFloorGroup(rp.Instance)}
             local RayOrigin = (acid.CFrame + acid.CFrame.LookVector * 100).Position
             local RayDirection = acid.CFrame.LookVector * -1000
             local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
             if Result then
                 growToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, data.size)
-                acid.CFrame *= CFrame.Angles(0, 0, math.rad(180))
                 acid.Parent = workspace.Misc
             end
 
