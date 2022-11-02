@@ -16,6 +16,7 @@ local Remotes = ReplicatedStorage.Remotes
 local DataConnection = Remotes.DataConnection
 
 local SerServices = ServerScriptService.Services
+local ClientService = require(SerServices.ClientService)
 local DataStorage = SerServices.DataStorage
 local ProfileService = require(DataStorage.ProfileService)
 local ProfileTemplate = require(DataStorage.ProfileTemplate)
@@ -99,10 +100,11 @@ function DataManager:SetSpawn(player, levelNum)
 		DataManager:SetValue(player, "Level", levelNum)
 		PlayerValues:SetValue(player, "Level", levelNum, "playerOnly")
 
-		DataManager:GiveCash(player, General.RewardCash, {noMulti = true})
-
 		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
 		level.Value += 1
+
+		DataManager:GiveCash(player, General.RewardCash, {noMulti = true})
+		ClientService.HealPlayer(player)
 	end
 end
 
@@ -123,7 +125,7 @@ function DataManager:BuyHealth(player)
 		PlayerValues:IncrementValue(player, "Health", 1, "playerOnly")
 		DataManager:GiveCash(player, -cost)
 
-		--update player stats
+		ClientService.SetPlayerStats(player)
 	end
 end
 
@@ -134,7 +136,7 @@ function DataManager:BuySpeed(player)
 		PlayerValues:IncrementValue(player, "Speed", 1, "playerOnly")
 		DataManager:GiveCash(player, -cost)
 
-		--update player stats
+		ClientService.SetPlayerStats(player)
 	end
 end
 
@@ -145,7 +147,7 @@ function DataManager:BuyJump(player)
 		PlayerValues:IncrementValue(player, "Jump", 1, "playerOnly")
 		DataManager:GiveCash(player, -cost)
 
-		--update player stats
+		ClientService.SetPlayerStats(player)
 	end
 end
 

@@ -40,7 +40,7 @@ function Event.Main(levelNum, level, data)
         local wall = Instance.new("Part")
         wall.Transparency = 1
         wall.Anchored = true
-        wall.Size = Vector3.new(1, center1.Size.Y, (center1.Position - center2.Position).Magnitude)
+        wall.Size = Vector3.new(1, center1.Size.Y, (center1.Position - center2.Position).Magnitude - 2)
         wall.CFrame = CFrame.new(center1.Position, center2.Position) + CFrame.new(center1.Position, center2.Position).LookVector * wall.Size.Z / 2
         wall.Parent = laserWall
 

@@ -4,14 +4,35 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
-local SerServices = ServerScriptService.Services
-local GameService = require(SerServices.GameService)
+local Utility = ReplicatedStorage.Utility
+local General = require(Utility.General)
 
 local Remotes = ReplicatedStorage.Remotes
 local ClientConnection = Remotes.ClientConnection
 local UpgradeConnection = Remotes.UpgradeConnection
 
 local ClientService = {}
+
+function ClientService.HealPlayer(player)
+    if General.playerCheck(player) then
+        local humanoid = player.Character.Humanoid
+        humanoid.Health = humanoid.MaxHealth
+    end
+end
+
+function ClientService.SetPlayerStats(player)
+    if General.playerCheck(player) then
+        local humanoid = player.Character.Humanoid
+
+        local healthPercent = humanoid.Health / humanoid.MaxHealth
+        humanoid.MaxHealth = General.PlayerHealth + (General.HealthValue * (PlayerValues:GetValue(player, "Health") or General.HealthDefault))
+        humanoid.Health = humanoid.MaxHealth * healthPercent
+
+        humanoid.WalkSpeed = General.PlayerSpeed + (General.SpeedValue * (PlayerValues:GetValue(player, "Speed") or General.SpeedDefault))
+
+        humanoid.JumpPower = General.PlayerJump + (General.JumpValue * (PlayerValues:GetValue(player, "Jump") or General.JumpDefault))
+    end
+end
 
 function ClientService.InitializeClient(player, profile)
     local stats = Instance.new("Folder")

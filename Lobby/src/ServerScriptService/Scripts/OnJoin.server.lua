@@ -7,6 +7,9 @@ local ServerValues = require(ServerScriptService.ServerValues)
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
+local Utility = ReplicatedStorage.Utility
+local General = require(Utility.General)
+
 local SerServices = ServerScriptService.Services
 local DataManager = require(SerServices.DataManager)
 local ClientService = require(SerServices.ClientService)
@@ -52,7 +55,15 @@ local function playerAdded(newPlayer)
                 repeat
                     newPlayer.Character:PivotTo(level.Floor.Spawn.CFrame)
                     task.wait()
-                until (newPlayer.Character:GetPivot().Position - level.Floor.Spawn.Position).Magnitude < 10
+                until General.playerCheck(newPlayer) and (newPlayer.Character:GetPivot().Position - level.Floor.Spawn.Position).Magnitude < 10
+
+                ClientService.SetPlayerStats(newPlayer)
+            else
+                repeat
+                    task.wait()
+                until General.playerCheck(newPlayer)
+
+                ClientService.SetPlayerStats(newPlayer)
             end
         end)
     end

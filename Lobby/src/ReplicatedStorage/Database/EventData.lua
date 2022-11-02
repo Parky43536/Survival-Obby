@@ -27,7 +27,7 @@ local EventData = {
 	},
 	["LaserWall"] = {
 		chance = 55,
-		levels = {min = 20, max = General.Levels},
+		levels = {min = 10, max = General.Levels},
 		obstacle = true,
 
 		despawnTime = 10,
@@ -37,14 +37,14 @@ local EventData = {
 	},
 	["SpeedingWall"] = {
 		chance = 45,
-		levels = {min = 10, max = General.Levels},
+		levels = {min = 5, max = General.Levels},
 		obstacle = true,
 
 		speed = 25,
 	},
 	["LavaLine"] = {
 		chance = 45,
-		levels = {min = 2, max = General.Levels},
+		levels = {min = 1, max = General.Levels},
 		obstacle = true,
 
 		despawnTime = 6,
@@ -53,7 +53,7 @@ local EventData = {
 	},
 	["Spike"] = {
 		chance = 35,
-		levels = {min = 2, max = General.Levels},
+		levels = {min = 1, max = General.Levels},
 		obstacle = true,
 
 		despawnTime = 10,
@@ -62,7 +62,7 @@ local EventData = {
 	},
 	["Bomb"] = {
 		chance = 40,
-		levels = {min = 2, max = General.Levels},
+		levels = {min = 1, max = General.Levels},
 		obstacle = true,
 
 		delayTime = 2,
@@ -78,7 +78,7 @@ local EventData = {
 	},
 	["Heal"] = {
 		chance = 120,
-		levels = {min = 15, max = General.Levels},
+		levels = {min = 20, max = General.Levels},
 		heal = 25,
 		despawnTime = 30,
 	},

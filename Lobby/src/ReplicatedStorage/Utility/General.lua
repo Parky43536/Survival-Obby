@@ -15,6 +15,10 @@ end
 
 --Stats---------------------------------------------
 
+General.PlayerHealth = 100
+General.PlayerSpeed = 16
+General.PlayerJump = 50.145
+
 General.HealthCost = 150
 General.HealthIncrease = 100
 General.HealthDefault = 0
@@ -56,12 +60,11 @@ end
 
 General.Signs = {
     [1] = "Click the button and survive to open the door",
-    [2] = "Watch out for bombs and other obstacles",
-    [3] = "Complete levels and collect coins to buy upgrades",
-    [5] = "One person must be alive or the button will reset",
-    [10] = "Speeding Walls will now appear",
-    [15] = "Heals will now appear",
-    [20] = "Laser Walls will now appear",
+    [2] = "Complete levels and collect coins to buy upgrades",
+    [3] = "One person must be alive or the button will reset",
+    [5] = "Speeding Walls will now appear",
+    [10] = "Laser Walls will now appear",
+    [20] = "Heals will now appear",
     [30] = "Acid Puddles will now appear",
     [40] = "Coins have become Super Coins",
     [50] = "Rockets will now appear",
