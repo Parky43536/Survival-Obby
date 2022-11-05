@@ -18,7 +18,7 @@ local function destroyRocket(rocket, touchConnection, data)
         end
 
         for _,player in pairs(EventService.getPlayersInRadius(rocket.Position, data.size / 2)) do
-            if player.Character then
+            if General.playerCheck(player) then
                 player.Character.Humanoid:TakeDamage(data.damage)
             end
         end

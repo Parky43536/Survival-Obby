@@ -23,7 +23,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.delayTime)
 
         for _,player in pairs(EventService.getPlayersInRadius(bomb.Position, data.size / 2)) do
-            if player.Character then
+            if General.playerCheck(player) then
                 player.Character.Humanoid:TakeDamage(data.damage)
             end
         end

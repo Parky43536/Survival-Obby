@@ -3,8 +3,19 @@ local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
 
 local EventData = {
-	["Rocket"] = {
+	["TeslaCoil"] = {
 		chance = 65,
+		levels = {min = 60, max = General.Levels},
+		obstacle = true,
+
+		delayTime = 2,
+		size = 30,
+		damageTicks = 5,
+		damageDelay = 2,
+		damage = 30,
+	},
+	["Rocket"] = {
+		chance = 60,
 		levels = {min = 50, max = General.Levels},
 		obstacle = true,
 
@@ -12,10 +23,10 @@ local EventData = {
 		delayTime = 2,
 		speed = 25,
 		size = 12,
-		damage = 40,
+		damage = 50,
 	},
 	["AcidPuddle"] = {
-		chance = 65,
+		chance = 60,
 		levels = {min = 30, max = General.Levels},
 		obstacle = true,
 
@@ -23,7 +34,7 @@ local EventData = {
 		growTime = 8,
 		delayTime = 1,
 		size = 20,
-		damage = 10,
+		damage = 15,
 	},
 	["LaserWall"] = {
 		chance = 55,
@@ -42,6 +53,16 @@ local EventData = {
 
 		speed = 25,
 	},
+	["FallingRock"] = {
+		chance = 50,
+		levels = {min = 1, max = General.Levels},
+		obstacle = true,
+
+		despawnTime = 8,
+		height = 40,
+		offset = 10,
+		damage = 40,
+	},
 	["LavaLine"] = {
 		chance = 45,
 		levels = {min = 1, max = General.Levels},
@@ -49,7 +70,7 @@ local EventData = {
 
 		despawnTime = 6,
 		delayTime = 1,
-		damage = 20,
+		damage = 25,
 	},
 	["Spike"] = {
 		chance = 35,
@@ -58,7 +79,7 @@ local EventData = {
 
 		despawnTime = 10,
 		delayTime = 0.5,
-		damage = 30,
+		damage = 40,
 	},
 	["Bomb"] = {
 		chance = 40,
@@ -79,7 +100,7 @@ local EventData = {
 	["Heal"] = {
 		chance = 120,
 		levels = {min = 20, max = General.Levels},
-		heal = 25,
+		heal = 15,
 		despawnTime = 30,
 	},
 	["Coin"] = {

@@ -68,6 +68,7 @@ General.Signs = {
     [30] = "Acid Puddles will now appear",
     [40] = "Coins have become Super Coins",
     [50] = "Rockets will now appear",
+    [60] = "Tesla Coils will now appear",
 }
 
 --Colors---------------------------------------------
