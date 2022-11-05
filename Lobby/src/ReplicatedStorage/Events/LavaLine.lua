@@ -50,6 +50,7 @@ function Event.Main(levelNum, level, data)
                 local lava = Assets.Obstacles.Lava:Clone()
                 lava.Size = Vector3.new(lava.Size.X, lava.Size.Y, (position1 - position2).Magnitude)
                 lava.CFrame = CFrame.new(position1, position2) + CFrame.new(position1, position2).LookVector * lava.Size.Z / 2
+                lava.CFrame = (originCFrame - originCFrame.Position) + lava.Position
                 lava.CFrame += lava.CFrame.UpVector * 0.1
                 lava.Size -= Vector3.new(0.01, 0, 0.01)
                 lava.Parent = workspace.Misc

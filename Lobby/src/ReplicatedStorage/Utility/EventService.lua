@@ -131,7 +131,7 @@ function EventService.randomPoint(level, args)
 
     local x = cframe.Position.X + rng:NextInteger(math.clamp((-size.X/2) + args.offset, -99e99, 0), math.clamp((size.X/2) - args.offset, 0, 99e99))
     local z = cframe.Position.Z + rng:NextInteger(math.clamp((-size.Z/2) + args.offset, -99e99, 0), math.clamp((size.Z/2) - args.offset, 0, 99e99))
-    local pos = Vector3.new(x, 100, z)
+    local pos = Vector3.new(x, cframe.Position.Y + 100, z)
 
     local RayOrigin = pos
     local RayDirection = Vector3.new(0, -1000, 0)

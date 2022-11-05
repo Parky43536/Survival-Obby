@@ -12,12 +12,13 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 function Event.Main(levelNum, level, data)
-    local rp = EventService.randomPoint(level, {offset = 6})
+    local rp = EventService.randomPoint(level)
     if rp then
         local rng = Random.new()
         local position1
         local position2
-        local originCFrame = CFrame.new(rp.Position - Vector3.new(0, 1, 0), rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
+        local originCFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
+        originCFrame += originCFrame.UpVector * -0.1
 
         if rng:NextInteger(1, 2) == 1 then
             originCFrame *= CFrame.Angles(0, math.rad(90), 0)
@@ -44,11 +45,10 @@ function Event.Main(levelNum, level, data)
         if position1 and position2 then
             local wall = Assets.Obstacles.SpeedingWall:Clone()
 
-            position1 += Vector3.new(0, 1 + wall.Size.Y/2, 0)
-            position2 += Vector3.new(0, 1 + wall.Size.Y/2, 0)
-
             wall.BrickColor = BrickColor.random()
-            wall.CFrame = CFrame.new(position1, position2)
+            wall.CFrame = CFrame.new(position2, position1)
+            wall.CFrame = (originCFrame - originCFrame.Position) + wall.Position
+            wall.CFrame += wall.CFrame.UpVector * (wall.Size.Y/2 + 0.1)
             wall.Parent = workspace.Misc
 
             local timeToTarget = (position1 - position2).Magnitude / data.speed
