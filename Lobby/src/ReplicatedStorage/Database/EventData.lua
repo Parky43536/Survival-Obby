@@ -92,7 +92,7 @@ local EventData = {
 	},
 	-----------------------------------------------------
 	["SuperCoin"] = {
-		chance = 30,
+		chance = 40,
 		levels = {min = 40, max = General.Levels},
 		value = 20,
 		despawnTime = 30,
@@ -104,7 +104,7 @@ local EventData = {
 		despawnTime = 30,
 	},
 	["Coin"] = {
-		chance = 15,
+		chance = 20,
 		levels = {min = 2, max = 39},
 		value = 10,
 		despawnTime = 30,

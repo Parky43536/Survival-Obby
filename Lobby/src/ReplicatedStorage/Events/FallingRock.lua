@@ -14,7 +14,7 @@ local Event = {}
 local touchCooldown = {}
 
 function Event.Main(levelNum, level, data)
-    local rp = EventService.randomPoint(level)
+    local rp = EventService.randomPoint(level, {offset = 8})
     if rp then
         local rng = Random.new()
         local rock = Assets.Obstacles.Rock:Clone()
@@ -37,7 +37,7 @@ function Event.Main(levelNum, level, data)
         local touchConnection
         touchConnection = rock.Touched:Connect(function(hit)
             local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-            if player and player.Character and rock.Velocity.Magnitude > 80 then
+            if player and player.Character and rock.Velocity.Magnitude > 60 then
                 if not touchCooldown[player] then
                     touchCooldown[player] = tick() - EventService.TouchCooldown
                 end

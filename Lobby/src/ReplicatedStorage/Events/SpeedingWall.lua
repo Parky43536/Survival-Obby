@@ -12,7 +12,7 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 function Event.Main(levelNum, level, data)
-    local rp = EventService.randomPoint(level)
+    local rp = EventService.randomPoint(level, {offset = 6})
     if rp then
         local rng = Random.new()
         local position1
