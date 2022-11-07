@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -17,7 +19,7 @@ function Event.Main(levelNum, level, data)
     local rOS1 = EventService.randomObstacleSpawner(levelNum, level)
     local rOS2 = EventService.randomObstacleSpawner(levelNum, level)
     if rOS1 and rOS2 then
-        local laserWall = Assets.Obstacles.LaserWall:Clone()
+        local laserWall = Obstacle.LaserWall:Clone()
         laserWall.Pillar1:SetPrimaryPartCFrame(rOS1.CFrame)
         laserWall.Pillar2:SetPrimaryPartCFrame(rOS2.CFrame)
 

@@ -24,13 +24,12 @@ function ClientService.SetPlayerStats(player)
     if General.playerCheck(player) then
         local humanoid = player.Character.Humanoid
 
+        humanoid.WalkSpeed = General.getValue("Speed", PlayerValues:GetValue(player, "Speed"))
+        humanoid.JumpPower = General.getValue("Jump", PlayerValues:GetValue(player, "Jump"))
+
         local healthPercent = humanoid.Health / humanoid.MaxHealth
-        humanoid.MaxHealth = General.PlayerHealth + (General.HealthValue * (PlayerValues:GetValue(player, "Health") or General.HealthDefault))
+        humanoid.MaxHealth = General.getValue("Health", PlayerValues:GetValue(player, "Health"))
         humanoid.Health = humanoid.MaxHealth * healthPercent
-
-        humanoid.WalkSpeed = General.PlayerSpeed + (General.SpeedValue * (PlayerValues:GetValue(player, "Speed") or General.SpeedDefault))
-
-        humanoid.JumpPower = General.PlayerJump + (General.JumpValue * (PlayerValues:GetValue(player, "Jump") or General.JumpDefault))
     end
 end
 

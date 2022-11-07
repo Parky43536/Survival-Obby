@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -23,7 +25,7 @@ local function destroyRocket(rocket, touchConnection, data)
             end
         end
 
-        local particle = Assets.Obstacles.Explosion:Clone()
+        local particle = Obstacles.Explosion:Clone()
         particle:PivotTo(rocket.CFrame)
         particle.Parent = workspace
 
@@ -47,7 +49,7 @@ end
 function Event.Main(levelNum, level, data)
     local rOS = EventService.randomObstacleSpawner(levelNum, level)
     if rOS then
-        local rocket = Assets.Obstacles.Rocket:Clone()
+        local rocket = Obstacle.Rocket:Clone()
         rocket:SetPrimaryPartCFrame(rOS.CFrame)
 
         local cframe, size = EventService.getBoundingBox(level.Floor)

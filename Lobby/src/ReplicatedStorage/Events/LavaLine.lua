@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -47,7 +49,7 @@ function Event.Main(levelNum, level, data)
             end
 
             if position1 and position2 then
-                local lava = Assets.Obstacles.Lava:Clone()
+                local lava = Obstacle.Lava:Clone()
                 lava.Size = Vector3.new(lava.Size.X, lava.Size.Y, (position1 - position2).Magnitude)
                 lava.CFrame = CFrame.new(position1, position2) + CFrame.new(position1, position2).LookVector * lava.Size.Z / 2
                 lava.CFrame = (originCFrame - originCFrame.Position) + lava.Position

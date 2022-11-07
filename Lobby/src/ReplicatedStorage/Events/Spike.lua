@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -18,7 +20,7 @@ function Event.Main(levelNum, level, data)
     if rpController then
         local rp = EventService.randomPoint(level, {model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
-            local spike = Assets.Obstacles.Spike:Clone()
+            local spike = Obstacle.Spike:Clone()
             spike.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(90), 0, math.rad(180))
             spike.CFrame = spike.CFrame + spike.CFrame.UpVector * -spike.Size.Y / 2
             spike.Parent = workspace.Misc

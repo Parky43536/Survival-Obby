@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -14,7 +16,7 @@ local Event = {}
 function Event.Main(levelNum, level, data)
     local rOS = EventService.randomObstacleSpawner(levelNum, level)
     if rOS then
-        local coil = Assets.Obstacles.TeslaCoil:Clone()
+        local coil = Obstacle.TeslaCoil:Clone()
         coil:SetPrimaryPartCFrame(rOS.CFrame)
         coil.Parent = workspace.Misc
 
@@ -29,7 +31,7 @@ function Event.Main(levelNum, level, data)
         for i = 1 , data.damageTicks do
             for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, data.size / 2)) do
                 if General.playerCheck(player) then
-                    local laser = Assets.Obstacles.Laser:Clone()
+                    local laser = Obstacle.Laser:Clone()
                     laser.Beam.Position = coil.Effect.Position
                     laser.Hit.Position = player.Character.PrimaryPart.Position
                     local weld = Instance.new("WeldConstraint")

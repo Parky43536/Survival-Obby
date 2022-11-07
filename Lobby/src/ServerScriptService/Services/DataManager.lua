@@ -111,7 +111,7 @@ end
 function DataManager:GiveCash(player, cash, args)
 	if not args then args = {} end
 	if cash > 0 and not args.noMulti then
-		cash = math.floor(cash + (cash * (PlayerValues:GetValue(player, "CMulti") / 10)))
+		cash = math.floor(cash + (cash * (PlayerValues:GetValue(player, "CMulti") * General.CMultiValue)))
 	end
 
 	DataManager:IncrementValue(player, "Cash", cash)

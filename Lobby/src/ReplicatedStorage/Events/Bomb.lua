@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -14,7 +16,7 @@ local Event = {}
 function Event.Main(levelNum, level, data)
     local rp = EventService.randomPoint(level)
     if rp then
-        local bomb = Assets.Obstacles.Bomb:Clone()
+        local bomb = Obstacle.Bomb:Clone()
         bomb.Position = rp.Position + Vector3.new(0, 3.5, 0)
         bomb.Parent = workspace.Misc
 
@@ -28,7 +30,7 @@ function Event.Main(levelNum, level, data)
             end
         end
 
-        local particle = Assets.Obstacles.Explosion:Clone()
+        local particle = Obstacles.Explosion:Clone()
         particle:PivotTo(bomb.CFrame)
         particle.Parent = workspace
 

@@ -29,6 +29,10 @@ local function comma_value(amount)
     return formatted
 end
 
+local function round(number, decimal)
+    return math.round(number * 10 ^ decimal) / (10 ^ decimal)
+end
+
 local currentSpin
 local currentAlertTween
 local function shopAlert(cash)
@@ -103,10 +107,15 @@ local function loadCash(value)
 end
 
 local function loadStats()
-    SideFrame.Stats.Health.Text = "Health: " .. PlayerValues:GetValue(LocalPlayer, "Health") or General.HealthDefault
-    SideFrame.Stats.Speed.Text = "Speed: " .. PlayerValues:GetValue(LocalPlayer, "Speed") or General.SpeedDefault
-    SideFrame.Stats.Jump.Text = "Jump: " .. PlayerValues:GetValue(LocalPlayer, "Jump") or General.JumpDefault
-    SideFrame.Stats.CMulti.Text = "C. Multi: " .. PlayerValues:GetValue(LocalPlayer, "CMulti") or General.CMultiDefault
+    local health = General.getValue("Health", PlayerValues:GetValue(LocalPlayer, "Health"))
+    local speed = General.getValue("Speed", PlayerValues:GetValue(LocalPlayer, "Speed"))
+    local jump = General.getValue("Jump", PlayerValues:GetValue(LocalPlayer, "Jump"))
+    local cMulti = General.getValue("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti"))
+
+    SideFrame.Stats.Health.Text = "Health: " .. (PlayerValues:GetValue(LocalPlayer, "Health") or General.HealthDefault) .. " (" .. round(health, 0) .. ")"
+    SideFrame.Stats.Speed.Text = "Speed: " .. (PlayerValues:GetValue(LocalPlayer, "Speed") or General.SpeedDefault) .. " (" .. round(speed, 1) .. ")"
+    SideFrame.Stats.Jump.Text = "Jump: " .. (PlayerValues:GetValue(LocalPlayer, "Jump") or General.JumpDefault) .. " (" .. round(jump, 0) .. ")"
+    SideFrame.Stats.CMulti.Text = "C. Multi: " .. (PlayerValues:GetValue(LocalPlayer, "CMulti") or General.CMultiDefault) .. " (" .. round(cMulti, 1) .. ")"
 end
 
 PlayerValues:SetCallback("Cash", function(player, value)

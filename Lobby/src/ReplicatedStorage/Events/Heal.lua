@@ -5,6 +5,8 @@ local RunService = game:GetService("RunService")
 local IsServer = RunService:IsServer()
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -50,7 +52,7 @@ function Event.Server(player)
 end
 
 function Event.Client(rp)
-    local heal = Assets.Obstacles.Heal:Clone()
+    local heal = Obstacle.Heal:Clone()
     heal.Position = rp + Vector3.new(0, 3.5, 0)
     heal.Parent = workspace.Misc
 

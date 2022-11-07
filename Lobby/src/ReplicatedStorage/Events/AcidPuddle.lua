@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -21,7 +23,7 @@ function Event.Main(levelNum, level, data)
             local growToSize
             local touchConnection
 
-            local acid = Assets.Obstacles.Acid:Clone()
+            local acid = Obstacle.Acid:Clone()
             acid.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
             acid.Parent = workspace.Misc
 

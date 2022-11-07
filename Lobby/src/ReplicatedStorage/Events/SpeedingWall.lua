@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = ReplicatedStorage.Assets
+local Obstacles = Assets.Obstacles
+local Obstacle = Obstacles:FindFirstChild(script.Name)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
@@ -43,7 +45,7 @@ function Event.Main(levelNum, level, data)
         end
 
         if position1 and position2 then
-            local wall = Assets.Obstacles.SpeedingWall:Clone()
+            local wall = Obstacle.SpeedingWall:Clone()
 
             wall.BrickColor = BrickColor.random()
             wall.CFrame = CFrame.new(position2, position1)
