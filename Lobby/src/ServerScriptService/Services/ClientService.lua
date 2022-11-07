@@ -50,7 +50,6 @@ function ClientService.InitializeClient(player, profile)
     PlayerValues:SetValue(player, "Speed", profile.Data.Speed, "playerOnly")
     PlayerValues:SetValue(player, "Jump", profile.Data.Jump, "playerOnly")
     PlayerValues:SetValue(player, "CMulti", profile.Data.CMulti, "playerOnly")
-    PlayerValues:SetValue(player, "Luck", profile.Data.Luck, "playerOnly")
 
     ClientConnection:FireClient(player)
     UpgradeConnection:FireClient(player)

@@ -92,14 +92,7 @@ function LevelService.ButtonEvent(levelNum, level, player)
             continue
         end
 
-        local playerLuck = PlayerValues:GetValue(player, "Luck")
-        local chance = data.chance
-
-        if data.obstacle then
-            chance += playerLuck
-        end
-
-        if rng:NextNumber(0, chance) <= 1 + (playerLuck / 20) then
+        if rng:NextNumber(0, data.chance) <= 1 then
             task.spawn(function()
                 if not requiredEvents[key] then
                     requiredEvents[key] = require(Events:FindFirstChild(key))

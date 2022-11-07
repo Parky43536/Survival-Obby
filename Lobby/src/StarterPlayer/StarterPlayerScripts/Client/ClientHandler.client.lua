@@ -34,7 +34,7 @@ local currentAlertTween
 local function shopAlert(cash)
     local alert = SideFrame.Alerts.ShopAlert
 
-    local alertSpin = 10
+    local alertSpin = 8
     if cash >= General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health")) then
         alertSpin /= 2
     end
@@ -47,11 +47,8 @@ local function shopAlert(cash)
     if cash >= General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")) then
         alertSpin /= 2
     end
-    if cash >= General.getCost("Luck", PlayerValues:GetValue(LocalPlayer, "Luck")) then
-        alertSpin /= 2
-    end
 
-    if alertSpin < 10 then
+    if alertSpin < 8 then
         if alertSpin ~= currentSpin then
             currentSpin = true
             alert.Visible = true
@@ -110,7 +107,6 @@ local function loadStats()
     SideFrame.Stats.Speed.Text = "Speed: " .. PlayerValues:GetValue(LocalPlayer, "Speed") or General.SpeedDefault
     SideFrame.Stats.Jump.Text = "Jump: " .. PlayerValues:GetValue(LocalPlayer, "Jump") or General.JumpDefault
     SideFrame.Stats.CMulti.Text = "C. Multi: " .. PlayerValues:GetValue(LocalPlayer, "CMulti") or General.CMultiDefault
-    SideFrame.Stats.Luck.Text = "Luck: " .. PlayerValues:GetValue(LocalPlayer, "Luck") or General.LuckDefault
 end
 
 PlayerValues:SetCallback("Cash", function(player, value)
@@ -130,10 +126,6 @@ PlayerValues:SetCallback("Jump", function()
 end)
 
 PlayerValues:SetCallback("CMulti", function()
-    loadStats()
-end)
-
-PlayerValues:SetCallback("Luck", function()
     loadStats()
 end)
 

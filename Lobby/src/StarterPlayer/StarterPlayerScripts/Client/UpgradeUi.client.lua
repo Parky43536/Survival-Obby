@@ -79,13 +79,6 @@ Upgrade.CMulti.Buy.Activated:Connect(function()
     end
 end)
 
-Upgrade.Luck.Buy.Activated:Connect(function()
-    if tick() - cooldownTime > cooldown then
-        cooldownTime = tick()
-        DataConnection:FireServer("Luck")
-    end
-end)
-
 ------------------------------------------------------------------
 
 local function comma_value(amount)
@@ -104,7 +97,6 @@ local function loadCosts()
     Upgrade.Speed.Cost.Amount.Text = "C " .. comma_value(General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")))
     Upgrade.Jump.Cost.Amount.Text = "C " .. comma_value(General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")))
     Upgrade.CMulti.Cost.Amount.Text = "C " .. comma_value(General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")))
-    Upgrade.Luck.Cost.Amount.Text = "C " .. comma_value(General.getCost("Luck", PlayerValues:GetValue(LocalPlayer, "Luck")))
 end
 
 PlayerValues:SetCallback("Health", function()
@@ -120,10 +112,6 @@ PlayerValues:SetCallback("Jump", function()
 end)
 
 PlayerValues:SetCallback("CMulti", function()
-    loadCosts()
-end)
-
-PlayerValues:SetCallback("Luck", function()
     loadCosts()
 end)
 

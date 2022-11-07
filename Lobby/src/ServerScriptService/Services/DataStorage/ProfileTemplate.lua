@@ -6,7 +6,6 @@ local ProfileTemplate = {
     Speed = 0,
     Jump = 0,
     CMulti = 0,
-    Luck = 0,
 }
 
 return ProfileTemplate

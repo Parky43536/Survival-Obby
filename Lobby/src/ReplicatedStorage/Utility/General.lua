@@ -38,10 +38,6 @@ General.CMultiCost = 150
 General.CMultiIncrease = 150
 General.CMultiDefault = 0
 
-General.LuckCost = 100
-General.LuckIncrease = 100
-General.LuckDefault = 0
-
 function General.getCost(typer, current)
     if typer == "Health" then
         return General.HealthCost + General.HealthIncrease * (current or General.HealthDefault)
@@ -51,8 +47,6 @@ function General.getCost(typer, current)
         return General.JumpCost + General.JumpIncrease * (current or General.JumpDefault)
     elseif typer == "CMulti" then
         return General.CMultiCost + General.CMultiIncrease * (current or General.CMultiDefault)
-    elseif typer == "Luck" then
-        return General.LuckCost + General.LuckIncrease * (current or General.LuckDefault)
     end
 end
 

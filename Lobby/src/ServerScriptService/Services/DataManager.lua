@@ -160,15 +160,6 @@ function DataManager:BuyCMulti(player)
 	end
 end
 
-function DataManager:BuyLuck(player)
-	local cost = General.getCost("Luck", PlayerValues:GetValue(player, "Luck"))
-	if PlayerValues:GetValue(player, "Cash") >= cost then
-		DataManager:IncrementValue(player, "Luck", 1)
-		PlayerValues:IncrementValue(player, "Luck", 1, "playerOnly")
-		DataManager:GiveCash(player, -cost)
-	end
-end
-
 DataConnection.OnServerEvent:Connect(function(player, action, args)
 	if action == "Health" then
 		DataManager:BuyHealth(player)
@@ -178,8 +169,6 @@ DataConnection.OnServerEvent:Connect(function(player, action, args)
 		DataManager:BuyJump(player)
 	elseif action == "CMulti" then
 		DataManager:BuyCMulti(player)
-	elseif action == "Luck" then
-		DataManager:BuyLuck(player)
 	--[[elseif action == "CurrentLevel" then
 		PlayerValues:SetValue(player, "CurrentLevel", args.level)]]
 	end
