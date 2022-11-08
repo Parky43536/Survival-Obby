@@ -1,12 +1,24 @@
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
+
+local IsServer = RunService:IsServer()
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
+
+local Signal
+if IsServer then
+    Signal = Instance.new("RemoteEvent")
+    Signal.Name = "Signal"
+    Signal.Parent = script
+else
+    Signal = script:WaitForChild("Signal")
+end
 
 local EventService = {}
 
@@ -242,6 +254,32 @@ function EventService.positionVisual(position, duration)
             part:Destroy()
         end)
     end
+end
+
+--Cleaning---------------------------------------------
+
+function EventService.CleanLevel(levelNum, level)
+    local obstacles = workspace.Obstacles:FindFirstChild(levelNum)
+    if obstacles then
+        for _, part in pairs(obstacles:GetDescendants()) do
+            part:Destroy()
+        end
+    end
+
+    if IsServer then
+        local cframe, size = EventService.getBoundingBox(level.Floor)
+        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+
+        for _, player in playersInLevel do
+            Signal:FireClient(player, levelNum)
+        end
+    end
+end
+
+if not IsServer then
+    Signal.OnClientEvent:Connect(function(...)
+        EventService.CleanLevel(...)
+    end)
 end
 
 return EventService

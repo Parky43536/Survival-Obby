@@ -24,29 +24,31 @@ function Event.Main(levelNum, level, data)
 
         task.wait(data.delayTime)
 
-        for _,player in pairs(EventService.getPlayersInRadius(bomb.Position, data.size / 2)) do
-            if General.playerCheck(player) then
-                player.Character.Humanoid:TakeDamage(data.damage)
+        if bomb.Parent ~= nil then
+            for _,player in pairs(EventService.getPlayersInRadius(bomb.Position, data.size / 2)) do
+                if General.playerCheck(player) then
+                    player.Character.Humanoid:TakeDamage(data.damage)
+                end
             end
+
+            local particle = Obstacles.Explosion:Clone()
+            particle:PivotTo(bomb.CFrame)
+            particle.Parent = workspace
+
+            AudioService:Create(16433289, bomb.Position, {Volume = 0.8})
+
+            local growsize = Vector3.new(1, 1, 1) * data.size
+            local goal = {Transparency = 0.9, Size = growsize}
+            local properties = {Time = 0.15}
+            TweenService.tween(particle, goal, properties)
+
+            local goal = {Transparency = 1}
+            local properties = {Time = 1.35}
+            TweenService.tween(particle, goal, properties)
+
+            game.Debris:AddItem(particle, 1.5)
+            bomb:Destroy()
         end
-
-        local particle = Obstacles.Explosion:Clone()
-        particle:PivotTo(bomb.CFrame)
-        particle.Parent = workspace
-
-        AudioService:Create(16433289, bomb.Position, {Volume = 0.8})
-
-        local growsize = Vector3.new(1, 1, 1) * data.size
-        local goal = {Transparency = 0.9, Size = growsize}
-        local properties = {Time = 0.15}
-        TweenService.tween(particle, goal, properties)
-
-        local goal = {Transparency = 1}
-        local properties = {Time = 1.35}
-        TweenService.tween(particle, goal, properties)
-
-        game.Debris:AddItem(particle, 1.5)
-        bomb:Destroy()
     end
 end
 

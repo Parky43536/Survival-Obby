@@ -32,6 +32,8 @@ function GameService.FinishButton(levelNum, level, win)
         task.wait(General.DoorTime)
     end
 
+    EventService.CleanLevel(levelNum, level)
+
     levels[levelNum].DoorOpened = false
     levels[levelNum].Timer = General.TimerCalc(levelNum)
     levels[levelNum].Started = false

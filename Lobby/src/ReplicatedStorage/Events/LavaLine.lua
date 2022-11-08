@@ -63,26 +63,28 @@ function Event.Main(levelNum, level, data)
 
                 task.wait(data.delayTime)
 
-                lava.LavaParticle.Enabled = true
-
-                local touchConnection
-                touchConnection = lava.Touched:Connect(function(hit)
-                    local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-                    if player and player.Character then
-                        if not touchCooldown[player] then
-                            touchCooldown[player] = tick() - EventService.TouchCooldown
-                        end
-                        if tick() - touchCooldown[player] > EventService.TouchCooldown then
-                            touchCooldown[player] = tick()
-                            player.Character.Humanoid:TakeDamage(data.damage)
-                        end
-                    end
-                end)
-
-                task.wait(data.despawnTime)
                 if lava.Parent ~= nil then
-                    touchConnection:Disconnect()
-                    lava:Destroy()
+                    lava.LavaParticle.Enabled = true
+
+                    local touchConnection
+                    touchConnection = lava.Touched:Connect(function(hit)
+                        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+                        if player and player.Character then
+                            if not touchCooldown[player] then
+                                touchCooldown[player] = tick() - EventService.TouchCooldown
+                            end
+                            if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                                touchCooldown[player] = tick()
+                                player.Character.Humanoid:TakeDamage(data.damage)
+                            end
+                        end
+                    end)
+
+                    task.wait(data.despawnTime)
+                    if lava.Parent ~= nil then
+                        touchConnection:Disconnect()
+                        lava:Destroy()
+                    end
                 end
             end
         end

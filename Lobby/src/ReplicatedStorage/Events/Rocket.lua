@@ -61,46 +61,49 @@ function Event.Main(levelNum, level, data)
             EventService.parentToObstacles(levelNum, rocket)
 
             for i = 1 , data.faceRate do
-                if General.playerCheck(targetPlayer) then
+                if rocket.Parent ~= nil and General.playerCheck(targetPlayer) then
                     local rocketPos = rocket.Stand.PrimaryPart.Position
                     local targetPos = targetPlayer.Character.PrimaryPart.Position
                     targetPos = targetPos - Vector3.new(0, rocket.Stand.Rocket.Position.Y - rocket.Stand.PrimaryPart.Position.Y, 0)
                     rocket.Stand:SetPrimaryPartCFrame(CFrame.new(rocketPos, targetPos))
                 end
+
                 task.wait(data.delayTime/data.faceRate)
             end
 
-            local realRocket = rocket.Stand.Rocket
-            EventService.parentToObstacles(levelNum, realRocket)
-            rocket:Destroy()
-            rocket = realRocket
-            rocket.Attachment.Fire.Enabled = true
+            if rocket.Parent ~= nil then
+                local realRocket = rocket.Stand.Rocket
+                EventService.parentToObstacles(levelNum, realRocket)
+                rocket:Destroy()
+                rocket = realRocket
+                rocket.Attachment.Fire.Enabled = true
 
-            local target = rocket.CFrame + rocket.CFrame.lookVector * 100
-            local timeToTarget = (rocket.Position - target.Position).Magnitude / data.speed
+                local target = rocket.CFrame + rocket.CFrame.lookVector * 100
+                local timeToTarget = (rocket.Position - target.Position).Magnitude / data.speed
 
-            local RayOrigin = rocket.Position
-            local RayDirection = rocket.CFrame.lookVector * 100
+                local RayOrigin = rocket.Position
+                local RayDirection = rocket.CFrame.lookVector * 100
 
-            local Params = RaycastParams.new()
-            Params.FilterType = Enum.RaycastFilterType.Whitelist
-            Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
+                local Params = RaycastParams.new()
+                Params.FilterType = Enum.RaycastFilterType.Whitelist
+                Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
 
-            local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-            if Result then
-                target = Result
-                timeToTarget = (rocket.Position - target.Position).Magnitude / data.speed
+                local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+                if Result then
+                    target = Result
+                    timeToTarget = (rocket.Position - target.Position).Magnitude / data.speed
+                end
+
+                local goal = {Position = target.Position}
+                local properties = {Time = timeToTarget}
+                TweenService.tween(rocket, goal, properties)
+
+                touchConnection = rocket.Touched:Connect(function()
+                    destroyRocket(rocket, touchConnection, data)
+                end)
+
+                task.wait(timeToTarget)
             end
-
-            local goal = {Position = target.Position}
-            local properties = {Time = timeToTarget}
-            TweenService.tween(rocket, goal, properties)
-
-            touchConnection = rocket.Touched:Connect(function()
-                destroyRocket(rocket, touchConnection, data)
-            end)
-
-            task.wait(timeToTarget)
         end
 
         destroyRocket(rocket, touchConnection, data)

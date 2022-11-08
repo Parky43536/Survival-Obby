@@ -92,12 +92,6 @@ local EventData = {
 		damage = 50,
 	},
 	-----------------------------------------------------
-	--[[["SuperCoin"] = {
-		chance = 40,
-		levels = {min = 50, max = General.Levels},
-		value = 20,
-		despawnTime = 30,
-	},]]
 	["Heal"] = {
 		chance = 120,
 		levels = {min = 15, max = General.Levels},

@@ -31,41 +31,45 @@ function Event.Main(levelNum, level, data)
 
         task.wait(data.laserDelayTime)
 
-        for _, beam in pairs(laserWall:GetDescendants()) do
-            if beam.Name == "Beam" then
-                beam.Enabled = true
+        if laserWall.Parent ~= nil then
+            for _, beam in pairs(laserWall:GetDescendants()) do
+                if beam.Name == "Beam" then
+                    beam.Enabled = true
+                end
+            end
+
+            local center1 = laserWall.Pillar1.Center
+            local center2 = laserWall.Pillar2.Center
+            local wall = Instance.new("Part")
+            wall.Transparency = 1
+            wall.Anchored = true
+            wall.Size = Vector3.new(1, center1.Size.Y, (center1.Position - center2.Position).Magnitude - 2)
+            wall.CFrame = CFrame.new(center1.Position, center2.Position) + CFrame.new(center1.Position, center2.Position).LookVector * wall.Size.Z / 2
+            wall.Parent = laserWall
+
+            local touchConnection
+            touchConnection = wall.Touched:Connect(function(hit)
+                local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+                if player and player.Character then
+                    if not touchCooldown[player] then
+                        touchCooldown[player] = tick() - EventService.TouchCooldown
+                    end
+                    if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                        touchCooldown[player] = tick()
+                        player.Character.Humanoid:TakeDamage(data.damage)
+                    end
+                end
+            end)
+
+            task.wait(data.despawnTime)
+            if laserWall.Parent ~= nil then
+                touchConnection:Disconnect()
+                laserWall:Destroy()
+
+                EventService.toggleObstacleSpawner(levelNum, rOS1, false)
+                EventService.toggleObstacleSpawner(levelNum, rOS2, false)
             end
         end
-
-        local center1 = laserWall.Pillar1.Center
-        local center2 = laserWall.Pillar2.Center
-        local wall = Instance.new("Part")
-        wall.Transparency = 1
-        wall.Anchored = true
-        wall.Size = Vector3.new(1, center1.Size.Y, (center1.Position - center2.Position).Magnitude - 2)
-        wall.CFrame = CFrame.new(center1.Position, center2.Position) + CFrame.new(center1.Position, center2.Position).LookVector * wall.Size.Z / 2
-        wall.Parent = laserWall
-
-        local touchConnection
-        touchConnection = wall.Touched:Connect(function(hit)
-            local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-            if player and player.Character then
-                if not touchCooldown[player] then
-                    touchCooldown[player] = tick() - EventService.TouchCooldown
-                end
-                if tick() - touchCooldown[player] > EventService.TouchCooldown then
-                    touchCooldown[player] = tick()
-                    player.Character.Humanoid:TakeDamage(data.damage)
-                end
-            end
-        end)
-
-        task.wait(data.despawnTime)
-        touchConnection:Disconnect()
-        laserWall:Destroy()
-
-        EventService.toggleObstacleSpawner(levelNum, rOS1, false)
-        EventService.toggleObstacleSpawner(levelNum, rOS2, false)
     end
 end
 

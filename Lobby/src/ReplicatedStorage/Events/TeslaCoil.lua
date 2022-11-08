@@ -29,26 +29,30 @@ function Event.Main(levelNum, level, data)
 
         local cframe, size = EventService.getBoundingBox(level.Floor)
         for i = 1 , data.damageTicks do
-            for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, data.size / 2)) do
-                if General.playerCheck(player) then
-                    local laser = Obstacle.Laser:Clone()
-                    laser.Beam.Position = coil.Effect.Position
-                    laser.Hit.Position = player.Character.PrimaryPart.Position
-                    local weld = Instance.new("WeldConstraint")
-                    weld.Part0 = player.Character.PrimaryPart
-                    weld.Part1 = laser.Hit
-                    weld.Parent = laser.Hit
-                    EventService.parentToObstacles(levelNum, laser)
-                    game.Debris:AddItem(laser, 0.5)
+            if coil.Parent ~= nil then
+                for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, data.size / 2)) do
+                    if General.playerCheck(player) then
+                        local laser = Obstacle.Laser:Clone()
+                        laser.Beam.Position = coil.Effect.Position
+                        laser.Hit.Position = player.Character.PrimaryPart.Position
+                        local weld = Instance.new("WeldConstraint")
+                        weld.Part0 = player.Character.PrimaryPart
+                        weld.Part1 = laser.Hit
+                        weld.Parent = laser.Hit
+                        EventService.parentToObstacles(levelNum, laser)
+                        game.Debris:AddItem(laser, data.damageDelay / 2)
 
-                    player.Character.Humanoid:TakeDamage(data.damage)
+                        player.Character.Humanoid:TakeDamage(data.damage)
+                    end
                 end
             end
 
             task.wait(data.damageDelay)
         end
 
-        coil:Destroy()
+        if coil.Parent ~= nil then
+            coil:Destroy()
+        end
 
         EventService.toggleObstacleSpawner(levelNum, rOS, false)
     end

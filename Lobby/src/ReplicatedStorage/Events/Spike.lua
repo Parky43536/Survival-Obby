@@ -31,24 +31,26 @@ function Event.Main(levelNum, level, data)
 
             task.wait(data.delayTime)
 
-            local touchConnection
-            touchConnection = spike.Touched:Connect(function(hit)
-                local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-                if player and player.Character then
-                    if not touchCooldown[player] then
-                        touchCooldown[player] = tick() - EventService.TouchCooldown
-                    end
-                    if tick() - touchCooldown[player] > EventService.TouchCooldown then
-                        touchCooldown[player] = tick()
-                        player.Character.Humanoid:TakeDamage(data.damage)
-                    end
-                end
-            end)
-
-            task.wait(data.despawnTime)
             if spike.Parent ~= nil then
-                touchConnection:Disconnect()
-                spike:Destroy()
+                local touchConnection
+                touchConnection = spike.Touched:Connect(function(hit)
+                    local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+                    if player and player.Character then
+                        if not touchCooldown[player] then
+                            touchCooldown[player] = tick() - EventService.TouchCooldown
+                        end
+                        if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                            touchCooldown[player] = tick()
+                            player.Character.Humanoid:TakeDamage(data.damage)
+                        end
+                    end
+                end)
+
+                task.wait(data.despawnTime)
+                if spike.Parent ~= nil then
+                    touchConnection:Disconnect()
+                    spike:Destroy()
+                end
             end
         end
     end
