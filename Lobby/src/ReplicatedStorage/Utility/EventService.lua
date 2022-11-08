@@ -122,6 +122,16 @@ function EventService.getFloorGroup(part)
     end
 end
 
+function EventService.parentToObstacles(levelNum, part)
+    if not workspace.Obstacles:FindFirstChild(levelNum) then
+        local folder = Instance.new("Folder")
+        folder.Name = levelNum
+        folder.Parent = workspace.Obstacles
+    end
+
+    part.Parent = workspace.Obstacles:FindFirstChild(levelNum)
+end
+
 function EventService.randomPoint(level, args)
     if not args then args = {} end
     if not args.offset then args.offset = 2 end

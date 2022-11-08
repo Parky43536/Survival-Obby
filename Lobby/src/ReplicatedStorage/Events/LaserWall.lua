@@ -23,7 +23,7 @@ function Event.Main(levelNum, level, data)
         laserWall.Pillar1:SetPrimaryPartCFrame(rOS1.CFrame)
         laserWall.Pillar2:SetPrimaryPartCFrame(rOS2.CFrame)
 
-        laserWall.Parent = workspace.Misc
+        EventService.parentToObstacles(levelNum, laserWall)
 
         local tweenInfo = TweenInfo.new(data.riseDelayTime)
         ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * 17)

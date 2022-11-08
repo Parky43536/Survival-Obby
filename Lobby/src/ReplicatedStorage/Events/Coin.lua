@@ -47,7 +47,7 @@ function Event.Main(levelNum, level)
         local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
 
         for _, player in playersInLevel do
-            Signal:FireClient(player, rp.Position)
+            Signal:FireClient(player, rp.Position, levelNum)
         end
     end
 end
@@ -56,10 +56,10 @@ function Event.Server(player)
     DataManager:GiveCash(player, data.value)
 end
 
-function Event.Client(rp)
+function Event.Client(rp, levelNum)
     local coin = Obstacle.Coin:Clone()
     coin.Position = rp + Vector3.new(0, 3.5, 0)
-    coin.Parent = workspace.Misc
+    EventService.parentToObstacles(levelNum, coin)
 
     local goal = {CFrame = coin.CFrame * CFrame.Angles(0, math.rad(180), 0)}
     local properties = {Time = 1, Repeat = math.huge}

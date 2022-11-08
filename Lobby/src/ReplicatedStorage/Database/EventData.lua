@@ -9,10 +9,10 @@ local EventData = {
 		obstacle = true,
 
 		delayTime = 2,
-		size = 30,
-		damageTicks = 5,
-		damageDelay = 2,
-		damage = 30,
+		size = 40,
+		damageTicks = 10,
+		damageDelay = 1,
+		damage = 15,
 	},
 	["Rocket"] = {
 		chance = 60,
@@ -106,7 +106,7 @@ local EventData = {
 	},
 	["Coin"] = {
 		chance = 20,
-		levels = {min = 2, max = 39},
+		levels = {min = 2, max = General.Levels},
 		value = 10,
 		despawnTime = 30,
 	},

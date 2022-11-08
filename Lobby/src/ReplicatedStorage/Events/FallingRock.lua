@@ -34,7 +34,7 @@ function Event.Main(levelNum, level, data)
         end
 
         rock.Position = rp.Position + Vector3.new(rng:NextInteger(-data.offset, data.offset), height, rng:NextInteger(-data.offset, data.offset))
-        rock.Parent = workspace.Misc
+        EventService.parentToObstacles(levelNum, rock)
 
         local touchConnection
         touchConnection = rock.Touched:Connect(function(hit)

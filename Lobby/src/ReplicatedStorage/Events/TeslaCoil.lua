@@ -18,7 +18,7 @@ function Event.Main(levelNum, level, data)
     if rOS then
         local coil = Obstacle.TeslaCoil:Clone()
         coil:SetPrimaryPartCFrame(rOS.CFrame)
-        coil.Parent = workspace.Misc
+        EventService.parentToObstacles(levelNum, coil)
 
         local goal = {Transparency = 0.1}
         local properties = {Time = data.delayTime}
@@ -38,7 +38,7 @@ function Event.Main(levelNum, level, data)
                     weld.Part0 = player.Character.PrimaryPart
                     weld.Part1 = laser.Hit
                     weld.Parent = laser.Hit
-                    laser.Parent = workspace.Misc
+                    EventService.parentToObstacles(levelNum, laser)
                     game.Debris:AddItem(laser, 0.5)
 
                     player.Character.Humanoid:TakeDamage(data.damage)

@@ -23,7 +23,7 @@ function Event.Main(levelNum, level, data)
             local spike = Obstacle.Spike:Clone()
             spike.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(90), 0, math.rad(180))
             spike.CFrame = spike.CFrame + spike.CFrame.UpVector * -spike.Size.Y / 2
-            spike.Parent = workspace.Misc
+            EventService.parentToObstacles(levelNum, spike)
 
             local goal = {CFrame = spike.CFrame + spike.CFrame.UpVector * spike.Size.Y}
             local properties = {Time = data.delayTime}

@@ -55,7 +55,7 @@ function Event.Main(levelNum, level, data)
                 lava.CFrame = (originCFrame - originCFrame.Position) + lava.Position
                 lava.CFrame += lava.CFrame.UpVector * 0.1
                 lava.Size -= Vector3.new(0.01, 0, 0.01)
-                lava.Parent = workspace.Misc
+                EventService.parentToObstacles(levelNum, lava)
 
                 local goal = {Transparency = 0.1}
                 local properties = {Time = data.delayTime}

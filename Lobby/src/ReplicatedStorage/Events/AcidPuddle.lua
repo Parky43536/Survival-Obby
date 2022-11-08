@@ -25,7 +25,7 @@ function Event.Main(levelNum, level, data)
 
             local acid = Obstacle.Acid:Clone()
             acid.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
-            acid.Parent = workspace.Misc
+            EventService.parentToObstacles(levelNum, acid)
 
             local Params = RaycastParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
@@ -35,7 +35,6 @@ function Event.Main(levelNum, level, data)
             local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
             if Result then
                 growToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, data.size)
-                acid.Parent = workspace.Misc
             end
 
             if acid.Parent and growToSize and growToSize > 4 then

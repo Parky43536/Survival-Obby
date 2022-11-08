@@ -58,7 +58,7 @@ function Event.Main(levelNum, level, data)
         local touchConnection = false
 
         if targetPlayer then
-            rocket.Parent = workspace.Misc
+            EventService.parentToObstacles(levelNum, rocket)
 
             for i = 1 , data.faceRate do
                 if General.playerCheck(targetPlayer) then
@@ -71,7 +71,7 @@ function Event.Main(levelNum, level, data)
             end
 
             local realRocket = rocket.Stand.Rocket
-            realRocket.Parent = workspace.Misc
+            EventService.parentToObstacles(levelNum, realRocket)
             rocket:Destroy()
             rocket = realRocket
             rocket.Attachment.Fire.Enabled = true

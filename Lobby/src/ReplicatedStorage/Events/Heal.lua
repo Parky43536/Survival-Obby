@@ -40,7 +40,7 @@ function Event.Main(levelNum, level)
         local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
 
         for _, player in playersInLevel do
-            Signal:FireClient(player, rp.Position)
+            Signal:FireClient(player, rp.Position, levelNum)
         end
     end
 end
@@ -51,10 +51,10 @@ function Event.Server(player)
     end
 end
 
-function Event.Client(rp)
+function Event.Client(rp, levelNum)
     local heal = Obstacle.Heal:Clone()
     heal.Position = rp + Vector3.new(0, 3.5, 0)
-    heal.Parent = workspace.Misc
+    EventService.parentToObstacles(levelNum, heal)
 
     local goal = {CFrame = heal.CFrame * CFrame.Angles(0, math.rad(180), 0)}
     local properties = {Time = 1, Repeat = math.huge}

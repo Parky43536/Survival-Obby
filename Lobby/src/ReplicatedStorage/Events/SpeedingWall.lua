@@ -51,7 +51,7 @@ function Event.Main(levelNum, level, data)
             wall.CFrame = CFrame.new(position2, position1)
             wall.CFrame = (originCFrame - originCFrame.Position) + wall.Position
             wall.CFrame += wall.CFrame.UpVector * (wall.Size.Y/2 + 0.1)
-            wall.Parent = workspace.Misc
+            EventService.parentToObstacles(levelNum, wall)
 
             local timeToTarget = (position1 - position2).Magnitude / data.speed
             local goal = {CFrame = wall.CFrame + wall.CFrame.LookVector * (position1 - position2).Magnitude}

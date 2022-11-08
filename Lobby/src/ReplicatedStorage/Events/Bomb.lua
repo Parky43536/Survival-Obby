@@ -18,7 +18,7 @@ function Event.Main(levelNum, level, data)
     if rp then
         local bomb = Obstacle.Bomb:Clone()
         bomb.Position = rp.Position + Vector3.new(0, 3.5, 0)
-        bomb.Parent = workspace.Misc
+        EventService.parentToObstacles(levelNum, bomb)
 
         AudioService:Create(11565378, bomb, {Volume = 0.8, Duration = 2})
 
