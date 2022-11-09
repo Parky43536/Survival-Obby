@@ -83,6 +83,7 @@ end
 
 function GameService.SetUpGame()
     local lastCFrame = workspace.Levels.Beginning:GetPivot()
+    local turnsDisabled = false
     local lastLevel
 
     for levelNum = 1 , General.Levels do
@@ -100,21 +101,37 @@ function GameService.SetUpGame()
             level = totalLevels[num]:Clone()
             level:PivotTo(lastCFrame)
 
+            local cframe, size = EventService.getBoundingBox(level.Floor)
+
             table.remove(totalLevels, num)
 
-            touching = false
+            local notValid = false
+
             local Params = OverlapParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
             Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
             Params.MaxParts = 1
-            local touchingParts = workspace:GetPartBoundsInBox(level.Door.PrimaryPart.Attachment.WorldCFrame, Vector3.new(5, 5, 5), Params)
+            local touchingParts = workspace:GetPartBoundsInBox(cframe, size - Vector3.new(1,1,1), Params)
             if next(touchingParts) then
-                touching = true
+                notValid = true
             end
-        until touching == false and level.Name ~= lastLevel
+
+            if level.Name == "Right" or level.Name == "Left" then
+                if turnsDisabled == true then
+                    notValid = true
+                end
+            end
+        until notValid == false and level.Name ~= lastLevel
 
         lastCFrame = level.Door.PrimaryPart.Attachment.WorldCFrame
         lastLevel = level.Name
+
+        if level.Name == "Stairs" then
+            turnsDisabled = false
+        elseif level.Name == "Right" or level.Name == "Left" then
+            turnsDisabled = true
+        end
+
         level.Name = levelNum
 
         level.Door.Level.Front.Label.Text = levelNum

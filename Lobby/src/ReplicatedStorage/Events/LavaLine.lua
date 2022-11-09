@@ -33,6 +33,7 @@ function Event.Main(levelNum, level, data)
             local rng = Random.new()
             local position1
             local position2
+            local widthSize = RV(levelNum, data, "size")
             local originCFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
             originCFrame += originCFrame.UpVector * -0.1
 
@@ -58,9 +59,16 @@ function Event.Main(levelNum, level, data)
                 position2 = Result.Position
             end
 
+            RayOrigin = (originCFrame + originCFrame.RightVector * 100).Position
+            RayDirection = originCFrame.RightVector * -1000
+            Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+            if Result then
+                widthSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+            end
+
             if position1 and position2 then
                 local lava = Obstacle.Lava:Clone()
-                lava.Size = Vector3.new(RV(levelNum, data, "size"), lava.Size.Y, (position1 - position2).Magnitude)
+                lava.Size = Vector3.new(widthSize, lava.Size.Y, (position1 - position2).Magnitude)
                 lava.CFrame = CFrame.new(position1, position2) + CFrame.new(position1, position2).LookVector * lava.Size.Z / 2
                 lava.CFrame = (originCFrame - originCFrame.Position) + lava.Position
                 lava.CFrame += lava.CFrame.UpVector * 0.1
