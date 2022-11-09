@@ -267,12 +267,7 @@ function EventService.CleanLevel(levelNum, level)
     end
 
     if IsServer then
-        local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
-
-        for _, player in playersInLevel do
-            Signal:FireClient(player, levelNum)
-        end
+        Signal:FireAllClients(levelNum)
     end
 end
 
