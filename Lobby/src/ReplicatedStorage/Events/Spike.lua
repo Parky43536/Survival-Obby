@@ -14,13 +14,24 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local touchCooldown = {}
+local slows = {}
+
+local function RV(levelNum, data, value)
+    if value == "spike" then
+        if levelNum >= data.upgrade then
+            return Obstacle.UpgradedSpike
+        else
+            return Obstacle.Spike
+        end
+    end
+end
 
 function Event.Main(levelNum, level, data)
     local rpController = EventService.randomPoint(level)
     if rpController then
         local rp = EventService.randomPoint(level, {model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
-            local spike = Obstacle.Spike:Clone()
+            local spike = RV(levelNum, data, "spike"):Clone()
             spike.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(90), 0, math.rad(180))
             spike.CFrame = spike.CFrame + spike.CFrame.UpVector * -spike.Size.Y / 2
             EventService.parentToObstacles(levelNum, spike)
@@ -42,6 +53,22 @@ function Event.Main(levelNum, level, data)
                         if tick() - touchCooldown[player] > EventService.TouchCooldown then
                             touchCooldown[player] = tick()
                             player.Character.Humanoid:TakeDamage(data.damage)
+                        end
+
+                        if levelNum >= data.upgrade then
+                            task.spawn(function()
+                                if not slows[player] then
+                                    slows[player] = true
+
+                                    player.Character.Humanoid.WalkSpeed -= data.slow
+                                    task.wait(data.slowDuration)
+                                    if General.playerCheck(player) then
+                                        player.Character.Humanoid.WalkSpeed += data.slow
+                                    end
+
+                                    slows[player] = nil
+                                end
+                            end)
                         end
                     end
                 end)

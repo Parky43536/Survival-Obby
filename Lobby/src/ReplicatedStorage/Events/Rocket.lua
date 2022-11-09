@@ -25,7 +25,7 @@ local function destroyRocket(rocket, touchConnection, data)
             end
         end
 
-        local particle = Obstacles.Explosion:Clone()
+        local particle = Obstacle.Explosion:Clone()
         particle:PivotTo(rocket.CFrame)
         particle.Parent = workspace
 

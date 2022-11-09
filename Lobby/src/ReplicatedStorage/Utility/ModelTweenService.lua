@@ -56,14 +56,16 @@ function module.TweenModuleCFrame(Model,Tweeninfo,CFrame)
 	local CFrameValue = Instance.new("CFrameValue")
 	CFrameValue.Value = Model:GetPrimaryPartCFrame()
 
-	CFrameValue:GetPropertyChangedSignal("Value"):connect(function()
-		Model:SetPrimaryPartCFrame(CFrameValue.Value)
+	CFrameValue:GetPropertyChangedSignal("Value"):Connect(function()
+		if Model.Parent ~= nil then
+			Model:SetPrimaryPartCFrame(CFrameValue.Value)
+		end
 	end)
 
 	local tween = TS:Create(CFrameValue, Tweeninfo, {Value = CFrame})
 	tween:Play()
 
-	tween.Completed:connect(function()
+	tween.Completed:Connect(function()
 		CFrameValue:Destroy()
 	end)
 

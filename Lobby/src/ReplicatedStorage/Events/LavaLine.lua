@@ -15,10 +15,20 @@ local Event = {}
 
 local touchCooldown = {}
 
+local function RV(levelNum, data, value)
+    if value == "size" then
+        if levelNum >= data.upgrade then
+            return data.upgradedSize
+        else
+            return data.size
+        end
+    end
+end
+
 function Event.Main(levelNum, level, data)
     local rpController = EventService.randomPoint(level)
     if rpController then
-        local rp = EventService.randomPoint(level, {model = {rpController.Instance}})
+        local rp = EventService.randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}})
         if rp then
             local rng = Random.new()
             local position1
@@ -50,7 +60,7 @@ function Event.Main(levelNum, level, data)
 
             if position1 and position2 then
                 local lava = Obstacle.Lava:Clone()
-                lava.Size = Vector3.new(lava.Size.X, lava.Size.Y, (position1 - position2).Magnitude)
+                lava.Size = Vector3.new(RV(levelNum, data, "size"), lava.Size.Y, (position1 - position2).Magnitude)
                 lava.CFrame = CFrame.new(position1, position2) + CFrame.new(position1, position2).LookVector * lava.Size.Z / 2
                 lava.CFrame = (originCFrame - originCFrame.Position) + lava.Position
                 lava.CFrame += lava.CFrame.UpVector * 0.1

@@ -24,30 +24,33 @@ function Event.Main(levelNum, level, data)
         local properties = {Time = data.delayTime}
         TweenService.tween(coil.Effect, goal, properties)
         task.wait(data.delayTime)
-        coil.Effect.Attachment.Bolts1.Enabled = true
-        coil.Effect.Attachment.Bolts2.Enabled = true
 
-        local cframe, size = EventService.getBoundingBox(level.Floor)
-        for i = 1 , data.damageTicks do
-            if coil.Parent ~= nil then
-                for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, data.size / 2)) do
-                    if General.playerCheck(player) then
-                        local laser = Obstacle.Laser:Clone()
-                        laser.Beam.Position = coil.Effect.Position
-                        laser.Hit.Position = player.Character.PrimaryPart.Position
-                        local weld = Instance.new("WeldConstraint")
-                        weld.Part0 = player.Character.PrimaryPart
-                        weld.Part1 = laser.Hit
-                        weld.Parent = laser.Hit
-                        EventService.parentToObstacles(levelNum, laser)
-                        game.Debris:AddItem(laser, data.damageDelay / 2)
+        if coil.Parent ~= nil then
+            coil.Effect.Attachment.Bolts1.Enabled = true
+            coil.Effect.Attachment.Bolts2.Enabled = true
 
-                        player.Character.Humanoid:TakeDamage(data.damage)
+            local cframe, size = EventService.getBoundingBox(level.Floor)
+            for i = 1 , data.damageTicks do
+                if coil.Parent ~= nil then
+                    for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, data.size / 2)) do
+                        if General.playerCheck(player) then
+                            local laser = Obstacle.Laser:Clone()
+                            laser.Beam.Position = coil.Effect.Position
+                            laser.Hit.Position = player.Character.PrimaryPart.Position
+                            local weld = Instance.new("WeldConstraint")
+                            weld.Part0 = player.Character.PrimaryPart
+                            weld.Part1 = laser.Hit
+                            weld.Parent = laser.Hit
+                            EventService.parentToObstacles(levelNum, laser)
+                            game.Debris:AddItem(laser, data.damageDelay / 2)
+
+                            player.Character.Humanoid:TakeDamage(data.damage)
+                        end
                     end
                 end
-            end
 
-            task.wait(data.damageDelay)
+                task.wait(data.damageDelay)
+            end
         end
 
         if coil.Parent ~= nil then

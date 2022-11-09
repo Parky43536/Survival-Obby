@@ -19,6 +19,8 @@ local GameService = {}
 local levels = {}
 
 function GameService.FinishButton(levelNum, level, win)
+    EventService.CleanLevel(levelNum, level)
+
     if win then
         LevelService.OpenDoors(level)
         levels[levelNum].DoorOpened = true
@@ -31,8 +33,6 @@ function GameService.FinishButton(levelNum, level, win)
 
         task.wait(General.DoorTime)
     end
-
-    EventService.CleanLevel(levelNum, level)
 
     levels[levelNum].DoorOpened = false
     levels[levelNum].Timer = General.TimerCalc(levelNum)

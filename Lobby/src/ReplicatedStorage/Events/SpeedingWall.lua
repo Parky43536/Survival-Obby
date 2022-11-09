@@ -13,8 +13,18 @@ local AudioService = require(Utility.AudioService)
 
 local Event = {}
 
+local function RV(levelNum, data, value)
+    if value == "size" then
+        if levelNum >= data.upgrade then
+            return data.upgradedSize
+        else
+            return data.size
+        end
+    end
+end
+
 function Event.Main(levelNum, level, data)
-    local rp = EventService.randomPoint(level, {offset = 6})
+    local rp = EventService.randomPoint(level, {offset = RV(levelNum, data, "size") / 2})
     if rp then
         local rng = Random.new()
         local position1
@@ -46,8 +56,8 @@ function Event.Main(levelNum, level, data)
 
         if position1 and position2 then
             local wall = Obstacle.SpeedingWall:Clone()
-
             wall.BrickColor = BrickColor.random()
+            wall.Size = Vector3.new(RV(levelNum, data, "size"), RV(levelNum, data, "size"), 2)
             wall.CFrame = CFrame.new(position2, position1)
             wall.CFrame = (originCFrame - originCFrame.Position) + wall.Position
             wall.CFrame += wall.CFrame.UpVector * (wall.Size.Y/2 + 0.1)

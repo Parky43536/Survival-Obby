@@ -68,29 +68,26 @@ end
 General.Signs = {
     [1] = "Click the button and survive to open the door",
     [2] = "Complete levels and collect coins to buy upgrades",
-    [3] = "One person must be alive or the button will reset",
+    [3] = "One person must be alive or the button will start over",
     [5] = "Speeding Walls will now appear",
-    [10] = "Laser Walls will now appear",
-    [15] = "Heals will now appear",
-    [20] = "Acid Puddles will now appear",
-    [25] = "Rockets will now appear",
-    [30] = "Tesla Coils will now appear",
-
-    --5 bomb upgrade
-    --10 spike upgrade
-    --15 lava line upgrade
-    --20 falling rock upgrade
-    --25 speeding wall upgrade
-    --30 laser walls upgrade
-    --35 heals upgrade
-    --40 acid puddle upgrade
-    --45 rocket upgrade
-    --50 tesla coil upgrade
-
-    --5 landmine
-    --10 landmine upgrade
-    --15 nuke
-    --20 nuke upgrade
+    --[10] = "Landmines will now appear",
+    [15] = "Laser Walls will now appear",
+    [20] = "Heals will now appear",
+    [25] = "Acid Puddles will now appear",
+    [30] = "Bombs have been upgraded",
+    [35] = "Spikes have been upgraded",
+    [40] = "Lava Lines have been upgraded",
+    [45] = "Falling Rocks have been upgraded",
+    [50] = "Rockets will now appear",
+    [55] = "Speeding Walls have been upgraded",
+    --[60] = "Landmines have been upgraded",
+    --[65] = "Laser Walls have been upgraded",
+    [70] = "Tesla Coils will now appear",
+    --[75] = "Acid Puddles have been upgraded",
+    --[80] = "Rockets have been upgraded",
+    --[85] = "Nukes will now appear",
+    --[90] = "Tesla Coils have been upgraded",
+    --[95] = "Nukes have been upgraded",
 }
 
 --Colors---------------------------------------------
