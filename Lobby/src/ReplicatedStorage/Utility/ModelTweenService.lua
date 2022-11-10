@@ -1,6 +1,7 @@
 local module = {}
 module.__index = module
 
+local CollectionService = game:GetService("CollectionService")
 local TS = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
@@ -184,7 +185,7 @@ function module.TweenModuleTransparency(Model,Tweeninfo,Transparency)
 	if typeof(Model) ~= "Instance" then error(Model.." isnt a instance") end
 	if not Model:IsA("Model") then error(Model.Name.." isnt a model") end
 	for _,v in ipairs(Model:GetDescendants()) do
-		if v:IsA("BasePart") then
+		if v:IsA("BasePart") and not CollectionService:HasTag(v, "IgnoreTransparency") then
 			TS:Create(v,Tweeninfo,{Transparency = Transparency}):Play()
 		end
 	end

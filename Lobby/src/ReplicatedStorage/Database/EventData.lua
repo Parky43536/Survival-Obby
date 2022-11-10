@@ -54,7 +54,16 @@ local EventData = {
 
 		upgradedDamage = 35,
 	},
-	--landmines
+	["Landmine"] = {
+		chance = 450,
+		levels = {min = 10, max = General.Levels},
+		upgrade = 60,
+
+		despawnTime = 60,
+		delayTime = 1.5,
+		size = 20,
+		damage = 40,
+	},
 	["SpeedingWall"] = {
 		chance = 45,
 		levels = {min = 5, max = General.Levels},
