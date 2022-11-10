@@ -13,7 +13,31 @@ local AudioService = require(Utility.AudioService)
 
 local Event = {}
 
-local function destroyRocket(rocket, touchConnection, data)
+local function RV(levelNum, data, value)
+    if value == "speed" then
+        if levelNum >= data.upgrade then
+            return data.upgradedSpeed
+        else
+            return data.speed
+        end
+    end
+    if value == "rocket" then
+        if levelNum >= data.upgrade then
+            return Obstacle.UpgradedRocket
+        else
+            return Obstacle.Rocket
+        end
+    end
+    if value == "explosion" then
+        if levelNum >= data.upgrade then
+            return Obstacle.UpgradedExplosion
+        else
+            return Obstacle.Explosion
+        end
+    end
+end
+
+local function destroyRocket(rocket, touchConnection, levelNum, data)
     if rocket.Parent ~= nil then
         if touchConnection then
             touchConnection:Disconnect()
@@ -25,7 +49,7 @@ local function destroyRocket(rocket, touchConnection, data)
             end
         end
 
-        local particle = Obstacle.Explosion:Clone()
+        local particle = RV(levelNum, data, "explosion"):Clone()
         particle:PivotTo(rocket.CFrame)
         particle.Parent = workspace
 
@@ -49,7 +73,7 @@ end
 function Event.Main(levelNum, level, data)
     local rOS = EventService.randomObstacleSpawner(levelNum, level)
     if rOS then
-        local rocket = Obstacle.Rocket:Clone()
+        local rocket = RV(levelNum, data, "rocket"):Clone()
         rocket:SetPrimaryPartCFrame(rOS.CFrame)
 
         local cframe, size = EventService.getBoundingBox(level.Floor)
@@ -79,7 +103,7 @@ function Event.Main(levelNum, level, data)
                 rocket.Attachment.Fire.Enabled = true
 
                 local target = rocket.CFrame + rocket.CFrame.lookVector * 100
-                local timeToTarget = (rocket.Position - target.Position).Magnitude / data.speed
+                local timeToTarget = (rocket.Position - target.Position).Magnitude / RV(levelNum, data, "speed")
 
                 local RayOrigin = rocket.Position
                 local RayDirection = rocket.CFrame.lookVector * 100
@@ -91,7 +115,7 @@ function Event.Main(levelNum, level, data)
                 local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
                 if Result then
                     target = Result
-                    timeToTarget = (rocket.Position - target.Position).Magnitude / data.speed
+                    timeToTarget = (rocket.Position - target.Position).Magnitude / RV(levelNum, data, "speed")
                 end
 
                 local goal = {Position = target.Position}
@@ -99,14 +123,14 @@ function Event.Main(levelNum, level, data)
                 TweenService.tween(rocket, goal, properties)
 
                 touchConnection = rocket.Touched:Connect(function()
-                    destroyRocket(rocket, touchConnection, data)
+                    destroyRocket(rocket, touchConnection, levelNum, data)
                 end)
 
                 task.wait(timeToTarget)
             end
         end
 
-        destroyRocket(rocket, touchConnection, data)
+        destroyRocket(rocket, touchConnection, levelNum, data)
 
         EventService.toggleObstacleSpawner(levelNum, rOS, false)
     end

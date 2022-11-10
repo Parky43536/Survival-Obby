@@ -9,10 +9,12 @@ local EventData = {
 		upgrade = 90,
 
 		delayTime = 2,
-		size = 34,
+		size = 32,
 		damageTicks = 10,
 		damageDelay = 1,
 		damage = 15,
+
+		upgradedSize = 44,
 	},
 	["Rocket"] = {
 		chance = 60,
@@ -24,6 +26,8 @@ local EventData = {
 		speed = 25,
 		size = 12,
 		damage = 50,
+
+		upgradedSpeed = 50,
 	},
 	["AcidPuddle"] = {
 		chance = 60,
@@ -33,8 +37,10 @@ local EventData = {
 		despawnTime = 14,
 		growTime = 8,
 		delayTime = 1,
-		size = 20,
-		damage = 15,
+		size = 24,
+		damage = 10,
+
+		upgradedSize = 32,
 	},
 	["LaserWall"] = {
 		chance = 55,
@@ -45,6 +51,8 @@ local EventData = {
 		riseDelayTime = 0.5,
 		laserDelayTime = 1,
 		damage = 25,
+
+		upgradedDamage = 35,
 	},
 	--landmines
 	["SpeedingWall"] = {
@@ -55,7 +63,7 @@ local EventData = {
 		speed = 25,
 		size = 12,
 
-		upgradedSize = 20,
+		upgradedSize = 16,
 	},
 	["FallingRock"] = {
 		chance = 50,
@@ -69,8 +77,7 @@ local EventData = {
 		size = 8,
 		damage = 40,
 
-		upgradedDamage = 50,
-		upgradedSize = 16,
+		upgradedSize = 12,
 	},
 	["LavaLine"] = {
 		chance = 45,

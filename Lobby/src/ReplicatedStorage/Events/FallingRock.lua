@@ -16,13 +16,6 @@ local Event = {}
 local touchCooldown = {}
 
 local function RV(levelNum, data, value)
-    if value == "damage" then
-        if levelNum >= data.upgrade then
-            return data.upgradedDamage
-        else
-            return data.damage
-        end
-    end
     if value == "size" then
         if levelNum >= data.upgrade then
             return data.upgradedSize
@@ -63,7 +56,7 @@ function Event.Main(levelNum, level, data)
                 end
                 if tick() - touchCooldown[player] > EventService.TouchCooldown then
                     touchCooldown[player] = tick()
-                    player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
+                    player.Character.Humanoid:TakeDamage(data.damage)
                 end
             end
         end)

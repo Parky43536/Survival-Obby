@@ -155,6 +155,14 @@ function EventService.randomPoint(level, args)
     local z = cframe.Position.Z + rng:NextInteger(math.clamp((-size.Z/2) + args.offset, -99e99, 0), math.clamp((size.Z/2) - args.offset, 0, 99e99))
     local pos = Vector3.new(x, cframe.Position.Y + 100, z)
 
+    if args.show then
+        EventService.positionVisual(Vector3.new(x, cframe.Position.Y, z), {
+            transparency = 0.5,
+            size = size + Vector3.new(-args.offset, 1, -args.offset),
+            duration = 1,
+        })
+    end
+
     local RayOrigin = pos
     local RayDirection = Vector3.new(0, -1000, 0)
 
@@ -235,9 +243,12 @@ function EventService.getClosestPlayer(position, players)
     return closestPlayer
 end
 
-function EventService.positionVisual(position, duration)
+function EventService.positionVisual(position, args)
+    if not args then args = {} end
+
     local part = Instance.new("Part")
-    part.Size = Vector3.new(1,1,1)
+    part.Size = args.size or Vector3.new(1,1,1)
+    part.Transparency = args.transparency or 0
     part.BrickColor = BrickColor.new("Bright red")
     part.Anchored = true
     part.CanCollide = false
@@ -248,9 +259,9 @@ function EventService.positionVisual(position, duration)
         part.CFrame = position
     end
 
-    if duration then
+    if args.duration then
         task.spawn(function()
-            task.wait(duration)
+            task.wait(args.duration)
             part:Destroy()
         end)
     end

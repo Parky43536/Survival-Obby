@@ -15,12 +15,22 @@ local Event = {}
 
 local touchCooldown = {}
 
+local function RV(levelNum, data, value)
+    if value == "size" then
+        if levelNum >= data.upgrade then
+            return data.upgradedSize
+        else
+            return data.size
+        end
+    end
+end
+
 function Event.Main(levelNum, level, data)
     local rpController = EventService.randomPoint(level)
     if rpController then
-        local rp = EventService.randomPoint(level, {offset = data.size/2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
+        local rp = EventService.randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
-            local growToSize
+            local growToSize = RV(levelNum, data, "size")
             local touchConnection
 
             local acid = Obstacle.Acid:Clone()
@@ -29,14 +39,25 @@ function Event.Main(levelNum, level, data)
             local Params = RaycastParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
             Params.FilterDescendantsInstances = {EventService.getFloorGroup(rp.Instance)}
+
             local RayOrigin = (acid.CFrame + acid.CFrame.LookVector * 100).Position
             local RayDirection = acid.CFrame.LookVector * -1000
             local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
             if Result then
-                growToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, data.size)
+                growToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
             end
 
-            if acid.Parent ~= nil and growToSize and growToSize > 4 then
+            RayOrigin = (acid.CFrame + acid.CFrame.RightVector * 100).Position
+            RayDirection = acid.CFrame.RightVector * -1000
+            Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+            if Result then
+                local testGrowToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+                if testGrowToSize < growToSize then
+                    growToSize = testGrowToSize
+                end
+            end
+
+            if growToSize and growToSize > 4 then
                 EventService.parentToObstacles(levelNum, acid)
 
                 local goal = {Size = Vector3.new(growToSize, acid.Size.Y, growToSize)}
@@ -49,26 +70,28 @@ function Event.Main(levelNum, level, data)
 
                 task.wait(data.delayTime)
 
-                acid.AcidParticle.Enabled = true
-
-                touchConnection = acid.Touched:Connect(function(hit)
-                    local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-                    if player and player.Character then
-                        if not touchCooldown[player] then
-                            touchCooldown[player] = tick() - EventService.TouchCooldown
-                        end
-                        if tick() - touchCooldown[player] > EventService.TouchCooldown then
-                            touchCooldown[player] = tick()
-                            player.Character.Humanoid:TakeDamage(data.damage)
-                        end
-                    end
-                end)
-
-                task.wait(data.despawnTime)
-
                 if acid.Parent ~= nil then
-                    touchConnection:Disconnect()
-                    acid:Destroy()
+                    acid.AcidParticle.Enabled = true
+
+                    touchConnection = acid.Touched:Connect(function(hit)
+                        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+                        if player and player.Character then
+                            if not touchCooldown[player] then
+                                touchCooldown[player] = tick() - EventService.TouchCooldown
+                            end
+                            if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                                touchCooldown[player] = tick()
+                                player.Character.Humanoid:TakeDamage(data.damage)
+                            end
+                        end
+                    end)
+
+                    task.wait(data.despawnTime)
+
+                    if acid.Parent ~= nil then
+                        touchConnection:Disconnect()
+                        acid:Destroy()
+                    end
                 end
             else
                 acid:Destroy()

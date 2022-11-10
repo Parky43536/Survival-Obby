@@ -81,12 +81,12 @@ General.Signs = {
     [50] = "Rockets will now appear",
     [55] = "Speeding Walls have been upgraded",
     --[60] = "Landmines have been upgraded",
-    --[65] = "Laser Walls have been upgraded",
+    [65] = "Laser Walls have been upgraded",
     [70] = "Tesla Coils will now appear",
-    --[75] = "Acid Puddles have been upgraded",
-    --[80] = "Rockets have been upgraded",
+    [75] = "Acid Puddles have been upgraded",
+    [80] = "Rockets have been upgraded",
     --[85] = "Nukes will now appear",
-    --[90] = "Tesla Coils have been upgraded",
+    [90] = "Tesla Coils have been upgraded",
     --[95] = "Nukes have been upgraded",
 }
 

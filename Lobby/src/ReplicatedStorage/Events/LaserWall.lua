@@ -15,19 +15,43 @@ local Event = {}
 
 local touchCooldown = {}
 
+local function RV(levelNum, data, value)
+    if value == "damage" then
+        if levelNum >= data.upgrade then
+            return data.upgradedDamage
+        else
+            return data.damage
+        end
+    end
+    if value == "laserWall" then
+        if levelNum >= data.upgrade then
+            return Obstacle.UpgradedLaserWall
+        else
+            return Obstacle.LaserWall
+        end
+    end
+    if value == "height" then
+        if levelNum >= data.upgrade then
+            return 17 + 8
+        else
+            return 17
+        end
+    end
+end
+
 function Event.Main(levelNum, level, data)
     local rOS1 = EventService.randomObstacleSpawner(levelNum, level)
     local rOS2 = EventService.randomObstacleSpawner(levelNum, level)
     if rOS1 and rOS2 then
-        local laserWall = Obstacle.LaserWall:Clone()
+        local laserWall = RV(levelNum, data, "laserWall"):Clone()
         laserWall.Pillar1:SetPrimaryPartCFrame(rOS1.CFrame)
         laserWall.Pillar2:SetPrimaryPartCFrame(rOS2.CFrame)
 
         EventService.parentToObstacles(levelNum, laserWall)
 
         local tweenInfo = TweenInfo.new(data.riseDelayTime)
-        ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * 17)
-        ModelTweenService.TweenModuleCFrame(laserWall.Pillar2, tweenInfo, laserWall.Pillar2.PrimaryPart.CFrame + laserWall.Pillar2.PrimaryPart.CFrame.UpVector * 17)
+        ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * RV(levelNum, data, "height"))
+        ModelTweenService.TweenModuleCFrame(laserWall.Pillar2, tweenInfo, laserWall.Pillar2.PrimaryPart.CFrame + laserWall.Pillar2.PrimaryPart.CFrame.UpVector * RV(levelNum, data, "height"))
 
         task.wait(data.laserDelayTime)
 
@@ -43,7 +67,7 @@ function Event.Main(levelNum, level, data)
             local wall = Instance.new("Part")
             wall.Transparency = 1
             wall.Anchored = true
-            wall.Size = Vector3.new(1, center1.Size.Y, (center1.Position - center2.Position).Magnitude - 2)
+            wall.Size = Vector3.new(0.5, center1.Size.Y, (center1.Position - center2.Position).Magnitude - 4)
             wall.CFrame = CFrame.new(center1.Position, center2.Position) + CFrame.new(center1.Position, center2.Position).LookVector * wall.Size.Z / 2
             wall.Parent = laserWall
 
@@ -56,7 +80,7 @@ function Event.Main(levelNum, level, data)
                     end
                     if tick() - touchCooldown[player] > EventService.TouchCooldown then
                         touchCooldown[player] = tick()
-                        player.Character.Humanoid:TakeDamage(data.damage)
+                        player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                     end
                 end
             end)
