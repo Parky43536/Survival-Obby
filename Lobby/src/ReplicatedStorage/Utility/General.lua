@@ -7,10 +7,10 @@ local General = {}
 General.Levels = 100
 General.DoorTime = 20
 General.RewardCash = 50
-General.EventsPerSecond = 10
+General.EventsPerSecond = 15
 
 function General.TimerCalc(levelNum)
-    return math.clamp(4 + (2 * levelNum), 0, 60)
+    return math.clamp(4 + (2 * levelNum), 0, 40)
 end
 
 --Stats---------------------------------------------
@@ -19,8 +19,8 @@ General.PlayerHealth = 100
 General.PlayerSpeed = 16
 General.PlayerJump = 50.145
 
-General.HealthCost = 150
-General.HealthIncrease = 100
+General.HealthCost = 125
+General.HealthIncrease = 125
 General.HealthDefault = 0
 General.HealthValue = 5
 
