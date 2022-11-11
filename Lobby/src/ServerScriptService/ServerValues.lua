@@ -1,6 +1,6 @@
 local ServerValues = {}
 
-ServerValues.DATASTORE_NAME = "TestPlayerData2"
+ServerValues.DATASTORE_NAME = "TestPlayerData3"
 ServerValues.TESTERSTORE_NAME = "TesterData"
 
 return ServerValues
