@@ -3,6 +3,17 @@ local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
 
 local EventData = {
+	["Nuke"] = {
+		chance = 75,
+		levels = {min = 85, max = General.Levels},
+		upgrade = 95,
+
+		delayTime = 10,
+		height = 80,
+		damage = 500,
+
+		upgradedDelayTime = 6,
+	},
 	["TeslaCoil"] = {
 		chance = 65,
 		levels = {min = 70, max = General.Levels},

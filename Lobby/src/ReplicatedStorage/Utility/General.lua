@@ -7,7 +7,7 @@ local General = {}
 General.Levels = 100
 General.DoorTime = 20
 General.RewardCash = 50
-General.EventsPerSecond = 15
+General.EventsPerSecond = 12
 
 function General.TimerCalc(levelNum)
     return math.clamp(4 + (2 * levelNum), 0, 40)
@@ -85,9 +85,9 @@ General.Signs = {
     [70] = "Tesla Coils will now appear",
     [75] = "Acid Puddles have been upgraded",
     [80] = "Rockets have been upgraded",
-    --[85] = "Nukes will now appear",
+    [85] = "Nukes will now appear",
     [90] = "Tesla Coils have been upgraded",
-    --[95] = "Nukes have been upgraded",
+    [95] = "Nukes have been upgraded",
 }
 
 --Colors---------------------------------------------

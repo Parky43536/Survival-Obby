@@ -34,7 +34,7 @@ function Event.Main(levelNum, level, data)
 
         local Params = RaycastParams.new()
         Params.FilterType = Enum.RaycastFilterType.Whitelist
-        Params.FilterDescendantsInstances = {EventService.getFloorGroup(rp.Instance)}
+        Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
 
         local height = data.height
         local RayOrigin = rp.Position

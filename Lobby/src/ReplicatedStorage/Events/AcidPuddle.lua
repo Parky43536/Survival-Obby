@@ -33,31 +33,34 @@ function Event.Main(levelNum, level, data)
             local growToSize = RV(levelNum, data, "size")
             local touchConnection
 
-            local acid = Obstacle.Acid:Clone()
-            acid.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
+            local originCFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
+            originCFrame += originCFrame.UpVector * -0.1
 
             local Params = RaycastParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
             Params.FilterDescendantsInstances = {EventService.getFloorGroup(rp.Instance)}
 
-            local RayOrigin = (acid.CFrame + acid.CFrame.LookVector * 100).Position
-            local RayDirection = acid.CFrame.LookVector * -1000
+            local RayOrigin = (originCFrame + originCFrame.LookVector * 100).Position
+            local RayDirection = originCFrame.LookVector * -1000
             local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
             if Result then
-                growToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+                growToSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
             end
 
-            RayOrigin = (acid.CFrame + acid.CFrame.RightVector * 100).Position
-            RayDirection = acid.CFrame.RightVector * -1000
+            RayOrigin = (originCFrame + originCFrame.RightVector * 100).Position
+            RayDirection = originCFrame.RightVector * -1000
             Result = workspace:Raycast(RayOrigin, RayDirection, Params)
             if Result then
-                local testGrowToSize = math.clamp((acid.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
-                if testGrowToSize < growToSize then
+                local testGrowToSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+                if testGrowToSize < growToSize or growToSize < 4 then
                     growToSize = testGrowToSize
                 end
             end
 
             if growToSize and growToSize > 4 then
+                local acid = Obstacle.Acid:Clone()
+                acid.CFrame = originCFrame
+                acid.CFrame += acid.CFrame.UpVector * 0.1
                 EventService.parentToObstacles(levelNum, acid)
 
                 local goal = {Size = Vector3.new(growToSize, acid.Size.Y, growToSize)}
@@ -93,8 +96,6 @@ function Event.Main(levelNum, level, data)
                         acid:Destroy()
                     end
                 end
-            else
-                acid:Destroy()
             end
         end
     end
