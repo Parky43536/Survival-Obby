@@ -95,6 +95,7 @@ end
 
 function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
+	ClientService.HealPlayer(player)
 
 	if DataManager:GetValue(player, "Level") + 1 == levelNum then
 		DataManager:SetValue(player, "Level", levelNum)
@@ -104,7 +105,6 @@ function DataManager:SetSpawn(player, levelNum)
 		level.Value += 1
 
 		DataManager:GiveCash(player, General.RewardCash, {noMulti = true})
-		ClientService.HealPlayer(player)
 	end
 end
 
