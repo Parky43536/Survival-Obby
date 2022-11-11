@@ -34,8 +34,7 @@ local function playerAdded(newPlayer)
     end
 
     local function loadPlayer()
-        local currentLevel = DataManager:GetValue(newPlayer, "Level")
-        --PlayerValues:SetValue(newPlayer, "CurrentLevel", currentLevel)
+        local currentLevel = PlayerValues:GetValue(newPlayer, "CurrentLevel") or DataManager:GetValue(newPlayer, "Level")
 
         task.spawn(function()
             if not newPlayer.Character then

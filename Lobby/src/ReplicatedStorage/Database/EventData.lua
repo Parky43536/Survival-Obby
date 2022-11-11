@@ -55,7 +55,7 @@ local EventData = {
 		upgradedDamage = 35,
 	},
 	["Landmine"] = {
-		chance = 35,
+		chance = 50,
 		levels = {min = 10, max = General.Levels},
 		upgrade = 60,
 
