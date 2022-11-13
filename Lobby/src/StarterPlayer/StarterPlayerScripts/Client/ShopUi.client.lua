@@ -49,6 +49,17 @@ end
 
 ------------------------------------------------------------------
 
+local function comma_value(amount)
+    local formatted = amount
+    while true do
+      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+        if (k == 0) then
+            break
+        end
+    end
+    return formatted
+end
+
 local cooldown = 0.2
 local cooldownTime = tick()
 
@@ -62,7 +73,7 @@ for name, data in (ShopData) do
 
     itemHolder.Name = name
     itemHolder.Buy.Image = "rbxassetid://" .. data.image
-    itemHolder.Info.Cost.Text = itemHolder.Info.Cost.Text .. data.cost
+    itemHolder.Info.Cost.Text = itemHolder.Info.Cost.Text .. comma_value(data.cost)
     itemHolder.Info.ItemName.Text = name
     itemHolder.Desc.Text = data.desc
 

@@ -2,19 +2,19 @@ local EventData = {
 	["Coin Magnet"] = {
 		gamepass = 103133843,
 		cost = 50,
-		image = 0,
+		image = 11558138789,
 		desc = "Automatically collects coins for you 🧲",
 	},
 	["Double Coins"] = {
 		gamepass = 103133738,
 		cost = 250,
-		image = 0,
+		image = 11558138504,
 		desc = "Doubles the value of coins you collect 🏦",
 	},
 	["God Powers"] = {
 		gamepass = 103134193,
 		cost = 1000,
-		image = 0,
+		image = 11558138192,
 		desc = "Unlocks the powers of flight and god health 🤩",
 	},
 	["Bloxy Cola"] = {
