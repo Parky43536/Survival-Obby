@@ -13,6 +13,7 @@ local General = require(Utility.General)
 local SerServices = ServerScriptService.Services
 local DataManager = require(SerServices.DataManager)
 local ClientService = require(SerServices.ClientService)
+local ShopService = require(SerServices.ShopService)
 
 local PlayerProfiles = {}
 
@@ -29,6 +30,7 @@ local function playerAdded(newPlayer)
 	if profile ~= nil then
 		loadPlayerProfile(newPlayer, profile)
         ClientService.InitializeClient(newPlayer, profile)
+        ShopService:InitializePurchases(newPlayer)
 	else
         warn("Could not load player profile")
     end

@@ -4,11 +4,13 @@ local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 
+local Assets = ReplicatedStorage.Assets
+
 local RepServices = ReplicatedStorage:WaitForChild("Services")
 local PlayerValues = require(RepServices:WaitForChild("PlayerValues"))
 
-local Utility = ReplicatedStorage:WaitForChild("Utility")
-local General = require(Utility.General)
+local DataBase = ReplicatedStorage.Database
+local ShopData = require(DataBase:WaitForChild("ShopData"))
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
@@ -19,8 +21,7 @@ local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local Shop = ShopUi.ShopFrame.ScrollingFrame
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
-local UpgradeConnection = Remotes:WaitForChild("UpgradeConnection")
-local DataConnection = Remotes:WaitForChild("DataConnection")
+local ShopConnection = Remotes:WaitForChild("ShopConnection")
 
 local function shopUiEnable()
     if ShopUi.Enabled == true then
@@ -47,5 +48,57 @@ local function onKeyPress(input, gameProcessedEvent)
 end
 
 ------------------------------------------------------------------
+
+local cooldown = 0.2
+local cooldownTime = tick()
+
+for name, data in (ShopData) do
+    local itemHolder
+    if data.gamepass then
+        itemHolder = Assets.Ui.Gamepass:Clone()
+    else
+        itemHolder = Assets.Ui.Tool:Clone()
+    end
+
+    itemHolder.Name = name
+    itemHolder.Buy.Image = "rbxassetid://" .. data.image
+    itemHolder.Info.Cost.Text = itemHolder.Info.Cost.Text .. data.cost
+    itemHolder.Info.ItemName.Text = name
+    itemHolder.Desc.Text = data.desc
+
+    itemHolder.LayoutOrder = data.cost
+    itemHolder.Parent = Shop
+
+    itemHolder.Buy.Activated:Connect(function()
+        if tick() - cooldownTime > cooldown then
+            cooldownTime = tick()
+            ShopConnection:FireServer(name)
+        end
+    end)
+end
+
+------------------------------------------------------------------
+
+local function loadBought()
+    local values = {}
+    for name,_ in (ShopData) do
+        values[name] = PlayerValues:GetValue(LocalPlayer, name)
+    end
+
+    for name,_ in (values) do
+        if Shop:FindFirstChild(name) then
+            local holderUi = Shop:FindFirstChild(name)
+            holderUi.Bought.Visible = true
+        end
+    end
+end
+
+for name,_ in (ShopData) do
+    PlayerValues:SetCallback(name, function()
+        loadBought()
+    end)
+end
+
+loadBought()
 
 UserInputService.InputBegan:Connect(onKeyPress)
