@@ -30,7 +30,6 @@ local function playerAdded(newPlayer)
 	if profile ~= nil then
 		loadPlayerProfile(newPlayer, profile)
         ClientService.InitializeClient(newPlayer, profile)
-        ShopService:InitializePurchases(newPlayer)
 	else
         warn("Could not load player profile")
     end
@@ -57,15 +56,14 @@ local function playerAdded(newPlayer)
                     newPlayer.Character:PivotTo(level.Floor.Spawn.CFrame)
                     task.wait()
                 until General.playerCheck(newPlayer) and (newPlayer.Character:GetPivot().Position - level.Floor.Spawn.Position).Magnitude < 10
-
-                ClientService.SetPlayerStats(newPlayer)
             else
                 repeat
                     task.wait()
                 until General.playerCheck(newPlayer)
-
-                ClientService.SetPlayerStats(newPlayer)
             end
+
+            ClientService.SetPlayerStats(newPlayer)
+            ShopService:InitializePurchases(newPlayer)
         end)
     end
 
