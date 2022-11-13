@@ -50,7 +50,7 @@ local EventData = {
 	["Golden Glove"] = {
 		cost = 100000,
 		image = 17386312,
-		desc = "Smack other players off the map ✋😈",
+		desc = "Smack other players off the level ✋😈",
 	},
 }
 return EventData

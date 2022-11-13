@@ -42,8 +42,10 @@ end
 function ShopService:GiveTool(player, name)
 	PlayerValues:SetValue(player, name, true, "playerOnly")
 
-	local Tool = Tools:FindFirstChild(name):Clone()
-	Tool.Parent = player.Backpack
+	if not player.Backpack:FindFirstChild(name) then
+		local Tool = Tools:FindFirstChild(name):Clone()
+		Tool.Parent = player.Backpack
+	end
 
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then
