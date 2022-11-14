@@ -143,13 +143,34 @@ end)
 
 ------------------------------------------------------------------
 
+local mobile = false
 local function mobileUi()
-    if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled then
-        LeftFrame.Position = UDim2.new(0.01, 0, 0.62, 0)
-        RightFrame.Position = UDim2.new(0.99, 0, 0.62, 0)
-    elseif not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
-        LeftFrame.Position = UDim2.new(0.01, 0, 0.88, 0)
-        RightFrame.Position = UDim2.new(0.99, 0, 0.88, 0)
+    local changed = false
+    if not mobile and UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled then
+        mobile = true
+        changed = true
+    end
+
+    if changed then
+        if mobile then
+            LeftFrame.Position = UDim2.new(0.01, 0, 0.62, 0)
+            RightFrame.Position = UDim2.new(0.99, 0, 0.62, 0)
+
+            for _, ui in (PlayerUi:GetDescendants()) do
+                if ui.Name == "Keybind" then
+                    ui.Visible = false
+                end
+            end
+        else
+            LeftFrame.Position = UDim2.new(0.01, 0, 0.88, 0)
+            RightFrame.Position = UDim2.new(0.99, 0, 0.88, 0)
+
+            for _, ui in (PlayerUi:GetDescendants()) do
+                if ui.Name == "Keybind" then
+                    ui.Visible = true
+                end
+            end
+        end
     end
 end
 

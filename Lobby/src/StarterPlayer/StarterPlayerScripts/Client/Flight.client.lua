@@ -82,14 +82,15 @@ local function onUpdate()
 		local humanoid = character.Humanoid
 
 		if humanoid.MoveDirection ~= Vector3.new(0,0,0) then
-			local lookCFrame = cf + cf.LookVector * flySpeed
-			local alignedPosition = Vector3.new(character.PrimaryPart.Position.X, lookCFrame.Position.Y, character.PrimaryPart.Position.Z)
-			local upCFrame = CFrame.new(character.PrimaryPart.Position, alignedPosition)
+			local hrp = character.PrimaryPart
+			local lookCFrame = hrp.CFrame + cf.LookVector * flySpeed
+			local alignedPosition = Vector3.new(hrp.Position.X, lookCFrame.Position.Y, hrp.Position.Z)
+			local upCFrame = CFrame.new(hrp.Position, alignedPosition)
 
 			local verticalVelocity = (humanoid.MoveDirection * Vector3.new(1, 0, 1)) * flySpeed
 			local horizontalVeclocity = (humanoid.MoveDirection * Vector3.new(0, 1, 0)) * flySpeed / 2 + (upCFrame.LookVector * flySpeed / 2)
 
-			if (character.PrimaryPart.Position - alignedPosition).Magnitude < flySpeed / 5 then
+			if (hrp.Position - alignedPosition).Magnitude < flySpeed / 5 then
 				bodyVel.Velocity = verticalVelocity
 			else
 				bodyVel.Velocity = verticalVelocity + horizontalVeclocity

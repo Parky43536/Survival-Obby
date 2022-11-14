@@ -70,6 +70,8 @@ local function playerAdded(newPlayer)
         end)
     end
 
+    loadPlayer()
+
     newPlayer.CharacterAdded:Connect(function()
         loadPlayer()
     end)

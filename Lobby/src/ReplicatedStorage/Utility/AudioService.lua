@@ -2,6 +2,9 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
+local RepServices = ReplicatedStorage.Services
+local PlayerValues = require(RepServices.PlayerValues)
+
 local IsServer = RunService:IsServer()
 
 local LocalPlayer
@@ -66,6 +69,10 @@ function AudioService:Create(id, target, properties, args)
 
 		--start client
 
+		if PlayerValues:GetValue(LocalPlayer, "SoundOff") and  args.name ~= "Music" then
+			return
+		end
+
 		id = tostring(id)
 		local newSoundObject = Instance.new("Sound")
 		newSoundObject.Name = args.name or id
@@ -89,6 +96,10 @@ function AudioService:Create(id, target, properties, args)
 			elseif property == "LoopDuration" then
 				newSoundObject["Looped"] = true
 			end
+		end
+
+		if args.name and args.name == "Music" and PlayerValues:GetValue(LocalPlayer, "MusicOff") then
+			newSoundObject["Volume"] = 0
 		end
 
 		local container

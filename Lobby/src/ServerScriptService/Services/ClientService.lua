@@ -11,6 +11,7 @@ local General = require(Utility.General)
 local Remotes = ReplicatedStorage.Remotes
 local ClientConnection = Remotes.ClientConnection
 local UpgradeConnection = Remotes.UpgradeConnection
+local SettingsConnection = Remotes.SettingsConnection
 
 local ClientService = {}
 
@@ -63,8 +64,14 @@ function ClientService.InitializeClient(player, profile)
     PlayerValues:SetValue(player, "Jump", profile.Data.Jump, "playerOnly")
     PlayerValues:SetValue(player, "CMulti", profile.Data.CMulti, "playerOnly")
 
+	for setting,_ in profile.Data.Settings do
+        print(player, setting)
+        PlayerValues:SetValue(player, setting, true, "playerOnly")
+    end
+
     ClientConnection:FireClient(player)
     UpgradeConnection:FireClient(player)
+    SettingsConnection:FireClient(player)
 end
 
 return ClientService

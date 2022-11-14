@@ -18,6 +18,7 @@ local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local LevelsUi = PlayerGui:WaitForChild("LevelsUi")
 local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
+local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
 local Shop = ShopUi.ShopFrame.ScrollingFrame
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -30,6 +31,7 @@ local function shopUiEnable()
         ShopUi.Enabled = true
         LevelsUi.Enabled = false
         UpgradeUi.Enabled = false
+        SettingsUi.Enabled = false
     end
 end
 

@@ -161,6 +161,19 @@ function DataManager:BuyCMulti(player)
 	end
 end
 
+function DataManager:SettingToggle(player, args)
+	local on = true
+	if PlayerValues:GetValue(player, args.setting) then
+		on = nil
+	end
+
+	PlayerValues:SetValue(player, args.setting, on, "playerOnly")
+
+	local settings = DataManager:GetValue(player, "Settings")
+	settings[args.setting] = on
+	DataManager:SetValue(player, "Settings", settings)
+end
+
 DataConnection.OnServerEvent:Connect(function(player, action, args)
 	if action == "Health" then
 		DataManager:BuyHealth(player)
@@ -170,6 +183,8 @@ DataConnection.OnServerEvent:Connect(function(player, action, args)
 		DataManager:BuyJump(player)
 	elseif action == "CMulti" then
 		DataManager:BuyCMulti(player)
+	elseif action == "SettingToggle" then
+		DataManager:SettingToggle(player, args)
 	elseif action == "CurrentLevel" then
 		PlayerValues:SetValue(player, "CurrentLevel", args.level)
 	end
