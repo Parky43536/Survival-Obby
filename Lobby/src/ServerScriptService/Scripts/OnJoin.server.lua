@@ -9,6 +9,7 @@ local PlayerValues = require(RepServices.PlayerValues)
 
 local Utility = ReplicatedStorage.Utility
 local General = require(Utility.General)
+local AudioService = require(Utility.AudioService)
 
 local SerServices = ServerScriptService.Services
 local DataManager = require(SerServices.DataManager)
@@ -30,6 +31,7 @@ local function playerAdded(newPlayer)
 	if profile ~= nil then
 		loadPlayerProfile(newPlayer, profile)
         ClientService.InitializeClient(newPlayer, profile)
+        AudioService:Music(newPlayer)
 	else
         warn("Could not load player profile")
     end
@@ -67,8 +69,6 @@ local function playerAdded(newPlayer)
             ShopService:InitializePurchases(newPlayer)
         end)
     end
-
-    loadPlayer()
 
     newPlayer.CharacterAdded:Connect(function()
         loadPlayer()

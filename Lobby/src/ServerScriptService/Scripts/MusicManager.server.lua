@@ -2,6 +2,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local AudioService = require(Utility:WaitForChild("AudioService"))
 
+local intermissionTime = 4
+
 local Music = {
     9038835388, --Anthem For New Life A
     1842976958, --Arcade Weekend
@@ -30,7 +32,17 @@ while true do
     local picked = musicList[key]
     table.remove(musicList, key)
 
-    local music = AudioService:Create(picked, workspace.Sound)
-    if music.TimeLength == 0 then music.Loaded:Wait() end
-    task.wait(music.TimeLength)
+    local length = 0
+
+    local soundForTime = Instance.new("Sound")
+    soundForTime.SoundId = "rbxassetid://".. picked
+    soundForTime.Parent = workspace.Sound
+
+    if soundForTime.TimeLength == 0 then soundForTime.Loaded:Wait() end
+    length = soundForTime.TimeLength
+    soundForTime:Destroy()
+
+    AudioService:Create(picked, workspace.Sound, {}, {name = "Music"})
+
+    task.wait(length + intermissionTime)
 end
