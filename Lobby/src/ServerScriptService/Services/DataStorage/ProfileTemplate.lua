@@ -1,5 +1,6 @@
 local ProfileTemplate = {
     Purchases = {},
+    Settings = {},
 
     Level = 1,
     Cash = 0,

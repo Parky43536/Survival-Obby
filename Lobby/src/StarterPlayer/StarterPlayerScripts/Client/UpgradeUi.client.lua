@@ -12,7 +12,7 @@ local General = require(Utility.General)
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
-local SideFrame = PlayerUi:WaitForChild("SideFrame")
+local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local LevelsUi = PlayerGui:WaitForChild("LevelsUi")
 local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
@@ -32,7 +32,7 @@ local function upgradeUiEnable()
     end
 end
 
-SideFrame.Upgrade.Activated:Connect(function()
+LeftFrame.Upgrade.Activated:Connect(function()
     upgradeUiEnable()
 end)
 

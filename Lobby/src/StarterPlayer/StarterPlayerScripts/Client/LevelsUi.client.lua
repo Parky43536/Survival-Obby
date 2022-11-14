@@ -18,7 +18,7 @@ local DataConnection = Remotes:WaitForChild("DataConnection")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
-local SideFrame = PlayerUi:WaitForChild("SideFrame")
+local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local LevelsUi = PlayerGui:WaitForChild("LevelsUi")
 local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
@@ -34,7 +34,7 @@ local function levelsUiEnable()
     end
 end
 
-SideFrame.Levels.Activated:Connect(function()
+LeftFrame.Levels.Activated:Connect(function()
     levelsUiEnable()
 end)
 

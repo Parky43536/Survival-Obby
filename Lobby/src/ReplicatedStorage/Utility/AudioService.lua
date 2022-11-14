@@ -31,7 +31,7 @@ end
 -- properties: list of sound properties and values				ex. {Looped = true, MaxDistance = 5}
 -- effects: list of effect instance names and their properties	ex. {PitchShiftSoundEffect = {Octave = 0.5}}
 
--- full example usage: AudioService:Create(4069771750, tower,PrimaryPart, {Looped = true}, {PitchShiftSoundEffect = {Octave = 0.5})
+-- full example usage: AudioService:Create(4069771750, tower, PrimaryPart, {Looped = true}, {PitchShiftSoundEffect = {Octave = 0.5})
 
 -- all sounds/containers are automatically destroyed after the sound has ended unless the sound is looped
 -- if the container was given, only the sound object will be destroyed

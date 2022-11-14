@@ -12,7 +12,7 @@ local PlayerValues = require(RepServices:WaitForChild("PlayerValues"))
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
-local TogglesFrame = PlayerUi:WaitForChild("TogglesFrame")
+local RightFrame = PlayerUi:WaitForChild("RightFrame")
 
 local Assets = ReplicatedStorage.Assets
 
@@ -117,28 +117,28 @@ local function processFlight()
     end
 
 	if isFlying then
-		TogglesFrame.Flight.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
-		TogglesFrame.Flight.Keybind.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+		RightFrame.Flight.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+		RightFrame.Flight.Keybind.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
 		setFlying(false)
 	else
-		TogglesFrame.Flight.BackgroundColor3 = Color3.fromRGB(4, 255, 0)
-		TogglesFrame.Flight.Keybind.BackgroundColor3 = Color3.fromRGB(4, 255, 0)
+		RightFrame.Flight.BackgroundColor3 = Color3.fromRGB(4, 214, 0)
+		RightFrame.Flight.Keybind.BackgroundColor3 = Color3.fromRGB(4, 214, 0)
 		setFlying(true)
 	end
 end
 
 PlayerValues:SetCallback("Flight", function(player, value)
-    if TogglesFrame then
+    if RightFrame then
         if value then
-            TogglesFrame.Flight.Visible = true
+            RightFrame.Flight.Visible = true
         else
-            TogglesFrame.Flight.Visible = false
+            RightFrame.Flight.Visible = false
             setFlying(false)
         end
     end
 end)
 
-TogglesFrame.Flight.Activated:Connect(function()
+RightFrame.Flight.Activated:Connect(function()
     processFlight()
 end)
 

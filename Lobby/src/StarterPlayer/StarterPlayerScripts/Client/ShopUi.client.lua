@@ -14,7 +14,7 @@ local ShopData = require(DataBase:WaitForChild("ShopData"))
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
-local SideFrame = PlayerUi:WaitForChild("SideFrame")
+local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local LevelsUi = PlayerGui:WaitForChild("LevelsUi")
 local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
@@ -33,7 +33,7 @@ local function shopUiEnable()
     end
 end
 
-SideFrame.Shop.Activated:Connect(function()
+LeftFrame.Shop.Activated:Connect(function()
     shopUiEnable()
 end)
 
