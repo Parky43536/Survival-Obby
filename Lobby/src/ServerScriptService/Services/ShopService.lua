@@ -5,6 +5,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Assets = ReplicatedStorage.Assets
 local Tools = Assets.Tools
 
+local Utility = ReplicatedStorage:WaitForChild("Utility")
+local General = require(Utility.General)
+
 local DataBase = ReplicatedStorage.Database
 local ShopData = require(DataBase:WaitForChild("ShopData"))
 
@@ -23,6 +26,20 @@ local function getNameById(id)
 	for name, data in (ShopData) do
 		if data.gamepass and data.gamepass == id then
 			return name
+		end
+	end
+end
+
+local function giveGodHealth(player, on)
+	if General.playerCheck(player) then
+		local humanoid = player.Character.Humanoid
+
+		if on then
+			humanoid.MaxHealth = 1000000
+			humanoid.Health = humanoid.MaxHealth
+		else
+			humanoid.MaxHealth = General.getValue("Health", PlayerValues:GetValue(player, "Health"))
+			humanoid.Health = humanoid.MaxHealth
 		end
 	end
 end
@@ -89,13 +106,17 @@ function ShopService:InitializePurchases(player)
 	end
 end
 
-ShopConnection.OnServerEvent:Connect(function(player, action)
+ShopConnection.OnServerEvent:Connect(function(player, action, args)
+	if not args then args = {} end
+
 	if ShopData[action] then
 		if ShopData[action].gamepass then
 			MarketplaceService:PromptGamePassPurchase(player, ShopData[action].gamepass)
 		else
 			ShopService:BuyTool(player, action)
 		end
+	elseif action == "GiveGodHealth" then
+		giveGodHealth(player, args.on)
 	end
 end)
 

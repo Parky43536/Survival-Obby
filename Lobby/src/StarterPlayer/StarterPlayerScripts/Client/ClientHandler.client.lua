@@ -145,8 +145,8 @@ end)
 
 local function mobileUi()
     if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled then
-        SideFrame.Position = UDim2.new(0.01, 0, 0.66, 0)
-        TogglesFrame.Position = UDim2.new(0.99, 0, 0.66, 0)
+        SideFrame.Position = UDim2.new(0.01, 0, 0.62, 0)
+        TogglesFrame.Position = UDim2.new(0.99, 0, 0.62, 0)
     elseif not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
         SideFrame.Position = UDim2.new(0.01, 0, 0.88, 0)
         TogglesFrame.Position = UDim2.new(0.99, 0, 0.88, 0)

@@ -16,66 +16,56 @@ local TogglesFrame = PlayerUi:WaitForChild("TogglesFrame")
 
 local Assets = ReplicatedStorage.Assets
 
-local bodyGyro = Instance.new("BodyGyro")
-bodyGyro.maxTorque = Vector3.new(1, 1, 1)*10^6
-bodyGyro.P = 10^6
-
-local bodyVel = Instance.new("BodyVelocity")
-bodyVel.maxForce = Vector3.new(1, 1, 1)*10^6
-bodyVel.P = 10^4
-
 local isFlying = false
-local FlySpeed = 50
-local character
-local hrp
-local humanoid
-local animate
-local idleAnim
-local moveAnim
-local lastAnim
+local flySpeed = 50
 
-local function positionVisual(position, args)
-    if not args then args = {} end
-
-    local part = Instance.new("Part")
-    part.Size = args.size or Vector3.new(1,1,1)
-    part.Transparency = args.transparency or 0
-    part.BrickColor = BrickColor.new("Bright red")
-    part.Anchored = true
-    part.CanCollide = false
-    part.Parent = workspace
-    if typeof(position) == "Vector3" then
-        part.Position = position
-    else
-        part.CFrame = position
-    end
-
-    if args.duration then
-        task.spawn(function()
-            task.wait(args.duration)
-            part:Destroy()
-        end)
-    end
-end
+local flyAnim
+local bodyGyro
+local bodyVel
 
 local function setFlying(flying)
+	local character = LocalPlayer.Character
+	local humanoid = character.Humanoid
+	local hrp = character.HumanoidRootPart
+	local animate = character.Animate
+
 	isFlying = flying
-	bodyGyro.Parent = isFlying and hrp or nil
-	bodyVel.Parent = isFlying and hrp or nil
-	bodyGyro.CFrame = hrp.CFrame
-	bodyVel.Velocity = Vector3.new()
+
 	animate.Disabled = isFlying
+
 	if (isFlying) then
-		lastAnim = idleAnim
-		lastAnim:Play()
+		bodyGyro = Instance.new("BodyGyro")
+		bodyGyro.maxTorque = Vector3.new(1, 1, 1)*10^6
+		bodyGyro.P = 10^6
+		bodyGyro.CFrame = hrp.CFrame
+		bodyGyro.Parent = hrp
+
+		bodyVel = Instance.new("BodyVelocity")
+		bodyVel.maxForce = Vector3.new(1, 1, 1)*10^6
+		bodyVel.P = 10^4
+		bodyVel.Velocity = Vector3.new()
+		bodyVel.Parent = hrp
+
+		flyAnim = humanoid:LoadAnimation(Assets.Animations.FlightIdleAnim)
+		flyAnim:Play()
 
 		for _, characterPart in pairs(LocalPlayer.Character:GetChildren()) do
 			if characterPart:IsA("BasePart") then
 				PhysicsService:SetPartCollisionGroup(characterPart, "FlyingPlayer")
 			end
 		end
-	elseif lastAnim then
-		lastAnim:Stop()
+	else
+		if flyAnim then
+			flyAnim:Stop()
+		end
+
+		if bodyVel then
+			bodyVel:Destroy()
+		end
+
+		if bodyGyro then
+			bodyGyro:Destroy()
+		end
 
 		for _, characterPart in pairs(LocalPlayer.Character:GetChildren()) do
 			if characterPart:IsA("BasePart") then
@@ -88,16 +78,18 @@ end
 local function onUpdate()
 	if (isFlying) then
 		local cf = Camera.CFrame
+		local character = LocalPlayer.Character
+		local humanoid = character.Humanoid
 
 		if humanoid.MoveDirection ~= Vector3.new(0,0,0) then
-			local lookCFrame = cf + cf.LookVector * FlySpeed
+			local lookCFrame = cf + cf.LookVector * flySpeed
 			local alignedPosition = Vector3.new(character.PrimaryPart.Position.X, lookCFrame.Position.Y, character.PrimaryPart.Position.Z)
 			local upCFrame = CFrame.new(character.PrimaryPart.Position, alignedPosition)
 
-			local verticalVelocity = (humanoid.MoveDirection * Vector3.new(1, 0, 1)) * FlySpeed
-			local horizontalVeclocity = (humanoid.MoveDirection * Vector3.new(0, 1, 0)) * FlySpeed / 2 + (upCFrame.LookVector * FlySpeed / 2)
+			local verticalVelocity = (humanoid.MoveDirection * Vector3.new(1, 0, 1)) * flySpeed
+			local horizontalVeclocity = (humanoid.MoveDirection * Vector3.new(0, 1, 0)) * flySpeed / 2 + (upCFrame.LookVector * flySpeed / 2)
 
-			if (character.PrimaryPart.Position - alignedPosition).Magnitude < FlySpeed / 5 then
+			if (character.PrimaryPart.Position - alignedPosition).Magnitude < flySpeed / 5 then
 				bodyVel.Velocity = verticalVelocity
 			else
 				bodyVel.Velocity = verticalVelocity + horizontalVeclocity
@@ -111,15 +103,8 @@ local function onUpdate()
 end
 
 local function processFlight()
-    if not character then
-        character = LocalPlayer.Character
-        hrp = character.HumanoidRootPart
-        humanoid = character.Humanoid
-        animate = character.Animate
-
-        idleAnim = humanoid:LoadAnimation(Assets.Animations.FlightIdleAnim)
-        moveAnim = humanoid:LoadAnimation(Assets.Animations.FlightMoveAnim)
-    end
+	local character = LocalPlayer.Character
+	local humanoid = character.Humanoid
 
     if (not humanoid or humanoid:GetState() == Enum.HumanoidStateType.Dead) then
         return
