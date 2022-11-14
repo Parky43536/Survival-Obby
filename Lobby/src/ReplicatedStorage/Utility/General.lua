@@ -66,7 +66,7 @@ end
 --Signs---------------------------------------------
 
 General.Signs = {
-    [1] = "Click the button and survive to open the door",
+    [1] = "Step on the button and survive to open the door",
     [2] = "Complete levels and collect coins to buy upgrades",
     [3] = "One person must be alive or the button will start over",
     [5] = "Speeding Walls will now appear",

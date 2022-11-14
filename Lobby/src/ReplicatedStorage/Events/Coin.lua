@@ -83,11 +83,13 @@ function Event.Client(rp, levelNum)
         if PlayerValues:GetValue(LocalPlayer, "Coin Magnet") then
             task.spawn(function()
                 task.wait(0.5)
-                local align = Instance.new("AlignPosition")
-                align.Attachment0 = coin.Attachment
-                align.Attachment1 = LocalPlayer.Character.PrimaryPart.RootRigAttachment
-                align.Parent = coin
-                coin.Anchored = false
+                if coin.Parent ~= nil then
+                    local align = Instance.new("AlignPosition")
+                    align.Attachment0 = coin.Attachment
+                    align.Attachment1 = LocalPlayer.Character.PrimaryPart.RootRigAttachment
+                    align.Parent = coin
+                    coin.Anchored = false
+                end
             end)
         end
     end

@@ -22,7 +22,7 @@ function LevelService.PressButton(button)
     if not ButtonPositionSaver[button] then ButtonPositionSaver[button] = button.Position end
 
     button.Position = ButtonPositionSaver[button]
-    local goal = {Position = ButtonPositionSaver[button] - Vector3.new(0, 0.99, 0)}
+    local goal = {Position = ButtonPositionSaver[button] - Vector3.new(0, button.Size.Y - 0.01, 0)}
     local properties = {Time = 0.1, Reverse = true}
     TweenService.tween(button, goal, properties)
 end

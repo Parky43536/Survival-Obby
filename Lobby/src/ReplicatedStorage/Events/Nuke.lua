@@ -83,10 +83,23 @@ function Event.Main(levelNum, level, data)
         stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. RV(levelNum, data, "delayTime")
         EventService.parentToObstacles(levelNum, stand)
 
-        stand.Button.ClickDetector.MouseClick:connect(function(player)
-            if General.playerCheck(player) then
+        local touchConnection
+        touchConnection = stand.Button.Touched:Connect(function(hit)
+            local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+            if player and player.Character then
                 nuke:Destroy()
-                stand:Destroy()
+
+                local pressTime = 0.1
+                local goal = {Position = stand.Button.Position - Vector3.new(0, stand.Button.Size.Y - 0.01, 0)}
+                local properties = {Time = pressTime}
+                TweenService.tween(stand.Button, goal, properties)
+
+                task.wait(pressTime)
+
+                if stand ~= nil then
+                    stand:Destroy()
+                    touchConnection:Disconnect()
+                end
             end
         end)
 
@@ -130,6 +143,7 @@ function Event.Main(levelNum, level, data)
         end
 
         stand:Destroy()
+        touchConnection:Disconnect()
         EventService.toggleObstacleSpawner(levelNum, rOS, false)
     end
 end

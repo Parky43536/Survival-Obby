@@ -42,8 +42,9 @@ function GameService.FinishButton(levelNum, level, win)
 end
 
 function GameService.SetUpButton(levelNum, level)
-    level.Button.Button.ClickDetector.MouseClick:connect(function(player)
-        if General.playerCheck(player) and levels[levelNum].Started == false then
+    level.Button.Button.Touched:Connect(function(hit)
+        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if player and General.playerCheck(player) and levels[levelNum].Started == false then
             levels[levelNum].Started = true
 
             LevelService.PressButton(level.Button.Button)
