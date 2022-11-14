@@ -30,6 +30,11 @@ end
 function ShopService:GiveGamepass(player, name)
 	PlayerValues:SetValue(player, name, true, "playerOnly")
 
+	if name == "God Powers" then
+		PlayerValues:SetValue(player, "Flight", true, "playerOnly")
+        PlayerValues:SetValue(player, "God Health", true, "playerOnly")
+	end
+
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then
 		print(player.Name .. " was given " .. name)

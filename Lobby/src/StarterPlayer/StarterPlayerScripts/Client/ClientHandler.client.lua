@@ -14,6 +14,7 @@ local TweenService = require(Utility.TweenService)
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
 local SideFrame = PlayerUi:WaitForChild("SideFrame")
+local TogglesFrame = PlayerUi:WaitForChild("TogglesFrame")
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ClientConnection = Remotes:WaitForChild("ClientConnection")
@@ -32,6 +33,8 @@ end
 local function round(number, decimal)
     return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
+
+------------------------------------------------------------------
 
 local currentSpin
 local currentAlertTween
@@ -137,6 +140,26 @@ end)
 PlayerValues:SetCallback("CMulti", function()
     loadStats()
 end)
+
+------------------------------------------------------------------
+
+local function mobileUi()
+    if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled then
+        SideFrame.Position = UDim2.new(0.01, 0, 0.66, 0)
+        TogglesFrame.Position = UDim2.new(0.99, 0, 0.66, 0)
+    elseif not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
+        SideFrame.Position = UDim2.new(0.01, 0, 0.88, 0)
+        TogglesFrame.Position = UDim2.new(0.99, 0, 0.88, 0)
+    end
+end
+
+UserInputService.InputBegan:Connect(function()
+    mobileUi()
+end)
+
+mobileUi()
+
+------------------------------------------------------------------
 
 ClientConnection.OnClientEvent:Connect(function()
     loadCash(PlayerValues:GetValue(LocalPlayer, "Cash"))

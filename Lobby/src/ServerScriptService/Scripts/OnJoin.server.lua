@@ -62,6 +62,7 @@ local function playerAdded(newPlayer)
                 until General.playerCheck(newPlayer)
             end
 
+            ClientService.InitializeCharacter(newPlayer)
             ClientService.SetPlayerStats(newPlayer)
             ShopService:InitializePurchases(newPlayer)
         end)

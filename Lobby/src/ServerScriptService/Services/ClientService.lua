@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local PhysicsService = game:GetService("PhysicsService")
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
@@ -30,6 +31,14 @@ function ClientService.SetPlayerStats(player)
         local healthPercent = humanoid.Health / humanoid.MaxHealth
         humanoid.MaxHealth = General.getValue("Health", PlayerValues:GetValue(player, "Health"))
         humanoid.Health = humanoid.MaxHealth * healthPercent
+    end
+end
+
+function ClientService.InitializeCharacter(player)
+    for _, characterPart in pairs(player.Character:GetChildren()) do
+        if characterPart:IsA("BasePart") then
+            PhysicsService:SetPartCollisionGroup(characterPart, "Player")
+        end
     end
 end
 

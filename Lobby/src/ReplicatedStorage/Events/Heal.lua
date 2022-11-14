@@ -56,7 +56,7 @@ function Event.Client(rp, levelNum)
     heal.Position = rp + Vector3.new(0, 3.5, 0)
     EventService.parentToObstacles(levelNum, heal)
 
-    local goal = {CFrame = heal.CFrame * CFrame.Angles(0, math.rad(180), 0)}
+    local goal = {Orientation = heal.Orientation + Vector3.new(0, 180, 0)}
     local properties = {Time = 1, Repeat = math.huge}
     TweenService.tween(heal, goal, properties)
 

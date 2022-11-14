@@ -1,5 +1,6 @@
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PhysicsService = game:GetService("PhysicsService")
 
 local Events = ReplicatedStorage.Events
 local DataBase = ReplicatedStorage.Database
@@ -79,6 +80,8 @@ function LevelService.SetUpLevelColor(levelNum, level)
             part.Color = General.SupportColor
         elseif CollectionService:HasTag(part, "ObstacleSpawner") then
             part.Transparency = 1
+        elseif CollectionService:HasTag(part, "Wall") then
+            PhysicsService:SetPartCollisionGroup(part, "Wall")
         end
     end
 end

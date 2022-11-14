@@ -2,6 +2,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local RepServices = ReplicatedStorage.Services
+local PlayerValues = require(RepServices.PlayerValues)
+
 local IsServer = RunService:IsServer()
 
 local Assets = ReplicatedStorage.Assets
@@ -61,7 +64,7 @@ function Event.Client(rp, levelNum)
     coin.Position = rp + Vector3.new(0, 3.5, 0)
     EventService.parentToObstacles(levelNum, coin)
 
-    local goal = {CFrame = coin.CFrame * CFrame.Angles(0, math.rad(180), 0)}
+    local goal = {Orientation = coin.Orientation + Vector3.new(0, 180, 0)}
     local properties = {Time = 1, Repeat = math.huge}
     TweenService.tween(coin, goal, properties)
 
@@ -75,6 +78,19 @@ function Event.Client(rp, levelNum)
             Signal:FireServer(LocalPlayer)
         end
     end)
+
+    if General.playerCheck(LocalPlayer) then
+        if PlayerValues:GetValue(LocalPlayer, "Coin Magnet") then
+            task.spawn(function()
+                task.wait(0.5)
+                local align = Instance.new("AlignPosition")
+                align.Attachment0 = coin.Attachment
+                align.Attachment1 = LocalPlayer.Character.PrimaryPart.RootRigAttachment
+                align.Parent = coin
+                coin.Anchored = false
+            end)
+        end
+    end
 
     task.wait(data.despawnTime)
     if coin.Parent ~= nil then
