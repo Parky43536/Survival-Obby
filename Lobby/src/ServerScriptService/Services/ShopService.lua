@@ -19,6 +19,7 @@ local ShopConnection = Remotes.ShopConnection
 
 local SerServices = ServerScriptService.Services
 local DataManager = require(SerServices.DataManager)
+local ClientService = require(SerServices.ClientService)
 
 local ShopService = {}
 
@@ -26,20 +27,6 @@ local function getNameById(id)
 	for name, data in (ShopData) do
 		if data.gamepass and data.gamepass == id then
 			return name
-		end
-	end
-end
-
-local function giveGodHealth(player, on)
-	if General.playerCheck(player) then
-		local humanoid = player.Character.Humanoid
-
-		if on then
-			humanoid.MaxHealth = 1000000
-			humanoid.Health = humanoid.MaxHealth
-		else
-			humanoid.MaxHealth = General.getValue("Health", PlayerValues:GetValue(player, "Health"))
-			humanoid.Health = humanoid.MaxHealth
 		end
 	end
 end
@@ -116,7 +103,8 @@ ShopConnection.OnServerEvent:Connect(function(player, action, args)
 			ShopService:BuyTool(player, action)
 		end
 	elseif action == "GiveGodHealth" then
-		giveGodHealth(player, args.on)
+		PlayerValues:SetValue(player, "GodHealthOn", args.on)
+		ClientService.SetPlayerStats(player)
 	end
 end)
 
