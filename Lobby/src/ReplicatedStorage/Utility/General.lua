@@ -6,7 +6,6 @@ local General = {}
 
 General.Levels = 100
 General.DoorTime = 20
-General.RewardCash = 50
 General.EventsPerSecond = 12
 
 function General.TimerCalc(levelNum)
@@ -67,7 +66,7 @@ end
 
 General.Signs = {
     [1] = "Step on the button and survive to open the door",
-    [2] = "Complete levels and collect coins to buy upgrades",
+    [2] = "Collect coins to buy upgrades and tools in the shop",
     [3] = "One person must be alive or the button will start over",
     [5] = "Speeding Walls will now appear",
     [10] = "Landmines will now appear",

@@ -103,8 +103,6 @@ function DataManager:SetSpawn(player, levelNum)
 
 		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
 		level.Value += 1
-
-		DataManager:GiveCash(player, General.RewardCash)
 	end
 end
 
