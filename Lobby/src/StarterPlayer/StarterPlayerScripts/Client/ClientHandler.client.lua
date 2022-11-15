@@ -18,6 +18,7 @@ local RightFrame = PlayerUi:WaitForChild("RightFrame")
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ClientConnection = Remotes:WaitForChild("ClientConnection")
+local DataConnection = Remotes:WaitForChild("DataConnection")
 
 local function comma_value(amount)
     local formatted = amount
@@ -70,6 +71,38 @@ local function shopAlert(cash)
     end
 end
 
+local function autoUpgrade()
+    if PlayerValues:GetValue(LocalPlayer, "AutoUpgrade") then
+        local upgrades = {"Health", "Speed", "Jump", "CMulti"}
+
+        local lowestCost = nil
+        for _, upgrade in upgrades do
+            if not lowestCost then
+                lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+            elseif General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade)) < lowestCost then
+                lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+            end
+        end
+
+        while PlayerValues:GetValue(LocalPlayer, "Cash") >= lowestCost do
+            for _, upgrade in upgrades do
+                DataConnection:FireServer(upgrade)
+            end
+
+            lowestCost = nil
+            for _, upgrade in upgrades do
+                if not lowestCost then
+                    lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+                elseif General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade)) < lowestCost then
+                    lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+                end
+            end
+
+            task.wait()
+        end
+    end
+end
+
 local currentCash
 local lastCashUpate
 local currentTween
@@ -106,6 +139,7 @@ local function loadCash(value)
         currentCash = value
     end
 
+    autoUpgrade()
     shopAlert(value)
 end
 
@@ -139,6 +173,10 @@ end)
 
 PlayerValues:SetCallback("CMulti", function()
     loadStats()
+end)
+
+PlayerValues:SetCallback("AutoUpgrade", function()
+    autoUpgrade()
 end)
 
 ------------------------------------------------------------------

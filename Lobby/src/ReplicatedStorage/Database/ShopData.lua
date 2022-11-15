@@ -42,11 +42,6 @@ local EventData = {
 		image = 129414426,
 		desc = "Makes you invisible while you have it out 👻",
 	},
-	["Golden Boombox"] = {
-		cost = 50000,
-		image = 212303004,
-		desc = "Play music for everyone around you 🎵",
-	},
 	["Golden Glove"] = {
 		cost = 100000,
 		image = 17386312,
