@@ -110,7 +110,7 @@ function DataManager:GiveCash(player, cash)
 	if cash > 0 then
 		cash = math.floor(cash + (cash * (PlayerValues:GetValue(player, "CMulti") * General.CMultiValue)))
 
-		if PlayerValues:GetValue(player, "Double Coins") then
+		if PlayerValues:GetValue(player, "VIP") then
 			cash *= 2
 		end
 	end
@@ -163,7 +163,12 @@ end
 
 function DataManager:SettingToggle(player, args)
 	local on = true
+
 	if PlayerValues:GetValue(player, args.setting) then
+		on = nil
+	end
+
+	if args.setting == "AutoUpgrade" and not PlayerValues:GetValue(player, "VIP") then
 		on = nil
 	end
 
