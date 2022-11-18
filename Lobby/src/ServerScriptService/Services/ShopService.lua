@@ -1,6 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local Assets = ReplicatedStorage.Assets
 local Tools = Assets.Tools
@@ -75,7 +76,7 @@ function ShopService:BuyTool(player, name)
 	if not purchases[name] then
 		local toolData = ShopData[name]
 
-		if PlayerValues:GetValue(player, "Cash") >= toolData.cost then
+		if PlayerValues:GetValue(player, "Cash") >= toolData.cost or RunService:IsStudio() then
 			DataManager:GiveCash(player, -toolData.cost)
 			ShopService:GiveTool(player, name)
 		end

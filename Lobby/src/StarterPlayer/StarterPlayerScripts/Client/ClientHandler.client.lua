@@ -39,7 +39,8 @@ end
 
 local currentSpin
 local currentAlertTween
-local function shopAlert(cash)
+local function shopAlert()
+    local cash = PlayerValues:GetValue(LocalPlayer, "Cash")
     local alert = LeftFrame.Alerts.ShopAlert
 
     local alertSpin = 8
@@ -140,7 +141,7 @@ local function loadCash(value)
     end
 
     autoUpgrade()
-    shopAlert(value)
+    shopAlert()
 end
 
 local function loadStats()
