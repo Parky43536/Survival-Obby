@@ -52,9 +52,9 @@ function GameService.SetUpButton(levelNum, level)
             level.Button.Button.BrickColor = BrickColor.new("Really red")
 
             for i = 1 , General.TimerCalc(levelNum) do
-                for j = 1 , General.EventsPerSecond do
+                for j = 1 , General.EventsCalc(levelNum) do
                     LevelService.ButtonEvent(levelNum, level, player)
-                    task.wait(1/General.EventsPerSecond)
+                    task.wait(1 / General.EventsCalc(levelNum))
                 end
 
                 local cframe, size = EventService.getBoundingBox(level.Floor)
@@ -102,6 +102,10 @@ function GameService.SetUpGame()
             level = totalLevels[num]:Clone()
             level:PivotTo(lastCFrame)
 
+            local door = Assets.Door:Clone()
+            door:PivotTo(level.Floor.PrimaryPart.Attachment.WorldCFrame)
+            door.Parent = level
+
             local cframe, size = EventService.getBoundingBox(level.Floor)
 
             table.remove(totalLevels, num)
@@ -127,7 +131,7 @@ function GameService.SetUpGame()
         lastCFrame = level.Door.PrimaryPart.Attachment.WorldCFrame
         lastLevel = level.Name
 
-        if level.Name == "Stairs" then
+        if level.Name == "Ramp" then
             turnsDisabled = false
         elseif level.Name == "Right" or level.Name == "Left" then
             turnsDisabled = true

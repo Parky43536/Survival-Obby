@@ -59,16 +59,40 @@ function LevelService.OpenDoors(level)
     end)
 end
 
-local lastPrimaryColor
+---------------------------------------------------------------
+
+function round(num, val)
+	return math.floor(val / num) * num
+end
+
+local function shallowCopy(list)
+	local newList = {}
+	for i,v in pairs(list) do
+		newList[i] = v
+	end
+
+	return newList
+end
+
+local possibleColors = shallowCopy(General.Colors)
+local lastRounding = 0
+local lastPick
 function LevelService.SetUpLevelColor(levelNum, level)
-    local rng = Random.new(levelNum * 1000)
+    local rounding = round(5, levelNum)
 
-    local PrimaryColor
-    repeat
-        PrimaryColor = General.Colors[rng:NextInteger(1, #General.Colors)]
-    until lastPrimaryColor ~= PrimaryColor
-    lastPrimaryColor = PrimaryColor
+    if lastRounding ~= rounding then
+        table.remove(possibleColors, lastPick)
+        if next(possibleColors) == nil then
+            possibleColors = shallowCopy(General.Colors)
+        end
+        lastRounding = rounding
+    end
 
+    local rng = Random.new(rounding * 1000)
+    local pick = rng:NextInteger(1, #possibleColors)
+    local PrimaryColor = possibleColors[pick]
+    lastPick = pick
+    
     local SecondaryColor = PrimaryColor:Lerp(Color3.fromRGB(255,255,255), General.SecondaryColorLerp)
 
     for _, part in pairs(level:GetDescendants()) do

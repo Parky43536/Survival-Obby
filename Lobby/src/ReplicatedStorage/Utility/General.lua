@@ -6,10 +6,13 @@ local General = {}
 
 General.Levels = 100
 General.DoorTime = 20
-General.EventsPerSecond = 12
 
 function General.TimerCalc(levelNum)
     return math.clamp(4 + (2 * levelNum), 0, 40)
+end
+
+function General.EventsCalc(levelNum)
+    return math.clamp(10 + math.floor(levelNum / 10), 0, 20)
 end
 
 --Stats---------------------------------------------
