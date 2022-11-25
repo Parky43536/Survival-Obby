@@ -94,11 +94,20 @@ local function comma_value(amount)
     return formatted
 end
 
+local function round(number, decimal)
+    return math.round(number * 10 ^ decimal) / (10 ^ decimal)
+end
+
 local function loadCosts()
     Upgrade.Health.Cost.Amount.Text = "C " .. comma_value(General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health")))
     Upgrade.Speed.Cost.Amount.Text = "C " .. comma_value(General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")))
     Upgrade.Jump.Cost.Amount.Text = "C " .. comma_value(General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")))
     Upgrade.CMulti.Cost.Amount.Text = "C " .. comma_value(General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")))
+
+    Upgrade.Health.Total.Amount.Text = comma_value(round(General.getValue("Health", PlayerValues:GetValue(LocalPlayer, "Health")), 0))
+    Upgrade.Speed.Total.Amount.Text = comma_value(round(General.getValue("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")), 1))
+    Upgrade.Jump.Total.Amount.Text = comma_value(round(General.getValue("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")), 0))
+    Upgrade.CMulti.Total.Amount.Text = comma_value(round(General.getValue("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")), 1))
 end
 
 PlayerValues:SetCallback("Health", function()

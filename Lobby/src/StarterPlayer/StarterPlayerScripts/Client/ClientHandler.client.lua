@@ -144,36 +144,8 @@ local function loadCash(value)
     shopAlert()
 end
 
-local function loadStats()
-    local health = General.getValue("Health", PlayerValues:GetValue(LocalPlayer, "Health"))
-    local speed = General.getValue("Speed", PlayerValues:GetValue(LocalPlayer, "Speed"))
-    local jump = General.getValue("Jump", PlayerValues:GetValue(LocalPlayer, "Jump"))
-    local cMulti = General.getValue("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti"))
-
-    LeftFrame.Stats.Health.Text = "Health: " .. (PlayerValues:GetValue(LocalPlayer, "Health") or General.HealthDefault) .. " (" .. round(health, 0) .. ")"
-    LeftFrame.Stats.Speed.Text = "Speed: " .. (PlayerValues:GetValue(LocalPlayer, "Speed") or General.SpeedDefault) .. " (" .. round(speed, 1) .. ")"
-    LeftFrame.Stats.Jump.Text = "Jump: " .. (PlayerValues:GetValue(LocalPlayer, "Jump") or General.JumpDefault) .. " (" .. round(jump, 0) .. ")"
-    LeftFrame.Stats.CMulti.Text = "C. Multi: " .. (PlayerValues:GetValue(LocalPlayer, "CMulti") or General.CMultiDefault) .. " (" .. round(cMulti, 1) .. ")"
-end
-
 PlayerValues:SetCallback("Cash", function(player, value)
     loadCash(value)
-end)
-
-PlayerValues:SetCallback("Health", function()
-    loadStats()
-end)
-
-PlayerValues:SetCallback("Speed", function()
-    loadStats()
-end)
-
-PlayerValues:SetCallback("Jump", function()
-    loadStats()
-end)
-
-PlayerValues:SetCallback("CMulti", function()
-    loadStats()
 end)
 
 PlayerValues:SetCallback("AutoUpgrade", function()
@@ -223,5 +195,4 @@ mobileUi()
 
 ClientConnection.OnClientEvent:Connect(function()
     loadCash(PlayerValues:GetValue(LocalPlayer, "Cash"))
-    loadStats()
 end)
