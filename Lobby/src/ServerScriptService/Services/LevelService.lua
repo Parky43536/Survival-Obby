@@ -78,7 +78,7 @@ local possibleColors = shallowCopy(General.Colors)
 local lastRounding = 0
 local lastPick
 function LevelService.SetUpLevelColor(levelNum, level)
-    local rounding = round(5, levelNum)
+    local rounding = round(General.LevelMultiple, levelNum)
 
     if lastRounding ~= rounding then
         table.remove(possibleColors, lastPick)
@@ -115,7 +115,7 @@ function LevelService.ButtonEvent(levelNum, level, player)
     local rng = Random.new()
 
     for key, data in pairs(EventData) do
-        if levelNum < data.levels.min or levelNum > data.levels.max then
+        if data.blocked or levelNum < data.level then
             continue
         end
 

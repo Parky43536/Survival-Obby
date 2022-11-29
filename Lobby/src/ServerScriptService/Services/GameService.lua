@@ -5,6 +5,9 @@ local SerServices = ServerScriptService.Services
 local DataManager = require(SerServices.DataManager)
 local LevelService = require(SerServices.LevelService)
 
+local DataBase = ReplicatedStorage.Database
+local EventData = require(DataBase:WaitForChild("EventData"))
+
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
@@ -87,7 +90,49 @@ function GameService.SetUpGame()
     local turnsDisabled = false
     local lastLevel
 
-    for levelNum = 1 , General.Levels do
+    local currentLevel = General.LevelMultiple
+    local currentEvent = 1
+
+    --set up level in eventdata and signs in general
+    for _, event in pairs(General.AppearanceOrder) do
+        if not EventData[event].blocked then
+            EventData[event].level = currentLevel
+
+            if not General.Signs[currentLevel] then
+                General.Signs[currentLevel] = EventData[event].name .. "s will now appear"
+            end
+
+            currentLevel += General.LevelMultiple
+        end
+    end
+
+    --set up upgrades in eventdata and signs in general
+    for levelNum = currentLevel, General.Levels, General.LevelMultiple do
+        local event = General.UpgradeOrder[currentEvent]
+        if EventData[event].blocked then
+            repeat
+                currentEvent += 1
+                if currentEvent > #General.UpgradeOrder then
+                    currentEvent = 1
+                end
+                event = General.UpgradeOrder[currentEvent]
+            until not EventData[event].blocked
+        end
+        table.insert(EventData[event].upgrades, currentLevel)
+
+        if not General.Signs[currentLevel] then
+            General.Signs[currentLevel] = EventData[event].name .. "s have been upgraded"
+        end
+
+        currentLevel += General.LevelMultiple
+        currentEvent += 1
+        if currentEvent > #General.UpgradeOrder then
+            currentEvent = 1
+        end
+    end
+
+    --set up physical levels
+    for levelNum = 1, General.Levels do
         levels[levelNum] = {Timer = General.TimerCalc(levelNum), Started = false, DoorOpened = false}
 
         local rng = Random.new(levelNum * 1000)

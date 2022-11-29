@@ -30,6 +30,18 @@ EventService.TouchCooldown = 1
 
 local obstacleSpawners = {}
 
+function EventService.totalUpgrades(levelNum, upgrades)
+    local totalUpgrades = 0
+
+    for _, level in pairs(upgrades) do
+        if levelNum > level then
+            totalUpgrades += 1
+        end
+    end
+
+    return totalUpgrades
+end
+
 function EventService.toggleObstacleSpawner(levelNum, obstacleSpawner, toggle)
     if not obstacleSpawners[levelNum] then obstacleSpawners[levelNum] = {} end
     obstacleSpawners[levelNum][obstacleSpawner] = toggle
