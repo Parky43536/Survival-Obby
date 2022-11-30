@@ -13,41 +13,10 @@ local AudioService = require(Utility.AudioService)
 
 local Event = {}
 
-local function RV(levelNum, data, value)
-    if value == "delayTime" then
-        if levelNum >= data.upgrade then
-            return data.upgradedDelayTime
-        else
-            return data.delayTime
-        end
-    end
-    if value == "nuke" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedNuke
-        else
-            return Obstacle.Nuke
-        end
-    end
-    if value == "stand" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedStand
-        else
-            return Obstacle.Stand
-        end
-    end
-    if value == "explosion" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedExplosion
-        else
-            return Obstacle.Explosion
-        end
-    end
-end
-
 function Event.Main(levelNum, level, data)
     local rOS = EventService.randomObstacleSpawner(levelNum, level)
     if rOS then
-        local nuke = RV(levelNum, data, "nuke"):Clone()
+        local nuke = Obstacle.Nuke:Clone()
         local cframe, size = EventService.getBoundingBox(level.Floor)
         local _, nukeSize = EventService.getBoundingBox(nuke)
 
@@ -73,14 +42,14 @@ function Event.Main(levelNum, level, data)
         nuke:PivotTo(cframe + Vector3.new(0, height, 0))
         EventService.parentToObstacles(levelNum, nuke)
 
-        local tweenInfo = TweenInfo.new(RV(levelNum, data, "delayTime"), Enum.EasingStyle.Linear)
+        local tweenInfo = TweenInfo.new(data.delayTime, Enum.EasingStyle.Linear)
         ModelTweenService.TweenModulePosition(nuke, tweenInfo, cframe.Position)
 
         -----
 
-        local stand = RV(levelNum, data, "stand"):Clone()
+        local stand = Obstacle.Stand:Clone()
         stand:SetPrimaryPartCFrame(rOS.CFrame)
-        stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. RV(levelNum, data, "delayTime")
+        stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. data.delayTime
         EventService.parentToObstacles(levelNum, stand)
 
         local touchConnection
@@ -104,18 +73,18 @@ function Event.Main(levelNum, level, data)
         end)
 
         task.spawn(function()
-            local time = RV(levelNum, data, "delayTime")
+            local time = data.delayTime
             for i = 1 , time do
                 task.wait(1)
                 if stand.Parent ~= nil then
-                    stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. RV(levelNum, data, "delayTime") - i
+                    stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. data.delayTime - i
                 end
             end
         end)
 
         -----
 
-        task.wait(RV(levelNum, data, "delayTime"))
+        task.wait(data.delayTime)
 
         if nuke.Parent ~= nil then
             local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
@@ -124,7 +93,7 @@ function Event.Main(levelNum, level, data)
                 player.Character.Humanoid:TakeDamage(data.damage)
             end
 
-            local particle = RV(levelNum, data, "explosion"):Clone()
+            local particle = Obstacle.Explosion:Clone()
             particle:PivotTo(cframe)
             particle.Parent = workspace
 

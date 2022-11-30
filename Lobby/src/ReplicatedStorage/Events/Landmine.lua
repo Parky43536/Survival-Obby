@@ -13,6 +13,17 @@ local AudioService = require(Utility.AudioService)
 
 local Event = {}
 
+local function RV(levelNum, data, value)
+    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+
+    if value == "damage" then
+        return data.damage + data.damageIncrease * upgrades
+    end
+    if value == "size" then
+        return data.size + data.sizeIncrease * upgrades
+    end
+end
+
 function Event.Main(levelNum, level, data)
     local rpController = EventService.randomPoint(level)
     if rpController then
@@ -25,10 +36,10 @@ function Event.Main(levelNum, level, data)
 
             task.wait(data.delayTime)
             if landmine.Parent ~= nil then
-                if levelNum >= data.upgrade then
+                --[[if levelNum >= data.upgrade then
                     local tweenInfo = TweenInfo.new(data.delayTime)
                     ModelTweenService.TweenModuleTransparency(landmine, tweenInfo, 0.9)
-                end
+                end]]
 
                 local hit = false
                 local touchConnection
@@ -37,9 +48,9 @@ function Event.Main(levelNum, level, data)
                         hit = true
 
                         if landmine.Parent ~= nil then
-                            for _,player in pairs(EventService.getPlayersInRadius(landmine.PrimaryPart.Position, data.size / 2)) do
+                            for _,player in pairs(EventService.getPlayersInRadius(landmine.PrimaryPart.Position, RV(levelNum, data, "size") / 2)) do
                                 if General.playerCheck(player) then
-                                    player.Character.Humanoid:TakeDamage(data.damage)
+                                    player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                                 end
                             end
 
@@ -49,7 +60,7 @@ function Event.Main(levelNum, level, data)
 
                             AudioService:Create(16433289, landmine.PrimaryPart.Position, {Volume = 0.8})
 
-                            local growsize = Vector3.new(1, 1, 1) * data.size
+                            local growsize = Vector3.new(1, 1, 1) * RV(levelNum, data, "size")
                             local goal = {Transparency = 0.9, Size = growsize}
                             local properties = {Time = 0.15}
                             TweenService.tween(particle, goal, properties)

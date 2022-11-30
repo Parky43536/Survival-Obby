@@ -4,7 +4,7 @@ local General = {}
 
 --Variables---------------------------------------------
 
-General.Levels = 100
+General.Levels = 200
 General.DoorTime = 20
 General.LevelMultiple = 5
 
@@ -95,7 +95,6 @@ General.UpgradeOrder = {
     [8] = "AcidPuddle",
     [9] = "Rocket",
     [10] = "TeslaCoil",
-    [11] = "Nuke",
 }
 
 --Colors---------------------------------------------

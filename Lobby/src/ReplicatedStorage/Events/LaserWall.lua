@@ -16,26 +16,10 @@ local Event = {}
 local touchCooldown = {}
 
 local function RV(levelNum, data, value)
+    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+
     if value == "damage" then
-        if levelNum >= data.upgrade then
-            return data.upgradedDamage
-        else
-            return data.damage
-        end
-    end
-    if value == "laserWall" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedLaserWall
-        else
-            return Obstacle.LaserWall
-        end
-    end
-    if value == "height" then
-        if levelNum >= data.upgrade then
-            return 17 + 8
-        else
-            return 17
-        end
+        return data.damage + data.damageIncrease * upgrades
     end
 end
 
@@ -43,15 +27,15 @@ function Event.Main(levelNum, level, data)
     local rOS1 = EventService.randomObstacleSpawner(levelNum, level)
     local rOS2 = EventService.randomObstacleSpawner(levelNum, level)
     if rOS1 and rOS2 then
-        local laserWall = RV(levelNum, data, "laserWall"):Clone()
-        laserWall.Pillar1:SetPrimaryPartCFrame(rOS1.CFrame)
-        laserWall.Pillar2:SetPrimaryPartCFrame(rOS2.CFrame)
+        local laserWall = Obstacle.LaserWall:Clone()
+        laserWall.Pillar1:SetPrimaryPartCFrame(CFrame.new(rOS1.Position))
+        laserWall.Pillar2:SetPrimaryPartCFrame(CFrame.new(rOS2.Position))
 
         EventService.parentToObstacles(levelNum, laserWall)
 
         local tweenInfo = TweenInfo.new(data.riseDelayTime)
-        ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * RV(levelNum, data, "height"))
-        ModelTweenService.TweenModuleCFrame(laserWall.Pillar2, tweenInfo, laserWall.Pillar2.PrimaryPart.CFrame + laserWall.Pillar2.PrimaryPart.CFrame.UpVector * RV(levelNum, data, "height"))
+        ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * 17)
+        ModelTweenService.TweenModuleCFrame(laserWall.Pillar2, tweenInfo, laserWall.Pillar2.PrimaryPart.CFrame + laserWall.Pillar2.PrimaryPart.CFrame.UpVector * 17)
 
         task.wait(data.laserDelayTime)
 

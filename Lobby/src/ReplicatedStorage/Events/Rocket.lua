@@ -14,26 +14,16 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local function RV(levelNum, data, value)
+    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+
+    if value == "damage" then
+        return data.damage + data.damageIncrease * upgrades
+    end
+    if value == "size" then
+        return data.size + data.sizeIncrease * upgrades
+    end
     if value == "speed" then
-        if levelNum >= data.upgrade then
-            return data.upgradedSpeed
-        else
-            return data.speed
-        end
-    end
-    if value == "rocket" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedRocket
-        else
-            return Obstacle.Rocket
-        end
-    end
-    if value == "explosion" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedExplosion
-        else
-            return Obstacle.Explosion
-        end
+        return data.speed + data.speedIncrease * upgrades
     end
 end
 
@@ -43,19 +33,19 @@ local function destroyRocket(rocket, touchConnection, levelNum, data)
             touchConnection:Disconnect()
         end
 
-        for _,player in pairs(EventService.getPlayersInRadius(rocket.Position, data.size / 2)) do
+        for _,player in pairs(EventService.getPlayersInRadius(rocket.Position, RV(levelNum, data, "size") / 2)) do
             if General.playerCheck(player) then
-                player.Character.Humanoid:TakeDamage(data.damage)
+                player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
             end
         end
 
-        local particle = RV(levelNum, data, "explosion"):Clone()
+        local particle = Obstacle.Explosion:Clone()
         particle:PivotTo(rocket.CFrame)
         particle.Parent = workspace
 
         AudioService:Create(16433289, rocket.Position, {Volume = 0.8})
 
-        local growsize = Vector3.new(1, 1, 1) * data.size
+        local growsize = Vector3.new(1, 1, 1) * RV(levelNum, data, "size")
         local goal = {Transparency = 0.9, Size = growsize}
         local properties = {Time = 0.15}
         TweenService.tween(particle, goal, properties)
@@ -73,7 +63,7 @@ end
 function Event.Main(levelNum, level, data)
     local rOS = EventService.randomObstacleSpawner(levelNum, level)
     if rOS then
-        local rocket = RV(levelNum, data, "rocket"):Clone()
+        local rocket = Obstacle.Rocket:Clone()
         rocket:SetPrimaryPartCFrame(rOS.CFrame)
 
         local cframe, size = EventService.getBoundingBox(level.Floor)

@@ -22,26 +22,12 @@ local function RV(levelNum, data, value)
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
     end
-    if value == "bomb" then
-        if upgrades >= 1 then
-            return Obstacle.UpgradedBomb
-        else
-            return Obstacle.Bomb
-        end
-    end
-    if value == "explosion" then
-        if upgrades >= 1 then
-            return Obstacle.UpgradedExplosion
-        else
-            return Obstacle.Explosion
-        end
-    end
 end
 
 function Event.Main(levelNum, level, data)
     local rp = EventService.randomPoint(level)
     if rp then
-        local bomb = RV(levelNum, data, "bomb"):Clone()
+        local bomb = Obstacle.Bomb:Clone()
         bomb.Position = rp.Position + Vector3.new(0, 3.5, 0)
         EventService.parentToObstacles(levelNum, bomb)
 
@@ -56,7 +42,7 @@ function Event.Main(levelNum, level, data)
                 end
             end
 
-            local particle = RV(levelNum, data, "explosion"):Clone()
+            local particle = Obstacle.Explosion:Clone()
             particle:PivotTo(bomb.CFrame)
             particle.Parent = workspace
 

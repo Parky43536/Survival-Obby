@@ -14,33 +14,17 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local function RV(levelNum, data, value)
+    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+
     if value == "size" then
-        if levelNum >= data.upgrade then
-            return data.upgradedSize
-        else
-            return data.size
-        end
-    end
-    if value == "laser" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedLaser
-        else
-            return Obstacle.Laser
-        end
-    end
-    if value == "teslaCoil" then
-        if levelNum >= data.upgrade then
-            return Obstacle.UpgradedTeslaCoil
-        else
-            return Obstacle.TeslaCoil
-        end
+        return data.size + data.sizeIncrease * upgrades
     end
 end
 
 function Event.Main(levelNum, level, data)
     local rOS = EventService.randomObstacleSpawner(levelNum, level)
     if rOS then
-        local coil = RV(levelNum, data, "teslaCoil"):Clone()
+        local coil = Obstacle.TeslaCoil:Clone()
         coil:SetPrimaryPartCFrame(rOS.CFrame)
         EventService.parentToObstacles(levelNum, coil)
 
@@ -60,7 +44,7 @@ function Event.Main(levelNum, level, data)
                 if coil.Parent ~= nil then
                     for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, RV(levelNum, data, "size") / 2)) do
                         if General.playerCheck(player) then
-                            local laser = RV(levelNum, data, "laser"):Clone()
+                            local laser = Obstacle.Laser:Clone()
                             laser.Beam.Position = coil.Effect.Position
                             laser.Hit.Position = player.Character.PrimaryPart.Position
                             local weld = Instance.new("WeldConstraint")

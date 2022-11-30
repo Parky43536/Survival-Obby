@@ -14,12 +14,10 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local function RV(levelNum, data, value)
+    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+
     if value == "size" then
-        if levelNum >= data.upgrade then
-            return data.upgradedSize
-        else
-            return data.size
-        end
+        return data.size + data.sizeIncrease * upgrades
     end
 end
 

@@ -4,8 +4,6 @@ local General = require(Utility.General)
 
 local EventData = {
 	["Nuke"] = {
-		blocked = true,
-
 		name = "Nuke",
 		chance = 75,
 		upgrades = {},
@@ -13,12 +11,8 @@ local EventData = {
 		delayTime = 10,
 		height = 80,
 		damage = 500,
-
-		upgradedDelayTime = 6,
 	},
 	["TeslaCoil"] = {
-		blocked = true,
-		
 		name = "Tesla Coil",
 		chance = 65,
 		upgrades = {},
@@ -29,11 +23,9 @@ local EventData = {
 		damageDelay = 1,
 		damage = 15,
 
-		upgradedSize = 44,
+		sizeIncrease = 8,
 	},
 	["Rocket"] = {
-		blocked = true,
-		
 		name = "Rocket",
 		chance = 60,
 		upgrades = {},
@@ -44,11 +36,11 @@ local EventData = {
 		size = 12,
 		damage = 50,
 
-		upgradedSpeed = 50,
+		speedIncrease = 15,
+		sizeIncrease = 2,
+		damageIncrease = 5,
 	},
 	["AcidPuddle"] = {
-		blocked = true,
-		
 		name = "Acid Puddle",
 		chance = 60,
 		upgrades = {},
@@ -59,11 +51,9 @@ local EventData = {
 		size = 24,
 		damage = 10,
 
-		upgradedSize = 32,
+		sizeIncrease = 6,
 	},
 	["LaserWall"] = {
-		blocked = true,
-		
 		name = "Laser Wall",
 		chance = 55,
 		upgrades = {},
@@ -73,11 +63,9 @@ local EventData = {
 		laserDelayTime = 1,
 		damage = 25,
 
-		upgradedDamage = 35,
+		damageIncrease = 10,
 	},
 	["Landmine"] = {
-		blocked = true,
-		
 		name = "Landmine",
 		chance = 50,
 		upgrades = {},
@@ -86,10 +74,11 @@ local EventData = {
 		delayTime = 1.5,
 		size = 20,
 		damage = 40,
+
+		sizeIncrease = 4,
+		damageIncrease = 5,
 	},
 	["SpeedingWall"] = {
-		blocked = true,
-		
 		name = "Speeding Wall",
 		chance = 45,
 		upgrades = {},
@@ -97,11 +86,9 @@ local EventData = {
 		speed = 25,
 		size = 12,
 
-		upgradedSize = 16,
+		sizeIncrease = 4,
 	},
 	["FallingRock"] = {
-		blocked = true,
-		
 		name = "Falling Rock",
 		chance = 50,
 		level = 1,
@@ -114,11 +101,9 @@ local EventData = {
 		size = 8,
 		damage = 40,
 
-		upgradedSize = 12,
+		sizeIncrease = 4,
 	},
 	["LavaLine"] = {
-		blocked = true,
-		
 		name = "Lava Line",
 		chance = 45,
 		level = 1,
@@ -129,11 +114,9 @@ local EventData = {
 		size = 4,
 		damage = 25,
 
-		upgradedSize = 10,
+		sizeIncrease = 4,
 	},
 	["Spike"] = {
-		blocked = true,
-		
 		name = "Spike",
 		chance = 35,
 		level = 1,
@@ -142,9 +125,6 @@ local EventData = {
 		despawnTime = 10,
 		delayTime = 0.5,
 		damage = 40,
-
-		slow = 8,
-		slowDuration = 4,
 	},
 	["Bomb"] = {
 		name = "Bomb",
@@ -156,8 +136,8 @@ local EventData = {
 		size = 24,
 		damage = 50,
 
-		sizeIncrease = 6,
-		damageIncrease = 10,
+		sizeIncrease = 4,
+		damageIncrease = 5,
 	},
 	-----------------------------------------------------
 	["Heal"] = {
