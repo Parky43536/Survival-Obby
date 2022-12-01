@@ -87,7 +87,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.delayTime)
 
         if nuke.Parent ~= nil then
-            local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+            local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
 
             for _, player in playersInLevel do
                 player.Character.Humanoid:TakeDamage(data.damage)

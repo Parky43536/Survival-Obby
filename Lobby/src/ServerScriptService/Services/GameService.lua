@@ -6,7 +6,8 @@ local DataManager = require(SerServices.DataManager)
 local LevelService = require(SerServices.LevelService)
 
 local DataBase = ReplicatedStorage.Database
-local EventData = require(DataBase:WaitForChild("EventData"))
+local EventData = require(DataBase.EventData)
+local LevelData = require(DataBase.LevelData)
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
@@ -29,7 +30,7 @@ function GameService.FinishButton(levelNum, level, win)
         levels[levelNum].DoorOpened = true
 
         local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
         for _, playerInRoom in playersInLevel do
             DataManager:SetSpawn(playerInRoom, levelNum + 1)
         end
@@ -61,7 +62,7 @@ function GameService.SetUpButton(levelNum, level)
                 end
 
                 local cframe, size = EventService.getBoundingBox(level.Floor)
-                local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+                local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
                 if #playersInLevel == 0 then
                     GameService.FinishButton(levelNum, level, false)
                     return
@@ -86,14 +87,10 @@ function GameService.SetUpSpawn(levelNum, level)
 end
 
 function GameService.SetUpGame()
-    local lastCFrame = workspace.Levels.Beginning:GetPivot()
-    local turnsDisabled = false
-    local lastLevel
-
+    --set up level and upgrades in eventdata and signs in general
     local currentLevel = General.LevelMultiple
     local currentEvent = 1
 
-    --set up level in eventdata and signs in general
     for _, event in pairs(General.AppearanceOrder) do
         if not EventData[event].blocked then
             EventData[event].level = currentLevel
@@ -106,7 +103,6 @@ function GameService.SetUpGame()
         end
     end
 
-    --set up upgrades in eventdata and signs in general
     for levelNum = currentLevel, General.Levels, General.LevelMultiple do
         local event = General.UpgradeOrder[currentEvent]
         if EventData[event].blocked then
@@ -132,58 +128,72 @@ function GameService.SetUpGame()
     end
 
     --set up physical levels
+    local lastCFrame = workspace.Levels.Beginning:GetPivot()
+    local turnsDisabled = false
+
     for levelNum = 1, General.Levels do
+        task.wait()
+
         levels[levelNum] = {Timer = General.TimerCalc(levelNum), Started = false, DoorOpened = false}
 
         local rng = Random.new(levelNum * 1000)
-        local totalLevels = Assets.Levels:GetChildren()
-        local touching = false
+        local levelList = LevelData.getList()
+        local name
+        local data
         local level
 
+        --check if its valid
         repeat
-            local num = rng:NextInteger(1, #totalLevels)
+            local valid = true
+            local num = rng:NextInteger(1, #levelList)
 
-            if level then level:Destroy() end
-            level = totalLevels[num]:Clone()
-            level:PivotTo(lastCFrame)
+            name = levelList[num]
+            data = LevelData.Levels[name]
 
-            local door = Assets.Door:Clone()
-            door:PivotTo(level.Floor.PrimaryPart.Attachment.WorldCFrame)
-            door.Parent = level
-
-            local cframe, size = EventService.getBoundingBox(level.Floor)
-
-            table.remove(totalLevels, num)
-
-            local notValid = false
-
-            local Params = OverlapParams.new()
-            Params.FilterType = Enum.RaycastFilterType.Whitelist
-            Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
-            Params.MaxParts = 1
-            local touchingParts = workspace:GetPartBoundsInBox(cframe, size - Vector3.new(1,1,1), Params)
-            if next(touchingParts) then
-                notValid = true
-            end
-
-            if level.Name == "Right" or level.Name == "Left" then
+            if data.turn then
                 if turnsDisabled == true then
-                    notValid = true
+                    valid = false
                 end
             end
-        until notValid == false and level.Name ~= lastLevel
 
-        lastCFrame = level.Door.PrimaryPart.Attachment.WorldCFrame
-        lastLevel = level.Name
+            if levelNum < data.level then
+                valid = false
+            end
 
-        if level.Name == "Ramp" then
+            if valid then
+                if level then level:Destroy() end
+                level = Assets.Levels:FindFirstChild(name):Clone()
+                level:PivotTo(lastCFrame)
+
+                local door = Assets.Door:Clone()
+                door:PivotTo(level.Floor.PrimaryPart.Attachment.WorldCFrame)
+                door.Parent = level
+
+                local cframe, size = EventService.getBoundingBox(level.Floor)
+                local Params = OverlapParams.new()
+                Params.FilterType = Enum.RaycastFilterType.Whitelist
+                Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
+                Params.MaxParts = 1
+                local touchingParts = workspace:GetPartBoundsInBox(cframe, size - Vector3.new(1,1,1), Params)
+                if next(touchingParts) then
+                    valid = false
+                end
+            end
+
+            if not valid then
+                table.remove(levelList, num)
+            end
+        until valid
+
+        if data.elevationChange then
             turnsDisabled = false
-        elseif level.Name == "Right" or level.Name == "Left" then
+        elseif data.turn then
             turnsDisabled = true
         end
 
-        level.Name = levelNum
+        lastCFrame = level.Door.PrimaryPart.Attachment.WorldCFrame
 
+        level.Name = levelNum
         level.Door.Level.Front.Label.Text = levelNum
         level.Door.Level.Back.Label.Text = levelNum
 

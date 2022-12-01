@@ -1,7 +1,3 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Utility = ReplicatedStorage:WaitForChild("Utility")
-local General = require(Utility.General)
-
 local EventData = {
 	["Nuke"] = {
 		name = "Nuke",
@@ -139,7 +135,6 @@ local EventData = {
 		sizeIncrease = 4,
 		damageIncrease = 5,
 	},
-	-----------------------------------------------------
 	["Heal"] = {
 		name = "Heal",
 		chance = 120,

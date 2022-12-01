@@ -93,6 +93,26 @@ end
 
 ----------------------------------------------------------------------------------
 
+function DataManager:TeleportToLevel(player, args)
+	--if RunService:IsStudio() or PlayerValues:GetValue(player, "Level") >= args.level then
+		local level = workspace.Levels:FindFirstChild(args.level)
+
+		if not level then
+			repeat
+				level = workspace.Levels:FindFirstChild(args.level)
+				task.wait()
+			until level
+		end
+
+		if General.playerCheck(player) then
+			PlayerValues:SetValue(player, "CurrentLevel", args.level)
+
+			local character = player.Character
+			character:PivotTo(level.Floor.Spawn.CFrame)
+		end
+	--end
+end
+
 function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
 	ClientService.HealPlayer(player)
@@ -190,8 +210,8 @@ DataConnection.OnServerEvent:Connect(function(player, action, args)
 		DataManager:BuyCMulti(player)
 	elseif action == "SettingToggle" then
 		DataManager:SettingToggle(player, args)
-	elseif action == "CurrentLevel" then
-		PlayerValues:SetValue(player, "CurrentLevel", args.level)
+	elseif action == "TeleportToLevel" then
+		DataManager:TeleportToLevel(player, args)
 	end
 end)
 

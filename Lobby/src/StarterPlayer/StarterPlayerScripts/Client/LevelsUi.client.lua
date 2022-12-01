@@ -65,13 +65,7 @@ local function levelsUi()
             level.Parent = Levels
 
             level.Activated:Connect(function()
-                local character = LocalPlayer.Character
-                --if RunService:IsStudio() or PlayerValues:GetValue(LocalPlayer, "Level") >= levelNum then
-                    if character and character.Parent ~= nil then
-                        character:PivotTo(workspace.Levels:FindFirstChild(levelNum).Floor.Spawn.CFrame)
-                        DataConnection:FireServer("CurrentLevel", {level = levelNum})
-                    end
-                --end
+                DataConnection:FireServer("TeleportToLevel", {level = levelNum})
             end)
         else
             level = Levels:FindFirstChild(levelNum)
