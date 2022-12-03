@@ -139,7 +139,7 @@ local EventData = {
 		name = "Heal",
 		chance = 120,
 		level = 1,
-		heal = 15,
+		heal = 0.1,
 		despawnTime = 30,
 	},
 	["Coin"] = {

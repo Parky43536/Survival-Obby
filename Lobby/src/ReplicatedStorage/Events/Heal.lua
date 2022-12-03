@@ -47,7 +47,7 @@ end
 
 function Event.Server(player)
     if General.playerCheck(player) then
-        player.Character.Humanoid.Health += data.heal
+        player.Character.Humanoid.Health += player.Character.Humanoid.MaxHealth * data.heal
     end
 end
 

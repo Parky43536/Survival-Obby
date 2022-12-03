@@ -39,8 +39,8 @@ function ShopService:GiveGamepass(player, name)
 		PlayerValues:SetValue(player, "Flight", true, "playerOnly")
         PlayerValues:SetValue(player, "God Health", true, "playerOnly")
 	elseif name == "VIP" then
-		if not player.Backpack:FindFirstChild("Rolling Pin") then
-			local Tool = Tools:FindFirstChild("Rolling Pin"):Clone()
+		if not player.Backpack:FindFirstChild("VIP Staff") then
+			local Tool = Tools:FindFirstChild("VIP Staff"):Clone()
 			Tool.Parent = player.Backpack
 		end
 	end

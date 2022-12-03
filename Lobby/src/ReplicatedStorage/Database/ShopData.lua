@@ -9,7 +9,7 @@ local EventData = {
 		gamepass = 103133738,
 		cost = 500,
 		image = 11572256801,
-		desc = "Double coins, auto upgrades, and the rolling pin tool 🌟",
+		desc = "Double coins, auto upgrades, and the VIP staff tool 🌟",
 	},
 	["God Powers"] = {
 		gamepass = 103134193,
@@ -26,6 +26,11 @@ local EventData = {
 		cost = 5000,
 		image = 28937264,
 		desc = "Drop banana peels on the ground for players to slip on 🍌",
+	},
+	["Bloxiade"] = {
+		cost = 10000,
+		image = 17237572,
+		desc = "An energetic drink that increases your speed for a bit 🔋",
 	},
 	["Invisibility Cape"] = {
 		cost = 10000,
@@ -46,6 +51,11 @@ local EventData = {
 		cost = 50000,
 		image = 16619617,
 		desc = "Makes you jump higher while you have it out 🌙",
+	},
+	["Rolling Pin"] = {
+		cost = 75000,
+		image = 11845896,
+		desc = "Smack other players to lower their speed for second 💥",
 	},
 	["Golden Glove"] = {
 		cost = 100000,
