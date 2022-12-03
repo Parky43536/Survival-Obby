@@ -34,7 +34,7 @@ function EventService.totalUpgrades(levelNum, upgrades)
     local totalUpgrades = 0
 
     for _, level in pairs(upgrades) do
-        if levelNum > level then
+        if levelNum >= level then
             totalUpgrades += 1
         end
     end
