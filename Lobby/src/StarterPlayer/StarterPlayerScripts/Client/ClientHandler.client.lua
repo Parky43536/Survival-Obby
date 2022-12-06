@@ -121,7 +121,7 @@ local function loadCash(value)
 
             if currentTween then currentTween:Cancel() end
             LeftFrame.Cash.CashIncrease.Size = UDim2.new(0.6, 0, 0.6, 0)
-            LeftFrame.Cash.CashIncrease.TextColor3 = Color3.fromRGB(255, 255, 0)
+            LeftFrame.Cash.CashIncrease.TextColor3 = Color3.fromRGB(254, 219, 65)
             local goal = {Size = LeftFrame.Cash.CashIncrease.Size + UDim2.new(0.2, 0, 0.2, 0), TextColor3 = Color3.fromRGB(255, 175, 110)}
             local properties = {Time = 1, Dir = "In", Style = "Bounce", Reverse = true}
             currentTween = TweenService.tween(LeftFrame.Cash.CashIncrease, goal, properties)
