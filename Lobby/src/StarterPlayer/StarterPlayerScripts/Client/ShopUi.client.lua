@@ -19,7 +19,9 @@ local LevelsUi = PlayerGui:WaitForChild("LevelsUi")
 local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
-local Shop = ShopUi.ShopFrame.ScrollingFrame
+
+local GamepassesShop = ShopUi.ShopFrame.GamepassesScrollingFrame
+local ToolsShop = ShopUi.ShopFrame.ToolsScrollingFrame
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ShopConnection = Remotes:WaitForChild("ShopConnection")
@@ -48,6 +50,18 @@ local function onKeyPress(input, gameProcessedEvent)
 		shopUiEnable()
 	end
 end
+
+------------------------------------------------------------------
+
+ShopUi.ShopFrame.Tabs.Gamepasses.Activated:Connect(function()
+    GamepassesShop.Visible = true
+    ToolsShop.Visible = false
+end)
+
+ShopUi.ShopFrame.Tabs.Tools.Activated:Connect(function()
+    GamepassesShop.Visible = false
+    ToolsShop.Visible = true
+end)
 
 ------------------------------------------------------------------
 
@@ -80,7 +94,11 @@ for name, data in (ShopData) do
     itemHolder.Desc.Text = data.desc
 
     itemHolder.LayoutOrder = data.cost
-    itemHolder.Parent = Shop
+    if data.gamepass then
+        itemHolder.Parent = GamepassesShop
+    else
+        itemHolder.Parent = ToolsShop
+    end
 
     itemHolder.Buy.Activated:Connect(function()
         if tick() - cooldownTime > cooldown then
@@ -99,8 +117,13 @@ local function loadBought()
     end
 
     for name,_ in (values) do
-        if Shop:FindFirstChild(name) then
-            local holderUi = Shop:FindFirstChild(name)
+        if GamepassesShop:FindFirstChild(name) then
+            local holderUi = GamepassesShop:FindFirstChild(name)
+            holderUi.Bought.Visible = true
+        end
+
+        if ToolsShop:FindFirstChild(name) then
+            local holderUi = ToolsShop:FindFirstChild(name)
             holderUi.Bought.Visible = true
         end
     end
