@@ -40,7 +40,7 @@ end)
 
 ------------------------------------------------------------------
 
-local settings = {"MusicOff", "SoundOff", "AutoUpgrade"}
+local settings = {"MusicOff", "SoundOff", "UpgradesOff","AutoUpgrade"}
 
 local function loadToggles()
     for _, setting in (settings) do

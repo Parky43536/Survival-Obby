@@ -197,6 +197,10 @@ function DataManager:SettingToggle(player, args)
 	local settings = DataManager:GetValue(player, "Settings")
 	settings[args.setting] = on
 	DataManager:SetValue(player, "Settings", settings)
+
+	if args.setting == "UpgradesOff" then
+		ClientService.SetPlayerStats(player)
+	end
 end
 
 DataConnection.OnServerEvent:Connect(function(player, action, args)
