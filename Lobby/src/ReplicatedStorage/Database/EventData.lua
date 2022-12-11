@@ -41,11 +41,11 @@ local EventData = {
 		chance = 60,
 		upgrades = {},
 
-		despawnTime = 14,
-		growTime = 8,
+		despawnTime = 10,
+		growTime = 6,
 		delayTime = 1,
 		size = 24,
-		damage = 10,
+		damage = 15,
 
 		sizeIncrease = 6,
 	},

@@ -3,8 +3,13 @@ local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
+local Assets = ReplicatedStorage.Assets
+
 local RepServices = ReplicatedStorage:WaitForChild("Services")
 local PlayerValues = require(RepServices:WaitForChild("PlayerValues"))
+
+local DataBase = ReplicatedStorage.Database
+local SettingsData = require(DataBase:WaitForChild("SettingsData"))
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
@@ -40,16 +45,15 @@ end)
 
 ------------------------------------------------------------------
 
-local settings = {"MusicOff", "SoundOff", "UpgradesOff","AutoUpgrade"}
-
 local function loadToggles()
-    for _, setting in (settings) do
-        local settingEnabled = PlayerValues:GetValue(LocalPlayer, setting)
-        local toggle = Settings:FindFirstChild(setting).Toggle
-        if settingEnabled then
-            toggle.Image = "rbxassetid://4360945444"
-        else
-            toggle.Image = "rbxassetid://6790887263"
+    for name, _ in (SettingsData) do
+        local ui = Settings:FindFirstChild(name)
+        if ui then
+            if PlayerValues:GetValue(LocalPlayer, name) then
+                ui.Toggle.Image = "rbxassetid://4360945444"
+            else
+                ui.Toggle.Image = "rbxassetid://6790887263"
+            end
         end
     end
 end
@@ -57,16 +61,22 @@ end
 local cooldown = 0.2
 local cooldownTime = tick()
 
-for _, setting in (settings) do
-    Settings:FindFirstChild(setting).Toggle.Activated:Connect(function()
+for name, data in (SettingsData) do
+    local settingHolder = Assets.Ui.Setting:Clone()
+    settingHolder.Name = name
+    settingHolder.Desc.Text = data.desc
+    settingHolder.LayoutOrder = data.order
+    settingHolder.Parent = Settings
+
+    settingHolder.Toggle.Activated:Connect(function()
         if tick() - cooldownTime > cooldown then
             cooldownTime = tick()
-            DataConnection:FireServer("SettingToggle", {setting = setting})
+            DataConnection:FireServer("SettingToggle", {setting = name})
         end
     end)
 
-    PlayerValues:SetCallback(setting, function(value)
-        if setting == "MusicOff" then
+    PlayerValues:SetCallback(name, function(value)
+        if name == "MusicOff" then
             local music = workspace.Sound:FindFirstChild("Music")
             if music then
                 if PlayerValues:GetValue(LocalPlayer, "MusicOff") then

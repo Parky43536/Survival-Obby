@@ -26,30 +26,29 @@ function ClientService.SetPlayerStats(player)
     if General.playerCheck(player) then
         local humanoid = player.Character.Humanoid
 
-        if not PlayerValues:GetValue(player, "UpgradesOff") then
-            humanoid.WalkSpeed = General.getValue("Speed", PlayerValues:GetValue(player, "Speed"))
-            humanoid.JumpPower = General.getValue("Jump", PlayerValues:GetValue(player, "Jump"))
+        if PlayerValues:GetValue(player, "GodHealth") then
+            humanoid.MaxHealth = 1000000
+            humanoid.Health = humanoid.MaxHealth
+        elseif not PlayerValues:GetValue(player, "HealthOff") then
+            local healthPercent = humanoid.Health / humanoid.MaxHealth
+            humanoid.MaxHealth = General.getValue("Health", PlayerValues:GetValue(player, "Health"))
+            humanoid.Health = humanoid.MaxHealth * healthPercent
+        else
+            local healthPercent = humanoid.Health / humanoid.MaxHealth
+            humanoid.MaxHealth = General.PlayerHealth
+            humanoid.Health = humanoid.MaxHealth * healthPercent
+        end
 
-            if PlayerValues:GetValue(player, "GodHealthOn") then
-                humanoid.MaxHealth = 1000000
-                humanoid.Health = humanoid.MaxHealth
-            else
-                local healthPercent = humanoid.Health / humanoid.MaxHealth
-                humanoid.MaxHealth = General.getValue("Health", PlayerValues:GetValue(player, "Health"))
-                humanoid.Health = humanoid.MaxHealth * healthPercent
-            end
+        if not PlayerValues:GetValue(player, "SpeedOff") then
+            humanoid.WalkSpeed = General.getValue("Speed", PlayerValues:GetValue(player, "Speed"))
         else
             humanoid.WalkSpeed = General.PlayerSpeed
-            humanoid.JumpPower = General.PlayerJump
+        end
 
-            if PlayerValues:GetValue(player, "GodHealthOn") then
-                humanoid.MaxHealth = 1000000
-                humanoid.Health = humanoid.MaxHealth
-            else
-                local healthPercent = humanoid.Health / humanoid.MaxHealth
-                humanoid.MaxHealth = General.PlayerHealth
-                humanoid.Health = humanoid.MaxHealth * healthPercent
-            end
+        if not PlayerValues:GetValue(player, "JumpOff") then
+            humanoid.JumpPower = General.getValue("Jump", PlayerValues:GetValue(player, "Jump"))
+        else
+            humanoid.JumpPower = General.PlayerJump
         end
     end
 end

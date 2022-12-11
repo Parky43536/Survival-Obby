@@ -121,6 +121,8 @@ function DataManager:SetSpawn(player, levelNum)
 		DataManager:SetValue(player, "Level", levelNum)
 		PlayerValues:SetValue(player, "Level", levelNum, "playerOnly")
 
+		DataManager:GiveCash(player, General.LevelReward)
+
 		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
 		level.Value += 1
 	end
@@ -198,9 +200,7 @@ function DataManager:SettingToggle(player, args)
 	settings[args.setting] = on
 	DataManager:SetValue(player, "Settings", settings)
 
-	if args.setting == "UpgradesOff" then
-		ClientService.SetPlayerStats(player)
-	end
+	ClientService.SetPlayerStats(player)
 end
 
 DataConnection.OnServerEvent:Connect(function(player, action, args)

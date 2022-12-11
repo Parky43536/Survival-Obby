@@ -37,38 +37,55 @@ end
 
 ------------------------------------------------------------------
 
-local currentSpin
-local currentAlertTween
+local currentAlertTime
+local currentAlertTweens = {}
 local function shopAlert()
     local cash = PlayerValues:GetValue(LocalPlayer, "Cash")
-    local alert = LeftFrame.Alerts.ShopAlert
+    local alertTime = 4
 
-    local alertSpin = 8
+    local realAlertTime = alertTime
     if cash >= General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health")) then
-        alertSpin /= 2
+        realAlertTime /= 2
     end
     if cash >= General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")) then
-        alertSpin /= 2
+        realAlertTime /= 2
     end
     if cash >= General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")) then
-        alertSpin /= 2
+        realAlertTime /= 2
     end
     if cash >= General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")) then
-        alertSpin /= 2
+        realAlertTime /= 2
     end
 
-    if alertSpin < 8 then
-        if alertSpin ~= currentSpin then
-            currentSpin = true
-            alert.Visible = true
+    if realAlertTime < alertTime then
+        if realAlertTime ~= currentAlertTime then
+            currentAlertTime = realAlertTime
 
-            if currentAlertTween then currentAlertTween:Cancel() end
-            local goal = {Rotation = alert.Rotation + 360}
-            local properties = {Time = alertSpin, Repeat = math.huge}
-            currentAlertTween = TweenService.tween(alert, goal, properties)
+            if currentAlertTweens["Background"] then currentAlertTweens["Background"]:Cancel() end
+            local goal = {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}
+            local properties = {Time = realAlertTime, Reverse = true, Repeat = math.huge}
+            currentAlertTweens["Background"] = TweenService.tween(LeftFrame.Upgrade, goal, properties)
+            ------
+            if currentAlertTweens["Text"] then currentAlertTweens["Text"]:Cancel() end
+            local goal = {TextColor3 = Color3.fromRGB(0, 0, 0)}
+            local properties = {Time = realAlertTime, Reverse = true, Repeat = math.huge}
+            currentAlertTweens["Text"] = TweenService.tween(LeftFrame.Upgrade.ButtonText, goal, properties)
+            ------
+            if currentAlertTweens["Keybind"] then currentAlertTweens["Keybind"]:Cancel() end
+            local goal = {TextColor3 = Color3.fromRGB(0, 0, 0), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}
+            local properties = {Time = realAlertTime, Reverse = true, Repeat = math.huge}
+            currentAlertTweens["Keybind"] = TweenService.tween(LeftFrame.Upgrade.Keybind, goal, properties)
         end
     else
-        alert.Visible = false
+        if currentAlertTweens["Background"] then currentAlertTweens["Background"]:Cancel() end
+        LeftFrame.Upgrade.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
+        ------
+        if currentAlertTweens["Text"] then currentAlertTweens["Text"]:Cancel() end
+        LeftFrame.Upgrade.ButtonText.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ------
+        if currentAlertTweens["Keybind"] then currentAlertTweens["Keybind"]:Cancel() end
+        LeftFrame.Upgrade.Keybind.TextColor3 = Color3.fromRGB(255, 255, 255)
+        LeftFrame.Upgrade.Keybind.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
     end
 end
 

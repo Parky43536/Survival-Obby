@@ -6,6 +6,7 @@ local General = {}
 
 General.Levels = 200
 General.DoorTime = 20
+General.LevelReward = 50
 General.LevelMultiple = 5
 
 function General.TimerCalc(levelNum)
@@ -35,7 +36,7 @@ General.SpeedValue = 0.5
 General.JumpCost = 100
 General.JumpIncrease = 100
 General.JumpDefault = 0
-General.JumpValue = 2
+General.JumpValue = 1.5
 
 General.CMultiCost = 150
 General.CMultiIncrease = 150
