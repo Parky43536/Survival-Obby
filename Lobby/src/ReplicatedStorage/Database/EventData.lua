@@ -32,8 +32,8 @@ local EventData = {
 		size = 12,
 		damage = 50,
 
-		speedIncrease = 15,
-		sizeIncrease = 2,
+		speedIncrease = 5,
+		sizeIncrease = 4,
 		damageIncrease = 5,
 	},
 	["AcidPuddle"] = {
