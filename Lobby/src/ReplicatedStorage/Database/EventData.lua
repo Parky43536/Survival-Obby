@@ -63,7 +63,7 @@ local EventData = {
 	},
 	["Landmine"] = {
 		name = "Landmine",
-		chance = 50,
+		chance = 45,
 		upgrades = {},
 
 		despawnTime = 60,
@@ -73,6 +73,18 @@ local EventData = {
 
 		sizeIncrease = 4,
 		damageIncrease = 5,
+	},
+	["Spinner"] = {
+		name = "Spinner",
+		chance = 55,
+		upgrades = {},
+
+		despawnTime = 8,
+		delayTime = 1,
+		tripTime = 0.75,
+		size = 20,
+
+		sizeIncrease = 5,
 	},
 	["SpeedingWall"] = {
 		name = "Speeding Wall",

@@ -109,7 +109,7 @@ ShopConnection.OnServerEvent:Connect(function(player, action, args)
 			ShopService:BuyTool(player, action)
 		end
 	elseif action == "GiveGodHealth" then
-		PlayerValues:SetValue(player, "GodHealthOn", args.on)
+		PlayerValues:SetValue(player, "GodHealth", args.on)
 		ClientService.SetPlayerStats(player)
 	end
 end)

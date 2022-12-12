@@ -14,7 +14,6 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local touchCooldown = {}
-local slows = {}
 
 function Event.Main(levelNum, level, data)
     for i = 1 , EventService.totalUpgrades(levelNum, data.upgrades) + 1 do
