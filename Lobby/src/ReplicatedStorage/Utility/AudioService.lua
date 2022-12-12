@@ -69,7 +69,7 @@ function AudioService:Create(id, target, properties, args)
 
 		--start client
 
-		if PlayerValues:GetValue(LocalPlayer, "SoundOff") and  args.name ~= "Music" then
+		if PlayerValues:GetValue(LocalPlayer, "SoundsOff") and args.name ~= "Music" then
 			return
 		end
 
@@ -171,6 +171,13 @@ function AudioService:Music(player)
 end
 
 function AudioService:Destroy(saveId)
+	if IsServer then
+		Signal:FireAllClients("Destroy", saveId)
+		return
+	end
+
+	--start client
+
 	if AudioService.SavedAudios[saveId] then
 		AudioService.SavedAudios[saveId]:Destroy()
 		AudioService.SavedAudios[saveId] = nil
