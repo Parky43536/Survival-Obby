@@ -1,12 +1,14 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
 local PhysicsService = game:GetService("PhysicsService")
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
+local Assets = ReplicatedStorage.Assets
+
 local Utility = ReplicatedStorage.Utility
 local General = require(Utility.General)
+local AudioService = require(Utility.AudioService)
 
 local Remotes = ReplicatedStorage.Remotes
 local ClientConnection = Remotes.ClientConnection
@@ -19,6 +21,24 @@ function ClientService.HealPlayer(player)
     if General.playerCheck(player) then
         local humanoid = player.Character.Humanoid
         humanoid.Health = humanoid.MaxHealth
+    end
+end
+
+function ClientService.UpgradePlayer(player, upgrade)
+    if General.playerCheck(player) then
+        AudioService:Create(9048769867, player.Character.PrimaryPart, {Pitch = math.random(10, 20) / 10, Volume = 0.5})
+
+        local particles = Assets.Misc.Upgrade.Attachment:Clone()
+        particles.Parent = player.Character.PrimaryPart
+
+        particles.Flare.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, General.getColor(upgrade)), ColorSequenceKeypoint.new(1, General.getColor(upgrade))}
+        particles.Ray.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, General.getColor(upgrade)), ColorSequenceKeypoint.new(1, General.getColor(upgrade))}
+
+        particles.Flare:Emit(1)
+        particles.Ray:Emit(1)
+
+        task.wait(2)
+        particles:Destroy()
     end
 end
 

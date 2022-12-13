@@ -46,7 +46,7 @@ local function setFlying(flying)
 		bodyVel.Velocity = Vector3.new()
 		bodyVel.Parent = hrp
 
-		flyAnim = humanoid:LoadAnimation(Assets.Animations.FlightIdleAnim)
+		flyAnim = humanoid:LoadAnimation(Assets.Misc.FlightIdleAnim)
 		flyAnim:Play()
 
 		for _, characterPart in pairs(LocalPlayer.Character:GetChildren()) do

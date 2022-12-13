@@ -141,45 +141,15 @@ function DataManager:GiveCash(player, cash)
 	PlayerValues:IncrementValue(player, "Cash", cash, "playerOnly")
 end
 
-function DataManager:BuyHealth(player)
-	local cost = General.getCost("Health", PlayerValues:GetValue(player, "Health"))
-	if PlayerValues:GetValue(player, "Cash") >= cost then
-		DataManager:IncrementValue(player, "Health", 1)
-		PlayerValues:IncrementValue(player, "Health", 1, "playerOnly")
+function DataManager:BuyUpgrade(player, upgrade)
+	local cost = General.getCost(upgrade, PlayerValues:GetValue(player, upgrade))
+	if cost and PlayerValues:GetValue(player, "Cash") >= cost then
+		DataManager:IncrementValue(player, upgrade, 1)
+		PlayerValues:IncrementValue(player, upgrade, 1, "playerOnly")
 		DataManager:GiveCash(player, -cost)
 
+		ClientService.UpgradePlayer(player, upgrade)
 		ClientService.SetPlayerStats(player)
-	end
-end
-
-function DataManager:BuySpeed(player)
-	local cost = General.getCost("Speed", PlayerValues:GetValue(player, "Speed"))
-	if PlayerValues:GetValue(player, "Cash") >= cost then
-		DataManager:IncrementValue(player, "Speed", 1)
-		PlayerValues:IncrementValue(player, "Speed", 1, "playerOnly")
-		DataManager:GiveCash(player, -cost)
-
-		ClientService.SetPlayerStats(player)
-	end
-end
-
-function DataManager:BuyJump(player)
-	local cost = General.getCost("Jump", PlayerValues:GetValue(player, "Jump"))
-	if PlayerValues:GetValue(player, "Cash") >= cost then
-		DataManager:IncrementValue(player, "Jump", 1)
-		PlayerValues:IncrementValue(player, "Jump", 1, "playerOnly")
-		DataManager:GiveCash(player, -cost)
-
-		ClientService.SetPlayerStats(player)
-	end
-end
-
-function DataManager:BuyCMulti(player)
-	local cost = General.getCost("CMulti", PlayerValues:GetValue(player, "CMulti"))
-	if PlayerValues:GetValue(player, "Cash") >= cost then
-		DataManager:IncrementValue(player, "CMulti", 1)
-		PlayerValues:IncrementValue(player, "CMulti", 1, "playerOnly")
-		DataManager:GiveCash(player, -cost)
 	end
 end
 
@@ -204,14 +174,8 @@ function DataManager:SettingToggle(player, args)
 end
 
 DataConnection.OnServerEvent:Connect(function(player, action, args)
-	if action == "Health" then
-		DataManager:BuyHealth(player)
-	elseif action == "Speed" then
-		DataManager:BuySpeed(player)
-	elseif action == "Jump" then
-		DataManager:BuyJump(player)
-	elseif action == "CMulti" then
-		DataManager:BuyCMulti(player)
+	if action == "Health" or action == "Speed" or action == "Jump" or action == "CMulti" then
+		DataManager:BuyUpgrade(player, action)
 	elseif action == "SettingToggle" then
 		DataManager:SettingToggle(player, args)
 	elseif action == "TeleportToLevel" then

@@ -165,7 +165,7 @@ function GameService.SetUpGame()
                 level = Assets.Levels:FindFirstChild(name):Clone()
                 level:PivotTo(lastCFrame)
 
-                local door = Assets.Door:Clone()
+                local door = Assets.Misc.Door:Clone()
                 door:PivotTo(level.Floor.PrimaryPart.Attachment.WorldCFrame)
                 door.Parent = level
 

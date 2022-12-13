@@ -41,18 +41,23 @@ local currentAlertTweens = {}
 local function shopAlert()
     local cash = PlayerValues:GetValue(LocalPlayer, "Cash")
     local alertTime = 4
-
     local realAlertTime = alertTime
-    if cash >= General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health")) then
+
+    local health = General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health"))
+    local speed = General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed"))
+    local jump = General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump"))
+    local cmulti = General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti"))
+
+    if health and cash >= health then
         realAlertTime /= 2
     end
-    if cash >= General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")) then
+    if speed and cash >= speed then
         realAlertTime /= 2
     end
-    if cash >= General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")) then
+    if jump and cash >= jump then
         realAlertTime /= 2
     end
-    if cash >= General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")) then
+    if cmulti and cash >= cmulti then
         realAlertTime /= 2
     end
 
@@ -92,30 +97,38 @@ local function autoUpgrade()
     if PlayerValues:GetValue(LocalPlayer, "AutoUpgrade") then
         local upgrades = {"Health", "Speed", "Jump", "CMulti"}
 
-        local lowestCost = nil
+        local lowestCost = false
         for _, upgrade in upgrades do
-            if not lowestCost then
-                lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
-            elseif General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade)) < lowestCost then
-                lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
-            end
-        end
-
-        while PlayerValues:GetValue(LocalPlayer, "Cash") >= lowestCost do
-            for _, upgrade in upgrades do
-                DataConnection:FireServer(upgrade)
-            end
-
-            lowestCost = nil
-            for _, upgrade in upgrades do
+            local cost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+            if cost then
                 if not lowestCost then
-                    lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
-                elseif General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade)) < lowestCost then
+                    lowestCost = cost
+                elseif cost < lowestCost then
                     lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
                 end
             end
+        end
 
-            task.wait()
+        if lowestCost then
+            while lowestCost and PlayerValues:GetValue(LocalPlayer, "Cash") >= lowestCost do
+                for _, upgrade in upgrades do
+                    DataConnection:FireServer(upgrade)
+                end
+
+                lowestCost = false
+                for _, upgrade in upgrades do
+                    local cost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+                    if cost then
+                        if not lowestCost then
+                            lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+                        elseif General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade)) < lowestCost then
+                            lowestCost = General.getCost(upgrade, PlayerValues:GetValue(LocalPlayer, upgrade))
+                        end
+                    end
+                end
+
+                task.wait()
+            end
         end
     end
 end

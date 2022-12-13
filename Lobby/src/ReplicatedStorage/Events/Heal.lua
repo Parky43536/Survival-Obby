@@ -66,7 +66,7 @@ function Event.Client(rp, levelNum)
         if General.playerCheck(player) then
             touchConnection:Disconnect()
 
-            AudioService:Create(9119834851, heal.Position, {Volume = 0.4, Pitch = math.random(10, 20) / 10})
+            AudioService:Create(9119834851, heal.Position, {Volume = 0.5, Pitch = math.random(10, 20) / 10})
 
             heal:Destroy()
 

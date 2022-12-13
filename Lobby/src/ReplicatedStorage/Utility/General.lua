@@ -24,43 +24,79 @@ General.HealthCost = 125
 General.HealthIncrease = 125
 General.HealthDefault = 0
 General.HealthValue = 5
+General.HealthMax = 300
+General.HealthColor = Color3.fromRGB(255, 0, 0)
 
 General.SpeedCost = 100
 General.SpeedIncrease = 100
 General.SpeedDefault = 0
 General.SpeedValue = 0.5
+General.SpeedMax = 35
+General.SpeedColor = Color3.fromRGB(0, 187, 255)
 
 General.JumpCost = 100
 General.JumpIncrease = 100
 General.JumpDefault = 0
-General.JumpValue = 1.5
+General.JumpValue = 1
+General.JumpMax = 75
+General.JumpColor = Color3.fromRGB(212, 0, 255)
 
 General.CMultiCost = 150
 General.CMultiIncrease = 150
 General.CMultiDefault = 0
 General.CMultiValue = 0.1
+General.CMultiMax = 4
+General.CMultiColor = Color3.fromRGB(4, 255, 0)
 
 function General.getCost(typer, current)
     if typer == "Health" then
-        return General.HealthCost + General.HealthIncrease * (current or General.HealthDefault)
+        if General.getValue(typer, current) == General.HealthMax then
+            return false
+        else
+            return General.HealthCost + General.HealthIncrease * (current or General.HealthDefault)
+        end
     elseif typer == "Speed" then
-        return General.SpeedCost + General.SpeedIncrease * (current or General.SpeedDefault)
+        if General.getValue(typer, current) == General.SpeedMax then
+            return false
+        else
+            return General.SpeedCost + General.SpeedIncrease * (current or General.SpeedDefault)
+        end
     elseif typer == "Jump" then
-        return General.JumpCost + General.JumpIncrease * (current or General.JumpDefault)
+        if General.getValue(typer, current) == General.JumpMax then
+            return false
+        else
+            return General.JumpCost + General.JumpIncrease * (current or General.JumpDefault)
+        end
     elseif typer == "CMulti" then
-        return General.CMultiCost + General.CMultiIncrease * (current or General.CMultiDefault)
+        if General.getValue(typer, current) == General.CMultiMax then
+            return false
+        else
+            return General.CMultiCost + General.CMultiIncrease * (current or General.CMultiDefault)
+        end
     end
 end
 
 function General.getValue(typer, current)
     if typer == "Health" then
-        return General.PlayerHealth + (General.HealthValue * (current or General.HealthDefault))
+        return math.clamp(General.PlayerHealth + (General.HealthValue * (current or General.HealthDefault)), General.PlayerHealth, General.HealthMax)
     elseif typer == "Speed" then
-        return General.PlayerSpeed + (General.SpeedValue * (current or General.SpeedDefault))
+        return math.clamp(General.PlayerSpeed + (General.SpeedValue * (current or General.SpeedDefault)), General.PlayerSpeed, General.SpeedMax)
     elseif typer == "Jump" then
-        return General.PlayerJump + (General.JumpValue * (current or General.JumpDefault))
+        return math.clamp(General.PlayerJump + (General.JumpValue * (current or General.JumpDefault)), General.PlayerJump, General.JumpMax)
     elseif typer == "CMulti" then
-        return 1 + (General.CMultiValue * (current or General.CMultiDefault))
+        return math.clamp(1 + (General.CMultiValue * (current or General.CMultiDefault)), 1, General.CMultiMax)
+    end
+end
+
+function General.getColor(typer)
+    if typer == "Health" then
+        return General.HealthColor
+    elseif typer == "Speed" then
+        return General.SpeedColor
+    elseif typer == "Jump" then
+        return General.JumpColor
+    elseif typer == "CMulti" then
+        return General.CMultiColor
     end
 end
 

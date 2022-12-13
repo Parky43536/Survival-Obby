@@ -9,6 +9,7 @@ local PlayerValues = require(RepServices:WaitForChild("PlayerValues"))
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
+local AudioService = require(Utility.AudioService)
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
@@ -98,33 +99,33 @@ local function round(number, decimal)
     return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
 
-local function loadCosts()
-    Upgrade.Health.Cost.Amount.Text = "C " .. comma_value(General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health")))
-    Upgrade.Speed.Cost.Amount.Text = "C " .. comma_value(General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")))
-    Upgrade.Jump.Cost.Amount.Text = "C " .. comma_value(General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")))
-    Upgrade.CMulti.Cost.Amount.Text = "C " .. comma_value(General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")))
+local stats = {"Health", "Speed", "Jump", "CMulti"}
 
-    Upgrade.Health.Total.Amount.Text = comma_value(round(General.getValue("Health", PlayerValues:GetValue(LocalPlayer, "Health")), 0))
-    Upgrade.Speed.Total.Amount.Text = comma_value(round(General.getValue("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")), 1))
-    Upgrade.Jump.Total.Amount.Text = comma_value(round(General.getValue("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")), 0))
-    Upgrade.CMulti.Total.Amount.Text = comma_value(round(General.getValue("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")), 1))
+local function loadCosts()
+    for i, stat in (stats) do
+        local statCost = General.getCost(stat, PlayerValues:GetValue(LocalPlayer, stat))
+        if statCost then
+            statCost = "C " .. comma_value(statCost)
+        else
+            statCost = "MAX"
+        end
+
+        local rounding = 0
+        if stat == "Speed" or stat == "CMulti" then
+            rounding = 1
+        end
+
+        local ui = Upgrade:FindFirstChild(stat)
+        ui.Cost.Amount.Text = statCost
+        ui.Total.Amount.Text = round(General.getValue(stat, PlayerValues:GetValue(LocalPlayer, stat)), rounding)
+    end
 end
 
-PlayerValues:SetCallback("Health", function()
-    loadCosts()
-end)
-
-PlayerValues:SetCallback("Speed", function()
-    loadCosts()
-end)
-
-PlayerValues:SetCallback("Jump", function()
-    loadCosts()
-end)
-
-PlayerValues:SetCallback("CMulti", function()
-    loadCosts()
-end)
+for i, stat in (stats) do
+    PlayerValues:SetCallback(stat, function()
+        loadCosts()
+    end)
+end
 
 UpgradeConnection.OnClientEvent:Connect(function()
     loadCosts()
