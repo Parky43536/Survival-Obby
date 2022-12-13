@@ -14,12 +14,12 @@ local EventData = {
 		upgrades = {},
 
 		delayTime = 2,
-		size = 32,
+		size = 40,
 		damageTicks = 10,
 		damageDelay = 1,
 		damage = 15,
 
-		sizeIncrease = 8,
+		sizeIncrease = 5,
 	},
 	["Rocket"] = {
 		name = "Rocket",

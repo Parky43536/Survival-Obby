@@ -42,7 +42,7 @@ while true do
     length = soundForTime.TimeLength
     soundForTime:Destroy()
 
-    AudioService:Create(picked, workspace.Sound, {}, {name = "Music"})
+    AudioService:Create(picked, workspace.Sound, {Volume = 0.15}, {name = "Music"})
 
     task.wait(length + intermissionTime)
 end
