@@ -91,6 +91,9 @@ function Event.Main(levelNum, level, data)
                             end
                             if tick() - touchCooldown[player] > EventService.TouchCooldown then
                                 touchCooldown[player] = tick()
+
+                                AudioService:Create(9118908929, player.Character.PrimaryPart, {TimePosition = 1.5, Pitch = math.random(10, 20) / 10, Volume = 0.75})
+
                                 player.Character.Humanoid:TakeDamage(data.damage)
                             end
                         end

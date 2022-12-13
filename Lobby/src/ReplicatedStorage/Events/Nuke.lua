@@ -75,9 +75,14 @@ function Event.Main(levelNum, level, data)
         task.spawn(function()
             local time = data.delayTime
             for i = 1 , time do
-                task.wait(1)
                 if stand.Parent ~= nil then
-                    stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. data.delayTime - i
+                    AudioService:Create(9113085665, stand.Button.Position, {Pitch = 0.75, Volume = 0.75})
+
+                    task.wait(1)
+
+                    if stand.Parent ~= nil then
+                        stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. data.delayTime - i
+                    end
                 end
             end
         end)

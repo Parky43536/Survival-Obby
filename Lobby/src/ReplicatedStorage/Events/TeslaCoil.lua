@@ -54,6 +54,8 @@ function Event.Main(levelNum, level, data)
                             EventService.parentToObstacles(levelNum, laser)
                             game.Debris:AddItem(laser, data.damageDelay / 2)
 
+                            AudioService:Create(9117877055, player.Character.PrimaryPart, {Pitch = math.random(10, 20) / 10, Volume = 0.5})
+
                             player.Character.Humanoid:TakeDamage(data.damage)
                         end
                     end

@@ -65,6 +65,9 @@ function Event.Client(rp, levelNum)
         local player = game.Players:GetPlayerFromCharacter(hit.Parent)
         if General.playerCheck(player) then
             touchConnection:Disconnect()
+
+            AudioService:Create(9119834851, heal.Position, {Volume = 0.4, Pitch = math.random(10, 20) / 10})
+
             heal:Destroy()
 
             Signal:FireServer(LocalPlayer)

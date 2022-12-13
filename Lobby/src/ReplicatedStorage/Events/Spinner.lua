@@ -51,6 +51,8 @@ function Event.Main(levelNum, level, data)
                             if tick() - touchCooldown[player] > EventService.TouchCooldown then
                                 touchCooldown[player] = tick()
 
+                                AudioService:Create(9120917109, player.Character.PrimaryPart, {Pitch = math.random(10, 20) / 10, Volume = 0.75})
+
                                 local physics = Obstacle.Physics:Clone()
                                 physics.Parent = player.Character
 
