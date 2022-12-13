@@ -3,7 +3,7 @@ local ProfileTemplate = {
     Settings = {},
 
     Level = 1,
-    Cash = 500,
+    Cash = 50,
 
     Health = 0,
     Speed = 0,

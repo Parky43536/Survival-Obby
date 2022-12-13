@@ -56,6 +56,13 @@ function Event.Main(levelNum, level, data)
                                 local physics = Obstacle.Physics:Clone()
                                 physics.Parent = player.Character
 
+                                local delta = player.Character.PrimaryPart.Position - spinner.Beam.Position
+                                local bv = Instance.new("BodyVelocity")
+                                bv.maxForce = Vector3.new(1e9, 1e9, 1e9)
+                                bv.velocity = delta.unit * 15
+                                bv.Parent = player.Character.PrimaryPart
+                                game:GetService("Debris"):AddItem(bv, 0.05)
+
                                 task.wait(data.tripTime)
 
                                 if player and player.Character then
