@@ -76,7 +76,7 @@ local EventData = {
 	},
 	["Spinner"] = {
 		name = "Spinner",
-		chance = 55,
+		chance = 65,
 		upgrades = {},
 
 		despawnTime = 8,

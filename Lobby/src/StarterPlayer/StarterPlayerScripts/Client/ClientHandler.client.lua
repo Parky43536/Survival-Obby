@@ -45,16 +45,16 @@ local function shopAlert()
 
     local realAlertTime = alertTime
     if cash >= General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health")) then
-        realAlertTime /= 2
+        realAlertTime /= 1.5
     end
     if cash >= General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed")) then
-        realAlertTime /= 2
+        realAlertTime /= 1.5
     end
     if cash >= General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump")) then
-        realAlertTime /= 2
+        realAlertTime /= 1.5
     end
     if cash >= General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti")) then
-        realAlertTime /= 2
+        realAlertTime /= 1.5
     end
 
     if realAlertTime < alertTime then
