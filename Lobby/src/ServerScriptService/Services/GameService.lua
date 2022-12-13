@@ -56,9 +56,9 @@ function GameService.SetUpButton(levelNum, level)
             level.Button.Button.BrickColor = BrickColor.new("Really red")
 
             for i = 1 , General.TimerCalc(levelNum) do
-                for j = 1 , General.EventsCalc(levelNum) do
+                for j = 1 , General.EventsPerSecond do
                     LevelService.ButtonEvent(levelNum, level, player)
-                    task.wait(1 / General.EventsCalc(levelNum))
+                    task.wait(1 / General.EventsPerSecond)
                 end
 
                 local cframe, size = EventService.getBoundingBox(level.Floor)
