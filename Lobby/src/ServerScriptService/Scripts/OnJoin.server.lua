@@ -55,9 +55,9 @@ local function playerAdded(newPlayer)
                 end
 
                 repeat
-                    newPlayer.Character:PivotTo(level.Floor.Spawn.CFrame)
+                    newPlayer.Character:PivotTo(level.Door.PlayerSpawn.CFrame)
                     task.wait()
-                until General.playerCheck(newPlayer) and (newPlayer.Character:GetPivot().Position - level.Floor.Spawn.Position).Magnitude < 10
+                until General.playerCheck(newPlayer) and (newPlayer.Character:GetPivot().Position - level.Door.PlayerSpawn.Position).Magnitude < 10
             else
                 repeat
                     task.wait()

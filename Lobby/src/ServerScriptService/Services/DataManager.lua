@@ -112,7 +112,7 @@ function DataManager:TeleportToLevel(player, args)
 			PlayerValues:SetValue(player, "CurrentLevel", args.level)
 
 			local character = player.Character
-			character:PivotTo(level.Floor.Spawn.CFrame)
+			character:PivotTo(level.Door.PlayerSpawn.CFrame)
 		end
 	--end
 end

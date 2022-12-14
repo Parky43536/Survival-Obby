@@ -22,7 +22,7 @@ function Event.Main(levelNum, level, data)
 
         local Params = RaycastParams.new()
         Params.FilterType = Enum.RaycastFilterType.Whitelist
-        Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
+        Params.FilterDescendantsInstances = {level.Floor:GetChildren()}
 
         local RayOrigin = cframe.Position + Vector3.new(0, 100, 0)
         local RayDirection = Vector3.new(0, -1000, 0)
@@ -31,9 +31,18 @@ function Event.Main(levelNum, level, data)
             cframe = CFrame.new(Result.Position)
         end
 
+        local checkForOtherLevels = workspace.Levels:GetChildren()
+        for i, otherLevel in pairs(checkForOtherLevels) do
+            if otherLevel.Name == level.Name then
+                table.remove(checkForOtherLevels, i)
+                break
+            end
+        end
+        Params.FilterDescendantsInstances = {checkForOtherLevels}
+
         local height = data.height
         RayOrigin = cframe.Position
-        RayDirection = Vector3.new(0, data.height, 0)
+        RayDirection = Vector3.new(0, height, 0)
         Result = workspace:Raycast(RayOrigin, RayDirection, Params)
         if Result then
             height = (cframe.Position - Result.Position).Magnitude - nukeSize.Y

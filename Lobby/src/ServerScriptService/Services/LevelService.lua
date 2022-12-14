@@ -92,7 +92,7 @@ function LevelService.SetUpLevelColor(levelNum, level)
     local pick = rng:NextInteger(1, #possibleColors)
     local PrimaryColor = possibleColors[pick]
     lastPick = pick
-    
+ 
     local SecondaryColor = PrimaryColor:Lerp(Color3.fromRGB(255,255,255), General.SecondaryColorLerp)
 
     for _, part in pairs(level:GetDescendants()) do
@@ -104,7 +104,9 @@ function LevelService.SetUpLevelColor(levelNum, level)
             part.Color = General.SupportColor
         elseif CollectionService:HasTag(part, "ObstacleSpawner") then
             part.Transparency = 1
-        elseif CollectionService:HasTag(part, "Wall") then
+        end
+
+        if CollectionService:HasTag(part, "Wall") then
             PhysicsService:SetPartCollisionGroup(part, "Wall")
         end
     end
