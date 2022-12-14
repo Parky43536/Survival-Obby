@@ -24,6 +24,10 @@ local ProfileTemplate = require(DataStorage.ProfileTemplate)
 local DataManager = {}
 DataManager.Profiles = {}
 
+local function round(number, decimal)
+    return math.round(number * 10 ^ decimal) / (10 ^ decimal)
+end
+
 function DataManager:Initialize(player, storeName)
 	local PlayerDataProfileStore = ProfileService.GetProfileStore(
 		storeName,
@@ -130,7 +134,7 @@ end
 
 function DataManager:GiveCash(player, cash)
 	if cash > 0 then
-		cash = math.floor(cash + (cash * (PlayerValues:GetValue(player, "CMulti") * General.CMultiValue)))
+		cash = math.floor(cash * General.getValue("CMulti", PlayerValues:GetValue(player, "CMulti")))
 
 		if PlayerValues:GetValue(player, "VIP") then
 			cash *= 2
@@ -164,13 +168,21 @@ function DataManager:SettingToggle(player, args)
 		on = nil
 	end
 
-	PlayerValues:SetValue(player, args.setting, on, "playerOnly")
-
 	local settings = DataManager:GetValue(player, "Settings")
 	settings[args.setting] = on
 	DataManager:SetValue(player, "Settings", settings)
 
+	PlayerValues:SetValue(player, args.setting, on, "playerOnly")
+
 	ClientService.SetPlayerStats(player)
+end
+
+function DataManager:SettingSlider(player, args)
+	local settings = DataManager:GetValue(player, "Settings")
+	settings[args.setting] = round(math.clamp(settings[args.setting] + args.value, args.min, args.max), 1)
+	DataManager:SetValue(player, "Settings", settings)
+
+	PlayerValues:SetValue(player, args.setting, settings[args.setting], "playerOnly")
 end
 
 DataConnection.OnServerEvent:Connect(function(player, action, args)
@@ -178,6 +190,8 @@ DataConnection.OnServerEvent:Connect(function(player, action, args)
 		DataManager:BuyUpgrade(player, action)
 	elseif action == "SettingToggle" then
 		DataManager:SettingToggle(player, args)
+	elseif action == "SettingSlider" then
+		DataManager:SettingSlider(player, args)
 	elseif action == "TeleportToLevel" then
 		DataManager:TeleportToLevel(player, args)
 	end

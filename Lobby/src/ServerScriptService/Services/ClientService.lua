@@ -97,9 +97,8 @@ function ClientService.InitializeClient(player, profile)
     PlayerValues:SetValue(player, "Jump", profile.Data.Jump, "playerOnly")
     PlayerValues:SetValue(player, "CMulti", profile.Data.CMulti, "playerOnly")
 
-	for setting,_ in profile.Data.Settings do
-        print(player, setting)
-        PlayerValues:SetValue(player, setting, true, "playerOnly")
+	for setting, value in profile.Data.Settings do
+        PlayerValues:SetValue(player, setting, value, "playerOnly")
     end
 
     ClientConnection:FireClient(player)

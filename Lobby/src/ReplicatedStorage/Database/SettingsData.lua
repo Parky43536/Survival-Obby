@@ -1,11 +1,19 @@
 local SettingsData = {
-	["MusicOff"] = {
-		desc = "Mute music",
+	["Music"] = {
+		desc = "Music",
 		order = 1,
+		slider = true,
+		value = 0.1,
+		min = 0,
+		max = 2,
 	},
-	["SoundsOff"] = {
-		desc = "Mute sounds",
+	["Sounds"] = {
+		desc = "Sounds",
 		order = 2,
+		slider = true,
+		value = 0.1,
+		min = 0,
+		max = 2,
 	},
 	["AutoUpgrade"] = {
 		desc = "Auto upgrade (VIP)",

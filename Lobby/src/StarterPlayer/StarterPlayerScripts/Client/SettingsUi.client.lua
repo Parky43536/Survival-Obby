@@ -11,6 +11,9 @@ local PlayerValues = require(RepServices:WaitForChild("PlayerValues"))
 local DataBase = ReplicatedStorage.Database
 local SettingsData = require(DataBase:WaitForChild("SettingsData"))
 
+local Utility = ReplicatedStorage:WaitForChild("Utility")
+local General = require(Utility.General)
+
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
 local RightFrame = PlayerUi:WaitForChild("RightFrame")
@@ -45,53 +48,76 @@ end)
 
 ------------------------------------------------------------------
 
-local function loadToggles()
-    for name, _ in (SettingsData) do
+local function loadSettings()
+    for name, data in (SettingsData) do
         local ui = Settings:FindFirstChild(name)
         if ui then
-            if PlayerValues:GetValue(LocalPlayer, name) then
-                ui.Toggle.Image = "rbxassetid://4360945444"
+            if data.slider then
+                ui.Value.Text = PlayerValues:GetValue(LocalPlayer, name)
             else
-                ui.Toggle.Image = "rbxassetid://6790887263"
+                if PlayerValues:GetValue(LocalPlayer, name) then
+                    ui.Toggle.Image = "rbxassetid://4360945444"
+                else
+                    ui.Toggle.Image = "rbxassetid://6790887263"
+                end
             end
         end
     end
 end
 
-local cooldown = 0.2
+local toggleCooldown = 0.2
+local sliderCooldown = 0.05
 local cooldownTime = tick()
 
 for name, data in (SettingsData) do
-    local settingHolder = Assets.Ui.Setting:Clone()
+    local settingHolder
+    if data.slider then
+        settingHolder = Assets.Ui.SliderSetting:Clone()
+    else
+        settingHolder = Assets.Ui.ToggleSetting:Clone()
+    end
+
     settingHolder.Name = name
     settingHolder.Desc.Text = data.desc
     settingHolder.LayoutOrder = data.order
     settingHolder.Parent = Settings
 
-    settingHolder.Toggle.Activated:Connect(function()
-        if tick() - cooldownTime > cooldown then
-            cooldownTime = tick()
-            DataConnection:FireServer("SettingToggle", {setting = name})
-        end
-    end)
+    if data.slider then
+        settingHolder.Plus.Activated:Connect(function()
+            if tick() - cooldownTime > sliderCooldown then
+                cooldownTime = tick()
+                DataConnection:FireServer("SettingSlider", {setting = name, value = data.value, min = data.min, max = data.max})
+            end
+        end)
 
-    PlayerValues:SetCallback(name, function(value)
-        if name == "MusicOff" then
+        settingHolder.Minus.Activated:Connect(function()
+            if tick() - cooldownTime > sliderCooldown then
+                cooldownTime = tick()
+                DataConnection:FireServer("SettingSlider", {setting = name, value = -data.value, min = data.min, max = data.max})
+            end
+        end)
+    else
+        settingHolder.Toggle.Activated:Connect(function()
+            if tick() - cooldownTime > toggleCooldown then
+                cooldownTime = tick()
+                DataConnection:FireServer("SettingToggle", {setting = name})
+            end
+        end)
+    end
+
+    PlayerValues:SetCallback(name, function()
+        if name == "Music" then
             local music = workspace.Sound:FindFirstChild("Music")
             if music then
-                if PlayerValues:GetValue(LocalPlayer, "MusicOff") then
-                    music.Volume = 0
-                else
-                    music.Volume = 0.2
-                end
+                music.Volume = General.MusicVolume * PlayerValues:GetValue(LocalPlayer, "Music")
             end
         end
 
-        loadToggles()
+        loadSettings()
     end)
 end
 
 SettingsConnection.OnClientEvent:Connect(function()
-    loadToggles()
+    loadSettings()
 end)
 

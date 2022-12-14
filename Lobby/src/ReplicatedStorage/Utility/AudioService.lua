@@ -69,10 +69,6 @@ function AudioService:Create(id, target, properties, args)
 
 		--start client
 
-		if PlayerValues:GetValue(LocalPlayer, "SoundsOff") and args.name ~= "Music" then
-			return
-		end
-
 		id = tostring(id)
 		local newSoundObject = Instance.new("Sound")
 		newSoundObject.Name = args.name or id
@@ -98,8 +94,10 @@ function AudioService:Create(id, target, properties, args)
 			end
 		end
 
-		if args.name and args.name == "Music" and PlayerValues:GetValue(LocalPlayer, "MusicOff") then
-			newSoundObject["Volume"] = 0
+		if args.name and args.name == "Music" then
+			newSoundObject["Volume"] *= PlayerValues:GetValue(LocalPlayer, "Music")
+		else
+			newSoundObject["Volume"] *= PlayerValues:GetValue(LocalPlayer, "Sounds")
 		end
 
 		local container

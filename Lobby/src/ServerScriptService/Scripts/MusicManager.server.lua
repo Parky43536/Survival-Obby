@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Utility = ReplicatedStorage:WaitForChild("Utility")
-local AudioService = require(Utility:WaitForChild("AudioService"))
+local AudioService = require(Utility.AudioService)
+local General = require(Utility.General)
 
 local intermissionTime = 4
 
@@ -42,7 +43,7 @@ while true do
     length = soundForTime.TimeLength
     soundForTime:Destroy()
 
-    AudioService:Create(picked, workspace.Sound, {Volume = 0.15}, {name = "Music"})
+    AudioService:Create(picked, workspace.Sound, {Volume = General.MusicVolume}, {name = "Music"})
 
     task.wait(length + intermissionTime)
 end

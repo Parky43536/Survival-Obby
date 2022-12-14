@@ -1,9 +1,9 @@
 local ProfileTemplate = {
     Purchases = {},
-    Settings = {},
+    Settings = {Music = 1, Sounds = 1},
 
     Level = 1,
-    Cash = 50,
+    Cash = 0,
 
     Health = 0,
     Speed = 0,
