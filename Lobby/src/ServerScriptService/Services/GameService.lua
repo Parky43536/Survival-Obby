@@ -17,6 +17,7 @@ local Assets = ReplicatedStorage.Assets
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
 local EventService = require(Utility.EventService)
+local AudioService = require(Utility.AudioService)
 
 local GameService = {}
 
@@ -26,6 +27,8 @@ function GameService.FinishButton(levelNum, level, win)
     EventService.CleanLevel(levelNum, level)
 
     if win then
+        AudioService:Create(1846252166, level.Button.Button, {Volume = 0.25})
+
         LevelService.OpenDoors(level)
         levels[levelNum].DoorOpened = true
 
@@ -36,6 +39,8 @@ function GameService.FinishButton(levelNum, level, win)
         end
 
         task.wait(General.DoorTime)
+    else
+        AudioService:Create(9113085663, level.Button.Button, {Volume = 0.5})
     end
 
     levels[levelNum].DoorOpened = false

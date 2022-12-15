@@ -30,7 +30,7 @@ local function playerAdded(newPlayer)
     local profile = getPlayerProfile(newPlayer)
 	if profile ~= nil then
 		loadPlayerProfile(newPlayer, profile)
-        ClientService.InitializeClient(newPlayer, profile)
+        ClientService:InitializeClient(newPlayer, profile)
         AudioService:Music(newPlayer)
 	else
         warn("Could not load player profile")
@@ -64,8 +64,8 @@ local function playerAdded(newPlayer)
                 until General.playerCheck(newPlayer)
             end
 
-            ClientService.InitializeCharacter(newPlayer)
-            ClientService.SetPlayerStats(newPlayer)
+            ClientService:InitializeLife(newPlayer)
+            ClientService:SetPlayerStats(newPlayer)
             ShopService:InitializePurchases(newPlayer)
         end)
     end

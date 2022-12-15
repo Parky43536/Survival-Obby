@@ -17,14 +17,14 @@ local SettingsConnection = Remotes.SettingsConnection
 
 local ClientService = {}
 
-function ClientService.HealPlayer(player)
+function ClientService:HealPlayer(player)
     if General.playerCheck(player) then
         local humanoid = player.Character.Humanoid
         humanoid.Health = humanoid.MaxHealth
     end
 end
 
-function ClientService.UpgradePlayer(player, upgrade)
+function ClientService:UpgradePlayer(player, upgrade)
     if General.playerCheck(player) then
         AudioService:Create(9048769867, player.Character.PrimaryPart, {Pitch = math.random(10, 20) / 10, Volume = 0.5})
 
@@ -42,7 +42,24 @@ function ClientService.UpgradePlayer(player, upgrade)
     end
 end
 
-function ClientService.SetPlayerStats(player)
+function ClientService:SpeedBoost(player, speed, duration)
+    PlayerValues:IncrementValue(player, "SpeedBoost", speed)
+    ClientService:SetPlayerStats(player)
+
+    if duration then
+        local lifeId = PlayerValues:GetValue(player, "LifeId")
+
+        task.spawn(function()
+            task.wait(duration)
+            if lifeId == PlayerValues:GetValue(player, "LifeId") then
+                PlayerValues:IncrementValue(player, "SpeedBoost", -speed)
+                ClientService:SetPlayerStats(player)
+            end
+        end)
+    end
+end
+
+function ClientService:SetPlayerStats(player)
     if General.playerCheck(player) then
         local humanoid = player.Character.Humanoid
 
@@ -64,6 +81,7 @@ function ClientService.SetPlayerStats(player)
         else
             humanoid.WalkSpeed = General.PlayerSpeed
         end
+        humanoid.WalkSpeed += (PlayerValues:GetValue(player, "SpeedBoost") or 0)
 
         if not PlayerValues:GetValue(player, "JumpOff") then
             humanoid.JumpPower = General.getValue("Jump", PlayerValues:GetValue(player, "Jump"))
@@ -73,7 +91,10 @@ function ClientService.SetPlayerStats(player)
     end
 end
 
-function ClientService.InitializeCharacter(player)
+function ClientService:InitializeLife(player)
+    PlayerValues:SetValue(player, "LifeId", tick())
+    PlayerValues:SetValue(player, "SpeedBoost", 0)
+
     for _, characterPart in pairs(player.Character:GetChildren()) do
         if characterPart:IsA("BasePart") then
             PhysicsService:SetPartCollisionGroup(characterPart, "Player")
@@ -81,14 +102,27 @@ function ClientService.InitializeCharacter(player)
     end
 end
 
-function ClientService.InitializeClient(player, profile)
+function ClientService:InitializeClient(player, profile)
     local stats = Instance.new("Folder")
     stats.Name = "leaderstats"
+
     local stage = Instance.new("NumberValue")
     stage.Name = "Level"
     stage.Value = profile.Data.Level
     stats.Parent = player
     stage.Parent = stats
+
+    local stage2 = Instance.new("NumberValue")
+    stage2.Name = "Wins"
+    stage2.Value = profile.Data.Wins
+    stage2.Parent = player
+    stage2.Parent = stats
+
+    --[[local wins = Instance.new("NumberValue")
+    wins.Name = "Wins"
+    wins.Value = profile.Data.Wins
+    wins.Parent = player
+    wins.Parent = stats]]
 
     PlayerValues:SetValue(player, "Level", profile.Data.Level, "playerOnly")
     PlayerValues:SetValue(player, "Cash", profile.Data.Cash, "playerOnly")

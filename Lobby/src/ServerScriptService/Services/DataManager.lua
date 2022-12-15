@@ -119,7 +119,7 @@ end
 
 function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
-	ClientService.HealPlayer(player)
+	ClientService:HealPlayer(player)
 
 	if DataManager:GetValue(player, "Level") + 1 == levelNum then
 		DataManager:SetValue(player, "Level", levelNum)
@@ -139,6 +139,10 @@ function DataManager:GiveCash(player, cash)
 		if PlayerValues:GetValue(player, "VIP") then
 			cash *= 2
 		end
+	else
+		if math.abs(cash) > PlayerValues:GetValue(player, "Cash") then
+			cash = -PlayerValues:GetValue(player, "Cash")
+		end
 	end
 
 	DataManager:IncrementValue(player, "Cash", cash)
@@ -152,8 +156,8 @@ function DataManager:BuyUpgrade(player, upgrade)
 		PlayerValues:IncrementValue(player, upgrade, 1, "playerOnly")
 		DataManager:GiveCash(player, -cost)
 
-		ClientService.UpgradePlayer(player, upgrade)
-		ClientService.SetPlayerStats(player)
+		ClientService:UpgradePlayer(player, upgrade)
+		ClientService:SetPlayerStats(player)
 	end
 end
 
@@ -174,7 +178,7 @@ function DataManager:SettingToggle(player, args)
 
 	PlayerValues:SetValue(player, args.setting, on, "playerOnly")
 
-	ClientService.SetPlayerStats(player)
+	ClientService:SetPlayerStats(player)
 end
 
 function DataManager:SettingSlider(player, args)

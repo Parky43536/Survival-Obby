@@ -110,7 +110,7 @@ ShopConnection.OnServerEvent:Connect(function(player, action, args)
 		end
 	elseif action == "GiveGodHealth" then
 		PlayerValues:SetValue(player, "GodHealth", args.on)
-		ClientService.SetPlayerStats(player)
+		ClientService:SetPlayerStats(player)
 	end
 end)
 
