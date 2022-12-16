@@ -118,12 +118,7 @@ function ClientService:InitializeClient(player, profile)
     stage2.Parent = player
     stage2.Parent = stats
 
-    --[[local wins = Instance.new("NumberValue")
-    wins.Name = "Wins"
-    wins.Value = profile.Data.Wins
-    wins.Parent = player
-    wins.Parent = stats]]
-
+    PlayerValues:SetValue(player, "CurrentLevel", profile.Data.Level, "playerOnly")
     PlayerValues:SetValue(player, "Level", profile.Data.Level, "playerOnly")
     PlayerValues:SetValue(player, "Cash", profile.Data.Cash, "playerOnly")
     PlayerValues:SetValue(player, "Health", profile.Data.Health, "playerOnly")

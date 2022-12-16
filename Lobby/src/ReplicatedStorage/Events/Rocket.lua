@@ -67,7 +67,7 @@ function Event.Main(levelNum, level, data)
         rocket:SetPrimaryPartCFrame(rOS.CFrame)
 
         local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
+        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
         local targetPlayer = EventService.getClosestPlayer(rocket.Stand.PrimaryPart.Position, playersInLevel)
         local touchConnection = false
 

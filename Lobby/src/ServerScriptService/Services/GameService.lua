@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
@@ -33,7 +34,7 @@ function GameService.FinishButton(levelNum, level, win)
         levels[levelNum].DoorOpened = true
 
         local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
+        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
         for _, playerInRoom in playersInLevel do
             DataManager:SetSpawn(playerInRoom, levelNum + 1)
         end
@@ -52,23 +53,42 @@ end
 
 function GameService.SetUpButton(levelNum, level)
     level.Button.Button.Touched:Connect(function(hit)
-        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-        if player and General.playerCheck(player) and levels[levelNum].Started == false then
+        local hitPlayer = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if hitPlayer and General.playerCheck(hitPlayer) and levels[levelNum].Started == false then
             levels[levelNum].Started = true
 
             LevelService.PressButton(level.Button.Button)
             level.Button.Button.Top.Label.Text = levels[levelNum].Timer
             level.Button.Button.BrickColor = BrickColor.new("Really red")
 
+            local noPlayers = 0
             for i = 1 , General.TimerCalc(levelNum) do
                 for j = 1 , General.EventsPerSecond do
-                    LevelService.ButtonEvent(levelNum, level, player)
+                    LevelService.ButtonEvent(levelNum, level)
                     task.wait(1 / General.EventsPerSecond)
                 end
 
+                --area check
                 local cframe, size = EventService.getBoundingBox(level.Floor)
-                local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
+                local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
                 if #playersInLevel == 0 then
+                    noPlayers += 1
+                    if noPlayers == 5 then
+                        GameService.FinishButton(levelNum, level, false)
+                        return
+                    end
+                else
+                    noPlayers = 0
+                end
+
+                --health check
+                local playersAlive = {}
+                for _, player in pairs(Players:GetChildren()) do
+                    if PlayerValues:GetValue(player, "CurrentLevel") == levelNum and General.playerCheck(player) then
+                        table.insert(playersAlive, player)
+                    end
+                end
+                if #playersAlive == 0 then
                     GameService.FinishButton(levelNum, level, false)
                     return
                 end

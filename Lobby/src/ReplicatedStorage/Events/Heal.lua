@@ -37,7 +37,7 @@ function Event.Main(levelNum, level)
     local rp = EventService.randomPoint(level)
     if rp then
         local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 200, 10))
+        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
 
         for _, player in playersInLevel do
             Signal:FireClient(player, rp.Position, levelNum)

@@ -113,7 +113,7 @@ function LevelService.SetUpLevelColor(levelNum, level)
 end
 
 local requiredEvents = {}
-function LevelService.ButtonEvent(levelNum, level, player)
+function LevelService.ButtonEvent(levelNum, level)
     local rng = Random.new()
 
     for key, data in pairs(EventData) do
