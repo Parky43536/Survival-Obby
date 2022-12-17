@@ -98,9 +98,9 @@ function ClientService:CheckFriends(player)
         if checkPlayer:IsFriendsWith(player.UserId) then
             PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
 
-            if not player.Backpack:FindFirstChild("Speed Coil") then
+            if not checkPlayer.Backpack:FindFirstChild("Speed Coil") then
                 local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
-                Tool.Parent = player.Backpack
+                Tool.Parent = checkPlayer.Backpack
             end
         end
     end
