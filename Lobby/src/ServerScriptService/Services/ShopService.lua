@@ -47,8 +47,6 @@ function ShopService:GiveGamepass(player, name)
 
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then
-		print(player.Name .. " was given " .. name)
-
 		purchases[name] = true
 		DataManager:SetValue(player, "Purchases", purchases)
 	end
@@ -64,8 +62,6 @@ function ShopService:GiveTool(player, name)
 
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then
-		print(player.Name .. " was given " .. name)
-
 		purchases[name] = true
 		DataManager:SetValue(player, "Purchases", purchases)
 	end

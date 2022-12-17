@@ -1,10 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PhysicsService = game:GetService("PhysicsService")
+local Players = game:GetService("Players")
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
 local Assets = ReplicatedStorage.Assets
+local Tools = Assets.Tools
 
 local Utility = ReplicatedStorage.Utility
 local General = require(Utility.General)
@@ -91,9 +93,29 @@ function ClientService:SetPlayerStats(player)
     end
 end
 
+function ClientService:CheckFriends(player)
+    for _, checkPlayer in pairs(Players:GetChildren()) do
+        if checkPlayer:IsFriendsWith(player.UserId) then
+            PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
+
+            if not player.Backpack:FindFirstChild("Speed Coil") then
+                local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
+                Tool.Parent = player.Backpack
+            end
+        end
+    end
+end
+
 function ClientService:InitializeLife(player)
     PlayerValues:SetValue(player, "LifeId", tick())
     PlayerValues:SetValue(player, "SpeedBoost", 0)
+
+    if PlayerValues:GetValue(player, "FriendHasJoined") then
+        if not player.Backpack:FindFirstChild("Speed Coil") then
+            local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
+            Tool.Parent = player.Backpack
+        end
+    end
 
     for _, characterPart in pairs(player.Character:GetChildren()) do
         if characterPart:IsA("BasePart") then
@@ -133,6 +155,8 @@ function ClientService:InitializeClient(player, profile)
     ClientConnection:FireClient(player)
     UpgradeConnection:FireClient(player)
     SettingsConnection:FireClient(player)
+
+    ClientService:CheckFriends(player)
 end
 
 return ClientService
