@@ -28,9 +28,30 @@ function Event.Main(levelNum, level, data)
     if rpController then
         local rp = EventService:randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
+            local size = RV(levelNum, data, "size")
+
             local spinner = Obstacle.Spinner:Clone()
             spinner:PivotTo(CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(180), 0, 0))
-            spinner.Beam.Size = Vector3.new(RV(levelNum, data, "size"), spinner.Beam.Size.Y, spinner.Beam.Size.Z)
+
+            local Params = RaycastParams.new()
+            Params.FilterType = Enum.RaycastFilterType.Whitelist
+            Params.FilterDescendantsInstances = {level.Floor:GetChildren()}
+
+            local directions = {0, 90, 180, 270}
+            for i, direction in pairs(directions) do
+                local directionCFrame = spinner.Beam.CFrame * CFrame.Angles(0, 0, math.rad(direction))
+                local RayOrigin = spinner.Beam.Position
+                local RayDirection = directionCFrame.RightVector * 100
+                local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+                if Result then
+                    local testSize = math.clamp((spinner.Beam.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+                    if testSize < size then
+                        size = testSize
+                    end
+                end
+            end
+
+            spinner.Beam.Size = Vector3.new(size, spinner.Beam.Size.Y, spinner.Beam.Size.Z)
             EventService:parentToObstacles(levelNum, spinner)
 
             task.spawn(function()

@@ -32,7 +32,7 @@ function Event.Main(levelNum, level, data)
         Params.FilterDescendantsInstances = {level.Floor:GetChildren()}
 
         local RayOrigin = rOS1.Position
-        local RayDirection = rOS1.Position + CFrame.new(rOS1.Position, rOS2.Position).LookVector * (rOS1.Position - rOS2.Position).Magnitude
+        local RayDirection = CFrame.new(rOS1.Position, rOS2.Position).LookVector * (rOS1.Position - rOS2.Position).Magnitude
         local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
         if Result then
             EventService:toggleObstacleSpawner(levelNum, rOS1, false)

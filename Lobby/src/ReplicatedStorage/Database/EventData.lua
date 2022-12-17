@@ -30,7 +30,7 @@ local EventData = {
 		delayTime = 2,
 		speed = 25,
 		size = 12,
-		damage = 50,
+		damage = 30,
 
 		speedIncrease = 5,
 		sizeIncrease = 4,
@@ -69,7 +69,7 @@ local EventData = {
 		despawnTime = 60,
 		delayTime = 1.5,
 		size = 20,
-		damage = 40,
+		damage = 30,
 
 		sizeIncrease = 4,
 		damageIncrease = 5,
@@ -81,10 +81,10 @@ local EventData = {
 
 		despawnTime = 8,
 		delayTime = 1,
-		tripTime = 0.75,
-		size = 20,
+		tripTime = 0.5,
+		size = 18,
 
-		sizeIncrease = 5,
+		sizeIncrease = 4,
 	},
 	["SpeedingWall"] = {
 		name = "Speeding Wall",
@@ -107,7 +107,7 @@ local EventData = {
 		height = 40,
 		offset = 10,
 		size = 8,
-		damage = 40,
+		damage = 30,
 
 		sizeIncrease = 4,
 	},
@@ -120,7 +120,7 @@ local EventData = {
 		despawnTime = 6,
 		delayTime = 1,
 		size = 4,
-		damage = 25,
+		damage = 15,
 
 		sizeIncrease = 4,
 	},
@@ -132,7 +132,7 @@ local EventData = {
 
 		despawnTime = 10,
 		delayTime = 0.5,
-		damage = 40,
+		damage = 30,
 	},
 	["Bomb"] = {
 		name = "Bomb",
@@ -142,7 +142,7 @@ local EventData = {
 
 		delayTime = 2,
 		size = 24,
-		damage = 50,
+		damage = 30,
 
 		sizeIncrease = 4,
 		damageIncrease = 5,
