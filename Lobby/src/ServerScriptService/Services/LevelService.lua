@@ -89,7 +89,7 @@ function LevelService.SetUpLevelColor(levelNum, level)
     end
 
     local rng = Random.new(rounding * 1000)
-    local pick = rng:NextInteger(1, #possibleColors)
+    local pick = 1--rng:NextInteger(1, #possibleColors)
     local PrimaryColor = possibleColors[pick]
     lastPick = pick
  
