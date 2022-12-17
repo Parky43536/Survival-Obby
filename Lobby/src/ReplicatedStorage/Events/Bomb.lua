@@ -14,7 +14,7 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "damage" then
         return data.damage + data.damageIncrease * upgrades
@@ -25,18 +25,18 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rp = EventService.randomPoint(level)
+    local rp = EventService:randomPoint(level)
     if rp then
         local bomb = Obstacle.Bomb:Clone()
         bomb.Position = rp.Position + Vector3.new(0, 3.5, 0)
-        EventService.parentToObstacles(levelNum, bomb)
+        EventService:parentToObstacles(levelNum, bomb)
 
         AudioService:Create(11565378, bomb, {Volume = 0.8, Duration = 2})
 
         task.wait(data.delayTime)
 
         if bomb.Parent ~= nil then
-            for _,player in pairs(EventService.getPlayersInRadius(bomb.Position, RV(levelNum, data, "size") / 2)) do
+            for _,player in pairs(EventService:getPlayersInRadius(bomb.Position, RV(levelNum, data, "size") / 2)) do
                 if General.playerCheck(player) then
                     player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                 end

@@ -30,7 +30,7 @@ EventService.TouchCooldown = 1
 
 local obstacleSpawners = {}
 
-function EventService.totalUpgrades(levelNum, upgrades)
+function EventService:totalUpgrades(levelNum, upgrades)
     local totalUpgrades = 0
 
     for _, level in pairs(upgrades) do
@@ -42,12 +42,12 @@ function EventService.totalUpgrades(levelNum, upgrades)
     return totalUpgrades
 end
 
-function EventService.toggleObstacleSpawner(levelNum, obstacleSpawner, toggle)
+function EventService:toggleObstacleSpawner(levelNum, obstacleSpawner, toggle)
     if not obstacleSpawners[levelNum] then obstacleSpawners[levelNum] = {} end
     obstacleSpawners[levelNum][obstacleSpawner] = toggle
 end
 
-function EventService.checkObstacleSpawner(levelNum, obstacleSpawner)
+function EventService:checkObstacleSpawner(levelNum, obstacleSpawner)
     if obstacleSpawners[levelNum] and obstacleSpawners[levelNum][obstacleSpawner] then
         return false
     end
@@ -55,7 +55,7 @@ function EventService.checkObstacleSpawner(levelNum, obstacleSpawner)
     return true
 end
 
-function EventService.randomObstacleSpawner(levelNum, level)
+function EventService:randomObstacleSpawner(levelNum, level)
     local rng = Random.new()
     local obstacleSpawnerList = {}
 
@@ -68,7 +68,7 @@ function EventService.randomObstacleSpawner(levelNum, level)
     local pickedSpawner
     repeat
         local num = rng:NextInteger(1, #obstacleSpawnerList)
-        if EventService.checkObstacleSpawner(levelNum, obstacleSpawnerList[num]) then
+        if EventService:checkObstacleSpawner(levelNum, obstacleSpawnerList[num]) then
             pickedSpawner = obstacleSpawnerList[num]
         else
             table.remove(obstacleSpawnerList, num)
@@ -76,13 +76,13 @@ function EventService.randomObstacleSpawner(levelNum, level)
     until pickedSpawner or #obstacleSpawnerList == 0
 
     if pickedSpawner then
-        EventService.toggleObstacleSpawner(levelNum, pickedSpawner, true)
+        EventService:toggleObstacleSpawner(levelNum, pickedSpawner, true)
     end
 
     return pickedSpawner
 end
 
-function EventService.getBoundingBox(model, orientation)
+function EventService:getBoundingBox(model, orientation)
 	if typeof(model) == "Instance" then
 		model = model:GetDescendants()
 	end
@@ -138,7 +138,7 @@ function EventService.getBoundingBox(model, orientation)
 	return wCf, size
 end
 
-function EventService.getFloorGroup(part)
+function EventService:getFloorGroup(part)
     if part.Parent and part.Parent.Name == "FloorGroup" then
         return part.Parent:GetChildren()
     else
@@ -146,7 +146,7 @@ function EventService.getFloorGroup(part)
     end
 end
 
-function EventService.parentToObstacles(levelNum, part)
+function EventService:parentToObstacles(levelNum, part)
     if not workspace.Obstacles:FindFirstChild(levelNum) then
         local folder = Instance.new("Folder")
         folder.Name = levelNum
@@ -156,19 +156,19 @@ function EventService.parentToObstacles(levelNum, part)
     part.Parent = workspace.Obstacles:FindFirstChild(levelNum)
 end
 
-function EventService.randomPoint(level, args)
+function EventService:randomPoint(level, args)
     if not args then args = {} end
     if not args.offset then args.offset = 2 end
 
     local rng = Random.new()
-    local cframe, size = EventService.getBoundingBox(args.model or level.Floor)
+    local cframe, size = EventService:getBoundingBox(args.model or level.Floor)
 
     local x = cframe.Position.X + rng:NextInteger(math.clamp((-size.X/2) + args.offset, -99e99, 0), math.clamp((size.X/2) - args.offset, 0, 99e99))
     local z = cframe.Position.Z + rng:NextInteger(math.clamp((-size.Z/2) + args.offset, -99e99, 0), math.clamp((size.Z/2) - args.offset, 0, 99e99))
     local pos = Vector3.new(x, cframe.Position.Y + 100, z)
 
     if args.show then
-        EventService.positionVisual(Vector3.new(x, cframe.Position.Y, z), {
+        EventService:positionVisual(Vector3.new(x, cframe.Position.Y, z), {
             transparency = 0.5,
             size = size + Vector3.new(-args.offset, 1, -args.offset),
             duration = 1,
@@ -197,7 +197,7 @@ function EventService.randomPoint(level, args)
     return Result
 end
 
-function EventService.getPlayersInRadius(position, radius, players)
+function EventService:getPlayersInRadius(position, radius, players)
     local currentPlayers = Players:GetChildren()
     local playersInRadius = {}
 
@@ -212,7 +212,7 @@ function EventService.getPlayersInRadius(position, radius, players)
     return playersInRadius
 end
 
-function EventService.getPlayersInSize(cframe, size, players)
+function EventService:getPlayersInSize(cframe, size, players)
     local currentPlayers = Players:GetChildren()
     local playersInSize = {}
 
@@ -236,7 +236,7 @@ function EventService.getPlayersInSize(cframe, size, players)
     return playersInSize
 end
 
-function EventService.getClosestPlayer(position, players)
+function EventService:getClosestPlayer(position, players)
     local currentPlayers = Players:GetChildren()
     local closestPlayer
 
@@ -255,7 +255,7 @@ function EventService.getClosestPlayer(position, players)
     return closestPlayer
 end
 
-function EventService.positionVisual(position, args)
+function EventService:positionVisual(position, args)
     if not args then args = {} end
 
     local part = Instance.new("Part")
@@ -281,7 +281,7 @@ end
 
 --Cleaning---------------------------------------------
 
-function EventService.CleanLevel(levelNum, level)
+function EventService:CleanLevel(levelNum, level)
     local obstacles = workspace.Obstacles:FindFirstChild(levelNum)
     if obstacles then
         for _, part in pairs(obstacles:GetDescendants()) do
@@ -296,7 +296,7 @@ end
 
 if not IsServer then
     Signal.OnClientEvent:Connect(function(...)
-        EventService.CleanLevel(...)
+        EventService:CleanLevel(...)
     end)
 end
 

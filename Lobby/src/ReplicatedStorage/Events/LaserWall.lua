@@ -16,7 +16,7 @@ local Event = {}
 local touchCooldown = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "damage" then
         return data.damage + data.damageIncrease * upgrades
@@ -24,14 +24,28 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rOS1 = EventService.randomObstacleSpawner(levelNum, level)
-    local rOS2 = EventService.randomObstacleSpawner(levelNum, level)
+    local rOS1 = EventService:randomObstacleSpawner(levelNum, level)
+    local rOS2 = EventService:randomObstacleSpawner(levelNum, level)
     if rOS1 and rOS2 then
+        local Params = RaycastParams.new()
+        Params.FilterType = Enum.RaycastFilterType.Whitelist
+        Params.FilterDescendantsInstances = {level.Floor:GetChildren()}
+
+        local RayOrigin = rOS1.Position
+        local RayDirection = rOS1.Position + CFrame.new(rOS1.Position, rOS2.Position).LookVector * (rOS1.Position - rOS2.Position).Magnitude
+        local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+        if Result then
+            EventService:toggleObstacleSpawner(levelNum, rOS1, false)
+            EventService:toggleObstacleSpawner(levelNum, rOS2, false)
+
+            return
+        end
+
         local laserWall = Obstacle.LaserWall:Clone()
         laserWall.Pillar1:SetPrimaryPartCFrame(CFrame.new(rOS1.Position))
         laserWall.Pillar2:SetPrimaryPartCFrame(CFrame.new(rOS2.Position))
 
-        EventService.parentToObstacles(levelNum, laserWall)
+        EventService:parentToObstacles(levelNum, laserWall)
 
         local tweenInfo = TweenInfo.new(data.riseDelayTime)
         ModelTweenService.TweenModuleCFrame(laserWall.Pillar1, tweenInfo, laserWall.Pillar1.PrimaryPart.CFrame + laserWall.Pillar1.PrimaryPart.CFrame.UpVector * 17)
@@ -77,8 +91,8 @@ function Event.Main(levelNum, level, data)
                 touchConnection:Disconnect()
                 laserWall:Destroy()
 
-                EventService.toggleObstacleSpawner(levelNum, rOS1, false)
-                EventService.toggleObstacleSpawner(levelNum, rOS2, false)
+                EventService:toggleObstacleSpawner(levelNum, rOS1, false)
+                EventService:toggleObstacleSpawner(levelNum, rOS2, false)
             end
         end
     end

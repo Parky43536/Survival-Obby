@@ -16,7 +16,7 @@ local Event = {}
 local touchCooldown = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
@@ -24,7 +24,7 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rp = EventService.randomPoint(level, {offset = RV(levelNum, data, "size")})
+    local rp = EventService:randomPoint(level, {offset = RV(levelNum, data, "size")})
     if rp then
         local rng = Random.new()
         local rock = Obstacle.Rock:Clone()
@@ -43,7 +43,7 @@ function Event.Main(levelNum, level, data)
         end
 
         rock.Position = rp.Position + Vector3.new(rng:NextInteger(-data.offset, data.offset), height, rng:NextInteger(-data.offset, data.offset))
-        EventService.parentToObstacles(levelNum, rock)
+        EventService:parentToObstacles(levelNum, rock)
 
         local touchConnection
         touchConnection = rock.Touched:Connect(function(hit)

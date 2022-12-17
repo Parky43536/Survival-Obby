@@ -14,11 +14,11 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 function Event.Main(levelNum, level, data)
-    local rOS = EventService.randomObstacleSpawner(levelNum, level)
+    local rOS = EventService:randomObstacleSpawner(levelNum, level)
     if rOS then
         local nuke = Obstacle.Nuke:Clone()
-        local cframe, size = EventService.getBoundingBox(level.Floor)
-        local _, nukeSize = EventService.getBoundingBox(nuke)
+        local cframe, size = EventService:getBoundingBox(level.Floor)
+        local _, nukeSize = EventService:getBoundingBox(nuke)
 
         local Params = RaycastParams.new()
         Params.FilterType = Enum.RaycastFilterType.Whitelist
@@ -49,7 +49,7 @@ function Event.Main(levelNum, level, data)
         end
 
         nuke:PivotTo(cframe + Vector3.new(0, height, 0))
-        EventService.parentToObstacles(levelNum, nuke)
+        EventService:parentToObstacles(levelNum, nuke)
 
         local tweenInfo = TweenInfo.new(data.delayTime, Enum.EasingStyle.Linear)
         ModelTweenService.TweenModulePosition(nuke, tweenInfo, cframe.Position)
@@ -59,7 +59,7 @@ function Event.Main(levelNum, level, data)
         local stand = Obstacle.Stand:Clone()
         stand:SetPrimaryPartCFrame(rOS.CFrame)
         stand.Button.BillboardGui.Label.Text = "Disarm Nuke:\n" .. data.delayTime
-        EventService.parentToObstacles(levelNum, stand)
+        EventService:parentToObstacles(levelNum, stand)
 
         local touchConnection
         touchConnection = stand.Button.Touched:Connect(function(hit)
@@ -101,7 +101,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.delayTime)
 
         if nuke.Parent ~= nil then
-            local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+            local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
 
             for _, player in playersInLevel do
                 player.Character.Humanoid:TakeDamage(data.damage)
@@ -127,7 +127,7 @@ function Event.Main(levelNum, level, data)
 
         stand:Destroy()
         touchConnection:Disconnect()
-        EventService.toggleObstacleSpawner(levelNum, rOS, false)
+        EventService:toggleObstacleSpawner(levelNum, rOS, false)
     end
 end
 

@@ -16,15 +16,15 @@ local Event = {}
 local touchCooldown = {}
 
 function Event.Main(levelNum, level, data)
-    for i = 1 , EventService.totalUpgrades(levelNum, data.upgrades) + 1 do
-        local rpController = EventService.randomPoint(level)
+    for i = 1 , EventService:totalUpgrades(levelNum, data.upgrades) + 1 do
+        local rpController = EventService:randomPoint(level)
         if rpController then
-            local rp = EventService.randomPoint(level, {model = {rpController.Instance}, filter = level.Floor:GetChildren()})
+            local rp = EventService:randomPoint(level, {model = {rpController.Instance}, filter = level.Floor:GetChildren()})
             if rp and rp.Instance == rpController.Instance then
                 local spike = Obstacle.Spike:Clone()
                 spike.CFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(90), 0, math.rad(180))
                 spike.CFrame = spike.CFrame + spike.CFrame.UpVector * -spike.Size.Y / 2
-                EventService.parentToObstacles(levelNum, spike)
+                EventService:parentToObstacles(levelNum, spike)
 
                 local goal = {CFrame = spike.CFrame + spike.CFrame.UpVector * spike.Size.Y}
                 local properties = {Time = data.delayTime}

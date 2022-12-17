@@ -14,7 +14,7 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "damage" then
         return data.damage + data.damageIncrease * upgrades
@@ -25,14 +25,14 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rpController = EventService.randomPoint(level)
+    local rpController = EventService:randomPoint(level)
     if rpController then
-        local rp = EventService.randomPoint(level, {model = {rpController.Instance}, filter = level.Floor:GetChildren()})
+        local rp = EventService:randomPoint(level, {model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
             local originCFrame = CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(-90), 0, 0)
             local landmine = Obstacle.Landmine:Clone()
             landmine:PivotTo(originCFrame)
-            EventService.parentToObstacles(levelNum, landmine)
+            EventService:parentToObstacles(levelNum, landmine)
 
             task.wait(data.delayTime)
             if landmine.Parent ~= nil then
@@ -48,7 +48,7 @@ function Event.Main(levelNum, level, data)
                         hit = true
 
                         if landmine.Parent ~= nil then
-                            for _,player in pairs(EventService.getPlayersInRadius(landmine.PrimaryPart.Position, RV(levelNum, data, "size") / 2)) do
+                            for _,player in pairs(EventService:getPlayersInRadius(landmine.PrimaryPart.Position, RV(levelNum, data, "size") / 2)) do
                                 if General.playerCheck(player) then
                                     player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                                 end

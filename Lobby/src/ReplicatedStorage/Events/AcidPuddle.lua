@@ -16,7 +16,7 @@ local Event = {}
 local touchCooldown = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
@@ -24,9 +24,9 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rpController = EventService.randomPoint(level)
+    local rpController = EventService:randomPoint(level)
     if rpController then
-        local rp = EventService.randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
+        local rp = EventService:randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
             local growToSize = RV(levelNum, data, "size")
             local touchConnection
@@ -36,30 +36,31 @@ function Event.Main(levelNum, level, data)
 
             local Params = RaycastParams.new()
             Params.FilterType = Enum.RaycastFilterType.Whitelist
-            Params.FilterDescendantsInstances = {EventService.getFloorGroup(rp.Instance)}
+            Params.FilterDescendantsInstances = {EventService:getFloorGroup(rp.Instance)}
 
-            local RayOrigin = (originCFrame + originCFrame.LookVector * 100).Position
-            local RayDirection = originCFrame.LookVector * -1000
-            local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-            if Result then
-                growToSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
-            end
-
-            RayOrigin = (originCFrame + originCFrame.RightVector * 100).Position
-            RayDirection = originCFrame.RightVector * -1000
-            Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-            if Result then
-                local testGrowToSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
-                if testGrowToSize < growToSize or growToSize < 4 then
-                    growToSize = testGrowToSize
+            local directions = {0, 90, 180, 270}
+            for _, direction in pairs(directions) do
+                local directionCFrame = originCFrame * CFrame.Angles(0, math.rad(direction), 0)
+                local RayOrigin = (directionCFrame + directionCFrame.LookVector * 100).Position
+                local RayDirection = directionCFrame.LookVector * -1000
+                local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+                if Result then
+                    if not growToSize then
+                        growToSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+                    else
+                        local testGrowToSize = math.clamp((originCFrame.Position - Result.Position).Magnitude * 2, 0, RV(levelNum, data, "size"))
+                        if testGrowToSize < growToSize then
+                            growToSize = testGrowToSize
+                        end
+                    end
                 end
             end
 
-            if growToSize and growToSize > 4 then
+            if growToSize then
                 local acid = Obstacle.Acid:Clone()
                 acid.CFrame = originCFrame
                 acid.CFrame += acid.CFrame.UpVector * 0.1
-                EventService.parentToObstacles(levelNum, acid)
+                EventService:parentToObstacles(levelNum, acid)
 
                 local goal = {Size = Vector3.new(growToSize, acid.Size.Y, growToSize)}
                 local properties = {Time = data.growTime}

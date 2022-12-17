@@ -44,10 +44,10 @@ end
 local Event = {}
 
 function Event.Main(levelNum, level)
-    local rp = EventService.randomPoint(level)
+    local rp = EventService:randomPoint(level)
     if rp then
-        local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+        local cframe, size = EventService:getBoundingBox(level.Floor)
+        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
 
         for _, player in playersInLevel do
             Signal:FireClient(player, rp.Position, levelNum)
@@ -62,7 +62,7 @@ end
 function Event.Client(rp, levelNum)
     local coin = Obstacle.Coin:Clone()
     coin.Position = rp + Vector3.new(0, 3.5, 0)
-    EventService.parentToObstacles(levelNum, coin)
+    EventService:parentToObstacles(levelNum, coin)
 
     local goal = {Orientation = coin.Orientation + Vector3.new(0, 180, 0)}
     local properties = {Time = 1, Repeat = math.huge}

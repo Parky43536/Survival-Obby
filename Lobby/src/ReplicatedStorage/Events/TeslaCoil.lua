@@ -14,7 +14,7 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
@@ -22,11 +22,11 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rOS = EventService.randomObstacleSpawner(levelNum, level)
+    local rOS = EventService:randomObstacleSpawner(levelNum, level)
     if rOS then
         local coil = Obstacle.TeslaCoil:Clone()
         coil:SetPrimaryPartCFrame(rOS.CFrame)
-        EventService.parentToObstacles(levelNum, coil)
+        EventService:parentToObstacles(levelNum, coil)
 
         local goal = {Transparency = 0.1}
         local properties = {Time = data.delayTime}
@@ -39,10 +39,10 @@ function Event.Main(levelNum, level, data)
                 particle.Enabled = true
             end
 
-            local cframe, size = EventService.getBoundingBox(level.Floor)
+            local cframe, size = EventService:getBoundingBox(level.Floor)
             for i = 1 , data.damageTicks do
                 if coil.Parent ~= nil then
-                    for _,player in pairs(EventService.getPlayersInRadius(coil.Effect.Position, RV(levelNum, data, "size") / 2)) do
+                    for _,player in pairs(EventService:getPlayersInRadius(coil.Effect.Position, RV(levelNum, data, "size") / 2)) do
                         if General.playerCheck(player) then
                             local laser = Obstacle.Laser:Clone()
                             laser.Beam.Position = coil.Effect.Position
@@ -51,7 +51,7 @@ function Event.Main(levelNum, level, data)
                             weld.Part0 = player.Character.PrimaryPart
                             weld.Part1 = laser.Hit
                             weld.Parent = laser.Hit
-                            EventService.parentToObstacles(levelNum, laser)
+                            EventService:parentToObstacles(levelNum, laser)
                             game.Debris:AddItem(laser, data.damageDelay / 2)
 
                             AudioService:Create(9117877055, player.Character.PrimaryPart, {Pitch = math.random(10, 20) / 10, Volume = 0.5})
@@ -69,7 +69,7 @@ function Event.Main(levelNum, level, data)
             coil:Destroy()
         end
 
-        EventService.toggleObstacleSpawner(levelNum, rOS, false)
+        EventService:toggleObstacleSpawner(levelNum, rOS, false)
     end
 end
 

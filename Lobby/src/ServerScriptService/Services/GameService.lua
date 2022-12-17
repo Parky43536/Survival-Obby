@@ -25,7 +25,7 @@ local GameService = {}
 local levels = {}
 
 function GameService.FinishButton(levelNum, level, win)
-    EventService.CleanLevel(levelNum, level)
+    EventService:CleanLevel(levelNum, level)
 
     if win then
         AudioService:Create(1846252166, level.Button.Button, {Volume = 0.25})
@@ -33,8 +33,8 @@ function GameService.FinishButton(levelNum, level, win)
         LevelService.OpenDoors(level)
         levels[levelNum].DoorOpened = true
 
-        local cframe, size = EventService.getBoundingBox(level.Floor)
-        local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+        local cframe, size = EventService:getBoundingBox(level.Floor)
+        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
         for _, playerInRoom in playersInLevel do
             DataManager:SetSpawn(playerInRoom, levelNum + 1)
         end
@@ -56,6 +56,7 @@ function GameService.SetUpButton(levelNum, level)
         local hitPlayer = game.Players:GetPlayerFromCharacter(hit.Parent)
         if hitPlayer and General.playerCheck(hitPlayer) and levels[levelNum].Started == false then
             levels[levelNum].Started = true
+            PlayerValues:SetValue(hitPlayer, "CurrentLevel", levelNum)
 
             LevelService.PressButton(level.Button.Button)
             level.Button.Button.Top.Label.Text = levels[levelNum].Timer
@@ -69,8 +70,8 @@ function GameService.SetUpButton(levelNum, level)
                 end
 
                 --area check
-                local cframe, size = EventService.getBoundingBox(level.Floor)
-                local playersInLevel = EventService.getPlayersInSize(cframe, size + Vector3.new(10, 100, 10))
+                local cframe, size = EventService:getBoundingBox(level.Floor)
+                local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
                 if #playersInLevel == 0 then
                     noPlayers += 1
                     if noPlayers == 5 then
@@ -194,7 +195,7 @@ function GameService.SetUpGame()
                 door:PivotTo(level.Floor.PrimaryPart.Attachment.WorldCFrame)
                 door.Parent = level
 
-                local cframe, size = EventService.getBoundingBox(level.Floor)
+                local cframe, size = EventService:getBoundingBox(level.Floor)
                 local Params = OverlapParams.new()
                 Params.FilterType = Enum.RaycastFilterType.Whitelist
                 Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}

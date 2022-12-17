@@ -16,7 +16,7 @@ local Event = {}
 local touchCooldown = {}
 
 local function RV(levelNum, data, value)
-    local upgrades = EventService.totalUpgrades(levelNum, data.upgrades)
+    local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
@@ -24,14 +24,14 @@ local function RV(levelNum, data, value)
 end
 
 function Event.Main(levelNum, level, data)
-    local rpController = EventService.randomPoint(level)
+    local rpController = EventService:randomPoint(level)
     if rpController then
-        local rp = EventService.randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
+        local rp = EventService:randomPoint(level, {offset = RV(levelNum, data, "size") / 2, model = {rpController.Instance}, filter = level.Floor:GetChildren()})
         if rp and rp.Instance == rpController.Instance then
             local spinner = Obstacle.Spinner:Clone()
             spinner:PivotTo(CFrame.new(rp.Position, rp.Position + rp.Normal) * CFrame.Angles(math.rad(180), 0, 0))
             spinner.Beam.Size = Vector3.new(RV(levelNum, data, "size"), spinner.Beam.Size.Y, spinner.Beam.Size.Z)
-            EventService.parentToObstacles(levelNum, spinner)
+            EventService:parentToObstacles(levelNum, spinner)
 
             task.spawn(function()
                 task.wait(data.delayTime)
