@@ -100,45 +100,51 @@ end
 ----------------------------------------------------------------------------------
 
 function DataManager:Badges(player)
+	local function awardBadge(id)
+		if not BadgeService:UserOwnsBadgeAsync(player, id) then
+			BadgeService:AwardBadge(player.UserId, id)
+		end
+	end
+
 	local level = DataManager:GetValue(player, "Level")
 	local wins = DataManager:GetValue(player, "Wins")
 
 	if level >= 1 then
-		BadgeService:AwardBadge(player.UserId, 2129871894)
+		awardBadge(2129871894)
 	end
 	if level >= 5 then
-		BadgeService:AwardBadge(player.UserId, 2129871896)
+		awardBadge(2129871896)
 	end
 	if level >= 10 then
-		BadgeService:AwardBadge(player.UserId, 2129871897)
+		awardBadge(2129871897)
 	end
 	if level >= 25 then
-		BadgeService:AwardBadge(player.UserId, 2129871898)
+		awardBadge(2129871898)
 	end
 	if level >= 50 then
-		BadgeService:AwardBadge(player.UserId, 2129871900)
+		awardBadge(2129871900)
 	end
 	if level >= 100 then
-		BadgeService:AwardBadge(player.UserId, 2129871901)
+		awardBadge(2129871901)
 	end
 	if level >= 150 then
-		BadgeService:AwardBadge(player.UserId, 2129871902)
+		awardBadge(2129871902)
 	end
 	if level >= 200 then
-		BadgeService:AwardBadge(player.UserId, 2129871903)
+		awardBadge(2129871903)
 	end
 
 	if wins >= 1 then
-		BadgeService:AwardBadge(player.UserId, 2129871886)
+		awardBadge(2129871886)
 	end
 	if wins >= 3 then
-		BadgeService:AwardBadge(player.UserId, 2129871890)
+		awardBadge(2129871890)
 	end
 	if wins >= 5 then
-		BadgeService:AwardBadge(player.UserId, 2129871891)
+		awardBadge(2129871891)
 	end
 	if wins >= 10 then
-		BadgeService:AwardBadge(player.UserId, 2129871892)
+		awardBadge(2129871892)
 	end
 end
 

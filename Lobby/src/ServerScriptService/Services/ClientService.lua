@@ -98,7 +98,7 @@ function ClientService:CheckFriends(player)
     for _, checkPlayer in pairs(Players:GetChildren()) do
         if checkPlayer:IsFriendsWith(player.UserId) then
             PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
-            ChatConnection:FireClient(player, "[ALERT] You're friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
+            ChatConnection:FireClient(checkPlayer, "[ALERT] Your friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
 
             if not checkPlayer.Backpack:FindFirstChild("Speed Coil") then
                 local Tool = Tools:FindFirstChild("Speed Coil"):Clone()

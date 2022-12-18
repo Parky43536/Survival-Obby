@@ -25,9 +25,13 @@ local bodyVel
 
 local function setFlying(flying)
 	local character = LocalPlayer.Character
-	local humanoid = character.Humanoid
-	local hrp = character.HumanoidRootPart
-	local animate = character.Animate
+	local humanoid = character:FindFirstChild("Humanoid")
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	local animate = character:FindFirstChild("Animate")
+
+	if not character or not humanoid or not hrp or not animate then
+		return
+	end
 
 	isFlying = flying
 
