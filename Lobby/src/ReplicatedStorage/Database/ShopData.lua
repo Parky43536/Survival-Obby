@@ -1,20 +1,20 @@
 local EventData = {
 	["Coin Magnet"] = {
-		gamepass = 0--103133843,
+		gamepass = 0,--103133843,
 		cost = 50,
 		image = 11829053298,
 		desc = "Automatically collects coins for you 🧲",
 		order = 1,
 	},
 	["VIP"] = {
-		gamepass = 0--103133738,
+		gamepass = 0,--103133738,
 		cost = 500,
 		image = 11829052997,
 		desc = "Double coins, auto upgrades, and the VIP staff tool 🌟",
 		order = 2,
 	},
 	["God Powers"] = {
-		gamepass = 0--103134193,
+		gamepass = 0,--103134193,
 		cost = 1000,
 		image = 11829053132,
 		desc = "Unlocks the powers of flight and god health 🤩",
