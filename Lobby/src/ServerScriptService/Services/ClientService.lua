@@ -130,9 +130,16 @@ function ClientService:InitializeClient(player, profile)
     local stats = Instance.new("Folder")
     stats.Name = "leaderstats"
 
-    local stage = Instance.new("NumberValue")
+    local stage = Instance.new("StringValue")
     stage.Name = "Level"
     stage.Value = profile.Data.Level
+
+    if stage.Value == "0" then
+        stage.Value = "Start"
+    elseif stage.Value == tostring(General.Levels + 1) then
+        stage.Value = "Finish"
+    end
+
     stats.Parent = player
     stage.Parent = stats
 

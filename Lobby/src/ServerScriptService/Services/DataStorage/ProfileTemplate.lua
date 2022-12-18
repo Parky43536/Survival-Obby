@@ -2,7 +2,7 @@ local ProfileTemplate = {
     Purchases = {},
     Settings = {Music = 1, Sounds = 1},
 
-    Level = 1,
+    Level = 0,
     Wins = 0,
     Cash = 0,
 

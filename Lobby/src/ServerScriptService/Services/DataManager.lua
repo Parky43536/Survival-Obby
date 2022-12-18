@@ -123,17 +123,24 @@ function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
 	ClientService:HealPlayer(player)
 
-	if DataManager:GetValue(player, "Level") + 1 == levelNum then
+	if DataManager:GetValue(player, "Level") + 1 == levelNum or (DataManager:GetValue(player, "Level") == 0 and levelNum == 2) then
 		DataManager:SetValue(player, "Level", levelNum)
 		PlayerValues:SetValue(player, "Level", levelNum, "playerOnly")
 
 		DataManager:GiveCash(player, General.LevelReward)
 
-		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
-		level.Value += 1
-	elseif DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
-		alertCooldowns[player] = levelNum
-		ChatConnection:FireClient(player, "[ALERT] You're level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
+		local stage = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
+		stage.Value = levelNum
+		if stage.Value == "0" then
+			stage.Value = "Start"
+		elseif stage.Value == tostring(General.Levels + 1) then
+			stage.Value = "Finish"
+		end
+	else
+		if DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
+			alertCooldowns[player] = levelNum
+			ChatConnection:FireClient(player, "[ALERT] You're level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
+		end
 	end
 end
 

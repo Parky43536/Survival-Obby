@@ -1,7 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -55,7 +54,7 @@ end
 ------------------------------------------------------------------
 
 local function levelsUi()
-    local currentLevel = PlayerValues:GetValue(LocalPlayer, "Level") or 1
+    local currentLevel = PlayerValues:GetValue(LocalPlayer, "Level") or 0
 
     for levelNum = 1 , General.Levels do
         local level
