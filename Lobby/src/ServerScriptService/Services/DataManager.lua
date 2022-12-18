@@ -101,7 +101,7 @@ end
 
 function DataManager:Badges(player)
 	local function awardBadge(id)
-		if not BadgeService:UserHasBadgeAsync(player, id) then
+		if not BadgeService:UserHasBadgeAsync(player.UserId, id) then
 			BadgeService:AwardBadge(player.UserId, id)
 		end
 	end
