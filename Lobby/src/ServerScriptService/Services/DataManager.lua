@@ -142,6 +142,38 @@ function DataManager:Badges(player)
 	end
 end
 
+function DataManager:Restart(player)
+	if DataManager:GetValue(player, "Level") == General.Levels + 1 then
+		DataManager:SetValue(player, "Level", 0)
+		DataManager:SetValue(player, "Cash", 0)
+		DataManager:SetValue(player, "Health", 0)
+		DataManager:SetValue(player, "Speed", 0)
+		DataManager:SetValue(player, "Jump", 0)
+		DataManager:SetValue(player, "Income", 0)
+
+		PlayerValues:SetValue(player, "CurrentLevel", 0, "playerOnly")
+		PlayerValues:SetValue(player, "Level", 0, "playerOnly")
+		PlayerValues:SetValue(player, "Cash", 0, "playerOnly")
+		PlayerValues:SetValue(player, "Health", 0, "playerOnly")
+		PlayerValues:SetValue(player, "Speed", 0, "playerOnly")
+		PlayerValues:SetValue(player, "Jump", 0, "playerOnly")
+		PlayerValues:SetValue(player, "Income", 0, "playerOnly")
+
+		if not PlayerValues:GetValue(player, "God Powers") then
+			PlayerValues:SetValue(player, "Flight", nil, "playerOnly")
+			PlayerValues:SetValue(player, "God Health", nil, "playerOnly")
+		end
+		for _, tool in pairs(player.Backpack:GetChildren()) do
+			if not PlayerValues:GetValue(player, tool) then
+				tool:Destroy()
+			end
+		end
+
+		DataManager:TeleportToLevel(player, {level = 0})
+		ClientService:SetPlayerStats(player)
+	end
+end
+
 function DataManager:TeleportToLevel(player, args)
 	if RunService:IsStudio() or PlayerValues:GetValue(player, "Level") >= args.level then
 		local level = workspace.Levels:FindFirstChild(args.level)
@@ -196,12 +228,14 @@ function DataManager:SetSpawn(player, levelNum)
 	DataManager:Badges(player)
 end
 
-function DataManager:GiveCash(player, cash)
+function DataManager:GiveCash(player, cash, product)
 	if cash > 0 then
-		cash = math.floor(cash * General.getValue("Income", PlayerValues:GetValue(player, "Income")))
+		if not product then
+			cash = math.floor(cash * General.getValue("Income", PlayerValues:GetValue(player, "Income")))
 
-		if PlayerValues:GetValue(player, "VIP") then
-			cash *= 2
+			if PlayerValues:GetValue(player, "VIP") then
+				cash *= 2
+			end
 		end
 	else
 		if math.abs(cash) > PlayerValues:GetValue(player, "Cash") then

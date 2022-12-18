@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -26,6 +27,9 @@ local ShopService = {}
 
 local function getNameById(id)
 	for name, data in (ShopData) do
+		if data.product and data.product == id then
+			return name
+		end
 		if data.gamepass and data.gamepass == id then
 			return name
 		end
@@ -39,6 +43,7 @@ function ShopService:GiveGamepass(player, name)
 		PlayerValues:SetValue(player, "Flight", true, "playerOnly")
         PlayerValues:SetValue(player, "God Health", true, "playerOnly")
 	elseif name == "VIP" then
+		PlayerValues:SetValue(player, "VIP Staff", true, "playerOnly")
 		if not player.Backpack:FindFirstChild("VIP Staff") then
 			local Tool = Tools:FindFirstChild("VIP Staff"):Clone()
 			Tool.Parent = player.Backpack
@@ -50,6 +55,18 @@ function ShopService:GiveGamepass(player, name)
 		purchases[name] = true
 		DataManager:SetValue(player, "Purchases", purchases)
 	end
+end
+
+function ShopService:GiveProduct(player, name)
+	print'running'
+	DataManager:GiveCash(player, ShopData[name].coins, true)
+
+	local purchases = DataManager:GetValue(player, "Purchases")
+	if not purchases[name] then purchases[name] = 0 end
+	purchases[name] += 1
+	DataManager:SetValue(player, "Purchases", purchases)
+
+	print(purchases)
 end
 
 function ShopService:GiveTool(player, name)
@@ -101,6 +118,8 @@ ShopConnection.OnServerEvent:Connect(function(player, action, args)
 	if ShopData[action] then
 		if ShopData[action].gamepass then
 			MarketplaceService:PromptGamePassPurchase(player, ShopData[action].gamepass)
+		elseif ShopData[action].product then
+			MarketplaceService:PromptProductPurchase(player, ShopData[action].product)
 		else
 			ShopService:BuyTool(player, action)
 		end
@@ -115,5 +134,13 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, id, p
 		ShopService:GiveGamepass(player, getNameById(id))
 	end
 end)
+
+MarketplaceService.ProcessReceipt = function(receiptInfo)
+	local player = Players:GetPlayerByUserId(receiptInfo.PlayerId)
+	local name = getNameById(receiptInfo.ProductId)
+	ShopService:GiveProduct(player, name)
+
+	return Enum.ProductPurchaseDecision.PurchaseGranted
+end
 
 return ShopService

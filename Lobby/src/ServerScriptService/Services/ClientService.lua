@@ -112,6 +112,11 @@ function ClientService:InitializeLife(player)
     PlayerValues:SetValue(player, "LifeId", tick())
     PlayerValues:SetValue(player, "SpeedBoost", 0)
 
+	if not PlayerValues:GetValue(player, "God Powers") then
+		PlayerValues:SetValue(player, "Flight", nil, "playerOnly")
+        PlayerValues:SetValue(player, "God Health", nil, "playerOnly")
+	end
+
     if PlayerValues:GetValue(player, "FriendHasJoined") then
         if not player.Backpack:FindFirstChild("Speed Coil") then
             local Tool = Tools:FindFirstChild("Speed Coil"):Clone()

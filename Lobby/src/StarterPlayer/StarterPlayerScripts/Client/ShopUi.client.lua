@@ -21,7 +21,7 @@ local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
 local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
 
-local GamepassesShop = ShopUi.ShopFrame.GamepassesScrollingFrame
+local ProductsShop = ShopUi.ShopFrame.ProductsScrollingFrame
 local ToolsShop = ShopUi.ShopFrame.ToolsScrollingFrame
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -55,13 +55,13 @@ end
 
 ------------------------------------------------------------------
 
-ShopUi.ShopFrame.Tabs.Gamepasses.Activated:Connect(function()
-    GamepassesShop.Visible = true
+ShopUi.ShopFrame.Tabs.Products.Activated:Connect(function()
+    ProductsShop.Visible = true
     ToolsShop.Visible = false
 end)
 
 ShopUi.ShopFrame.Tabs.Tools.Activated:Connect(function()
-    GamepassesShop.Visible = false
+    ProductsShop.Visible = false
     ToolsShop.Visible = true
 end)
 
@@ -83,8 +83,8 @@ local cooldownTime = tick()
 
 for name, data in (ShopData) do
     local itemHolder
-    if data.gamepass then
-        itemHolder = Assets.Ui.Gamepass:Clone()
+    if data.gamepass or data.product then
+        itemHolder = Assets.Ui.Product:Clone()
     else
         itemHolder = Assets.Ui.Tool:Clone()
     end
@@ -94,10 +94,10 @@ for name, data in (ShopData) do
     itemHolder.Info.Cost.Text = itemHolder.Info.Cost.Text .. comma_value(data.cost)
     itemHolder.Info.ItemName.Text = name
     itemHolder.Desc.Text = data.desc
+    itemHolder.LayoutOrder = data.order
 
-    itemHolder.LayoutOrder = data.cost
-    if data.gamepass then
-        itemHolder.Parent = GamepassesShop
+    if data.gamepass or data.product then
+        itemHolder.Parent = ProductsShop
     else
         itemHolder.Parent = ToolsShop
     end
@@ -119,8 +119,8 @@ local function loadBought()
     end
 
     for name,_ in (values) do
-        if GamepassesShop:FindFirstChild(name) then
-            local holderUi = GamepassesShop:FindFirstChild(name)
+        if ProductsShop:FindFirstChild(name) then
+            local holderUi = ProductsShop:FindFirstChild(name)
             holderUi.Bought.Visible = true
         end
 

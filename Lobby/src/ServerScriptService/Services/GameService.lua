@@ -23,6 +23,7 @@ local AudioService = require(Utility.AudioService)
 local GameService = {}
 
 local levels = {}
+local touchCooldown = {}
 
 function GameService.FinishButton(levelNum, level, win)
     EventService:CleanLevel(levelNum, level)
@@ -49,6 +50,22 @@ function GameService.FinishButton(levelNum, level, win)
     levels[levelNum].Started = false
     level.Button.Button.Top.Label.Text = "start"
     level.Button.Button.BrickColor = BrickColor.new("Lime green")
+end
+
+function GameService.SetUpRestart(level)
+    level.Restart.Restart.Touched:Connect(function(hit)
+        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if player then
+            if not touchCooldown[player] then
+                touchCooldown[player] = tick() - EventService.TouchCooldown
+            end
+            if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                touchCooldown[player] = tick()
+
+                DataManager:Restart(player)
+            end
+        end
+    end)
 end
 
 function GameService.SetUpButton(levelNum, level)
@@ -103,7 +120,6 @@ function GameService.SetUpButton(levelNum, level)
     end)
 end
 
-local touchCooldown = {}
 function GameService.SetUpSpawn(levelNum, level)
     level.Door.Checkpoint.Touched:Connect(function(hit)
         local player = game.Players:GetPlayerFromCharacter(hit.Parent)
@@ -250,6 +266,7 @@ function GameService.SetUpGame()
     finish.Name = General.Levels + 1
     LevelService.SetUpLevelColor(General.Levels + 1, finish)
     finish:PivotTo(lastCFrame)
+    GameService.SetUpRestart(finish)
     finish.Parent = workspace.Levels
 end
 
