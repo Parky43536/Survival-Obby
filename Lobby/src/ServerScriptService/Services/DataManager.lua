@@ -100,11 +100,10 @@ end
 ----------------------------------------------------------------------------------
 
 function DataManager:Badges(player)
-	local level = DataManager:SetValue(player, "Level")
-	local wins = DataManager:SetValue(player, "Wins")
+	local level = DataManager:GetValue(player, "Level")
+	local wins = DataManager:GetValue(player, "Wins")
 
 	if level >= 1 then
-		print'eee'
 		BadgeService:AwardBadge(player.UserId, 2129871894)
 	end
 	if level >= 5 then
