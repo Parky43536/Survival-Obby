@@ -115,7 +115,22 @@ function Event.Main(levelNum, level, data)
                     destroyRocket(rocket, touchConnection, levelNum, data)
                 end)
 
-                task.wait(timeToTarget)
+                Params = RaycastParams.new()
+                Params.FilterType = Enum.RaycastFilterType.Blacklist
+                Params.FilterDescendantsInstances = {rocket}
+                for i = 1 , 10 do
+                    if rocket.Parent ~= nil then
+                        RayOrigin = rocket.Position
+                        RayDirection = rocket.Position + rocket.CFrame.LookVector * rocket.Size.Z / 2
+                        Result = workspace:Raycast(RayOrigin, RayDirection, Params)
+                        if Result then
+                            destroyRocket(rocket, touchConnection, levelNum, data)
+                        end
+                        task.wait(timeToTarget/10)
+                    else
+                        break
+                    end
+                end
             end
         end
 
