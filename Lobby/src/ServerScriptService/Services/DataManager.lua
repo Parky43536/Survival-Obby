@@ -14,6 +14,7 @@ local General = require(Utility.General)
 
 local Remotes = ReplicatedStorage.Remotes
 local DataConnection = Remotes.DataConnection
+local ChatConnection = Remotes.ChatConnection
 
 local SerServices = ServerScriptService.Services
 local ClientService = require(SerServices.ClientService)
@@ -117,6 +118,7 @@ function DataManager:TeleportToLevel(player, args)
 	--end
 end
 
+local alertCooldowns = {}
 function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
 	ClientService:HealPlayer(player)
@@ -129,12 +131,15 @@ function DataManager:SetSpawn(player, levelNum)
 
 		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
 		level.Value += 1
+	elseif DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
+		alertCooldowns[player] = levelNum
+		ChatConnection:FireClient(player, "[ALERT] You're level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
 	end
 end
 
 function DataManager:GiveCash(player, cash)
 	if cash > 0 then
-		cash = math.floor(cash * General.getValue("CMulti", PlayerValues:GetValue(player, "CMulti")))
+		cash = math.floor(cash * General.getValue("Income", PlayerValues:GetValue(player, "Income")))
 
 		if PlayerValues:GetValue(player, "VIP") then
 			cash *= 2
@@ -190,7 +195,7 @@ function DataManager:SettingSlider(player, args)
 end
 
 DataConnection.OnServerEvent:Connect(function(player, action, args)
-	if action == "Health" or action == "Speed" or action == "Jump" or action == "CMulti" then
+	if action == "Health" or action == "Speed" or action == "Jump" or action == "Income" then
 		DataManager:BuyUpgrade(player, action)
 	elseif action == "SettingToggle" then
 		DataManager:SettingToggle(player, args)

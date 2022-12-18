@@ -16,6 +16,7 @@ local Remotes = ReplicatedStorage.Remotes
 local ClientConnection = Remotes.ClientConnection
 local UpgradeConnection = Remotes.UpgradeConnection
 local SettingsConnection = Remotes.SettingsConnection
+local ChatConnection = Remotes.ChatConnection
 
 local ClientService = {}
 
@@ -97,6 +98,7 @@ function ClientService:CheckFriends(player)
     for _, checkPlayer in pairs(Players:GetChildren()) do
         if checkPlayer:IsFriendsWith(player.UserId) then
             PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
+            ChatConnection:FireClient(player, "[ALERT] You're friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
 
             if not checkPlayer.Backpack:FindFirstChild("Speed Coil") then
                 local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
@@ -146,7 +148,7 @@ function ClientService:InitializeClient(player, profile)
     PlayerValues:SetValue(player, "Health", profile.Data.Health, "playerOnly")
     PlayerValues:SetValue(player, "Speed", profile.Data.Speed, "playerOnly")
     PlayerValues:SetValue(player, "Jump", profile.Data.Jump, "playerOnly")
-    PlayerValues:SetValue(player, "CMulti", profile.Data.CMulti, "playerOnly")
+    PlayerValues:SetValue(player, "Income", profile.Data.Income, "playerOnly")
 
 	for setting, value in profile.Data.Settings do
         PlayerValues:SetValue(player, setting, value, "playerOnly")

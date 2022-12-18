@@ -42,12 +42,12 @@ General.JumpValue = 1
 General.JumpMax = 75
 General.JumpColor = Color3.fromRGB(212, 0, 255)
 
-General.CMultiCost = 50
-General.CMultiIncrease = 50
-General.CMultiDefault = 0
-General.CMultiValue = 0.1
-General.CMultiMax = 4
-General.CMultiColor = Color3.fromRGB(4, 255, 0)
+General.IncomeCost = 50
+General.IncomeIncrease = 50
+General.IncomeDefault = 0
+General.IncomeValue = 0.1
+General.IncomeMax = 4
+General.IncomeColor = Color3.fromRGB(4, 255, 0)
 
 function General.getCost(typer, current)
     if typer == "Health" then
@@ -68,11 +68,11 @@ function General.getCost(typer, current)
         else
             return General.JumpCost + General.JumpIncrease * (current or General.JumpDefault)
         end
-    elseif typer == "CMulti" then
-        if General.getValue(typer, current) == General.CMultiMax then
+    elseif typer == "Income" then
+        if General.getValue(typer, current) == General.IncomeMax then
             return false
         else
-            return General.CMultiCost + General.CMultiIncrease * (current or General.CMultiDefault)
+            return General.IncomeCost + General.IncomeIncrease * (current or General.IncomeDefault)
         end
     end
 end
@@ -84,8 +84,8 @@ function General.getValue(typer, current)
         return math.clamp(General.PlayerSpeed + (General.SpeedValue * (current or General.SpeedDefault)), General.PlayerSpeed, General.SpeedMax)
     elseif typer == "Jump" then
         return math.clamp(General.PlayerJump + (General.JumpValue * (current or General.JumpDefault)), General.PlayerJump, General.JumpMax)
-    elseif typer == "CMulti" then
-        return math.clamp(1 + (General.CMultiValue * (current or General.CMultiDefault)), 1, General.CMultiMax)
+    elseif typer == "Income" then
+        return math.clamp(1 + (General.IncomeValue * (current or General.IncomeDefault)), 1, General.IncomeMax)
     end
 end
 
@@ -96,8 +96,8 @@ function General.getColor(typer)
         return General.SpeedColor
     elseif typer == "Jump" then
         return General.JumpColor
-    elseif typer == "CMulti" then
-        return General.CMultiColor
+    elseif typer == "Income" then
+        return General.IncomeColor
     end
 end
 

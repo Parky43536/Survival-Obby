@@ -77,10 +77,10 @@ Upgrade.Jump.Buy.Activated:Connect(function()
     end
 end)
 
-Upgrade.CMulti.Buy.Activated:Connect(function()
+Upgrade.Income.Buy.Activated:Connect(function()
     if tick() - cooldownTime > cooldown then
         cooldownTime = tick()
-        DataConnection:FireServer("CMulti")
+        DataConnection:FireServer("Income")
     end
 end)
 
@@ -101,7 +101,7 @@ local function round(number, decimal)
     return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
 
-local stats = {"Health", "Speed", "Jump", "CMulti"}
+local stats = {"Health", "Speed", "Jump", "Income"}
 
 local function loadCosts()
     for i, stat in (stats) do
@@ -113,7 +113,7 @@ local function loadCosts()
         end
 
         local rounding = 0
-        if stat == "Speed" or stat == "CMulti" then
+        if stat == "Speed" or stat == "Income" then
             rounding = 1
         end
 

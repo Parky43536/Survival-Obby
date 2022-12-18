@@ -19,6 +19,7 @@ local RightFrame = PlayerUi:WaitForChild("RightFrame")
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ClientConnection = Remotes:WaitForChild("ClientConnection")
 local DataConnection = Remotes:WaitForChild("DataConnection")
+local ChatConnection = Remotes:WaitForChild("ChatConnection")
 
 local function comma_value(amount)
     local formatted = amount
@@ -46,7 +47,7 @@ local function shopAlert()
     local health = General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health"))
     local speed = General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed"))
     local jump = General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump"))
-    local cmulti = General.getCost("CMulti", PlayerValues:GetValue(LocalPlayer, "CMulti"))
+    local income = General.getCost("Income", PlayerValues:GetValue(LocalPlayer, "Income"))
 
     if health and cash >= health then
         realAlertTime /= 2
@@ -57,7 +58,7 @@ local function shopAlert()
     if jump and cash >= jump then
         realAlertTime /= 2
     end
-    if cmulti and cash >= cmulti then
+    if income and cash >= income then
         realAlertTime /= 2
     end
 
@@ -95,7 +96,7 @@ end
 
 local function autoUpgrade()
     if PlayerValues:GetValue(LocalPlayer, "AutoUpgrade") then
-        local upgrades = {"Health", "Speed", "Jump", "CMulti"}
+        local upgrades = {"Health", "Speed", "Jump", "Income"}
 
         local lowestCost = false
         for _, upgrade in upgrades do
@@ -221,6 +222,10 @@ end)
 mobileUi()
 
 ------------------------------------------------------------------
+
+ChatConnection.OnClientEvent:Connect(function(text, color)
+    game.StarterGui:SetCore("ChatMakeSystemMessage", {Text = text, Color = color})
+end)
 
 ClientConnection.OnClientEvent:Connect(function()
     loadCash(PlayerValues:GetValue(LocalPlayer, "Cash"))

@@ -55,12 +55,12 @@ local EventData = {
 	["Rolling Pin"] = {
 		cost = 75000,
 		image = 11845896,
-		desc = "Smack other players to lower their speed for second 💥",
+		desc = "Smack other players to make them fall over 💥",
 	},
 	["Golden Glove"] = {
 		cost = 100000,
 		image = 17386312,
-		desc = "Smack other players off the level ✋😈",
+		desc = "Smack other players to launch them off the level ✋😈",
 	},
 }
 return EventData

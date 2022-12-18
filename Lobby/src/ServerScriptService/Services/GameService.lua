@@ -103,11 +103,19 @@ function GameService.SetUpButton(levelNum, level)
     end)
 end
 
+local touchCooldown = {}
 function GameService.SetUpSpawn(levelNum, level)
     level.Door.Checkpoint.Touched:Connect(function(hit)
         local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-	    if player and levels[levelNum].DoorOpened then
-            DataManager:SetSpawn(player, levelNum + 1)
+        if player and levels[levelNum].DoorOpened then
+            if not touchCooldown[player] then
+                touchCooldown[player] = tick() - EventService.TouchCooldown
+            end
+            if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                touchCooldown[player] = tick()
+
+                DataManager:SetSpawn(player, levelNum + 1)
+            end
         end
     end)
 end
