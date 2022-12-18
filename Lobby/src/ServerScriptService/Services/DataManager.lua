@@ -104,6 +104,7 @@ function DataManager:Badges(player)
 	local wins = DataManager:SetValue(player, "Wins")
 
 	if level >= 1 then
+		print'eee'
 		BadgeService:AwardBadge(player.UserId, 2129871894)
 	end
 	if level >= 5 then
@@ -186,14 +187,14 @@ function DataManager:SetSpawn(player, levelNum)
 			local wins = player:FindFirstChild("leaderstats"):FindFirstChild("Wins")
 			wins.Value += 1
 		end
-
-		DataManager:Badges(player)
 	else
 		if DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
 			alertCooldowns[player] = levelNum
 			ChatConnection:FireClient(player, "[ALERT] You're level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
 		end
 	end
+
+	DataManager:Badges(player)
 end
 
 function DataManager:GiveCash(player, cash)
