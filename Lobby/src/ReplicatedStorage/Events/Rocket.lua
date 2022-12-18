@@ -67,7 +67,7 @@ function Event.Main(levelNum, level, data)
         rocket:SetPrimaryPartCFrame(rOS.CFrame)
 
         local cframe, size = EventService:getBoundingBox(level.Floor)
-        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
+        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
         local targetPlayer = EventService:getClosestPlayer(rocket.Stand.PrimaryPart.Position, playersInLevel)
         local touchConnection = false
 
@@ -121,7 +121,7 @@ function Event.Main(levelNum, level, data)
                 for i = 1 , 10 do
                     if rocket.Parent ~= nil then
                         RayOrigin = rocket.Position
-                        RayDirection = rocket.Position + rocket.CFrame.LookVector * rocket.Size.Z / 2
+                        RayDirection = rocket.CFrame.LookVector * rocket.Size.Z / 2
                         Result = workspace:Raycast(RayOrigin, RayDirection, Params)
                         if Result then
                             destroyRocket(rocket, touchConnection, levelNum, data)

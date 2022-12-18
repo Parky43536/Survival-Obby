@@ -34,7 +34,7 @@ function GameService.FinishButton(levelNum, level, win)
         levels[levelNum].DoorOpened = true
 
         local cframe, size = EventService:getBoundingBox(level.Floor)
-        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
+        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
         for _, playerInRoom in playersInLevel do
             DataManager:SetSpawn(playerInRoom, levelNum + 1)
         end
@@ -71,7 +71,7 @@ function GameService.SetUpButton(levelNum, level)
 
                 --area check
                 local cframe, size = EventService:getBoundingBox(level.Floor)
-                local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
+                local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
                 if #playersInLevel == 0 then
                     noPlayers += 1
                     if noPlayers == 5 then

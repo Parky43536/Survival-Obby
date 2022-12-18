@@ -30,19 +30,7 @@ function Event.Main(levelNum, level, data)
         local rock = Obstacle.Rock:Clone()
         rock.Size = Vector3.new(1,1,1) * RV(levelNum, data, "size")
 
-        local Params = RaycastParams.new()
-        Params.FilterType = Enum.RaycastFilterType.Whitelist
-        Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
-
-        local height = data.height
-        local RayOrigin = rp.Position
-        local RayDirection = Vector3.new(0, data.height, 0)
-        local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-        if Result then
-            height = (rp.Position - Result.Position).Magnitude - rock.Size.Y / 2
-        end
-
-        rock.Position = rp.Position + Vector3.new(rng:NextInteger(-data.offset, data.offset), height, rng:NextInteger(-data.offset, data.offset))
+        rock.Position = rp.Position + Vector3.new(rng:NextInteger(-data.offset, data.offset), data.height, rng:NextInteger(-data.offset, data.offset))
         EventService:parentToObstacles(levelNum, rock)
 
         local touchConnection

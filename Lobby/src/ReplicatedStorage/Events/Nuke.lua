@@ -38,17 +38,8 @@ function Event.Main(levelNum, level, data)
                 break
             end
         end
-        Params.FilterDescendantsInstances = {checkForOtherLevels}
 
-        local height = data.height
-        RayOrigin = cframe.Position
-        RayDirection = Vector3.new(0, height, 0)
-        Result = workspace:Raycast(RayOrigin, RayDirection, Params)
-        if Result then
-            height = (cframe.Position - Result.Position).Magnitude - nukeSize.Y
-        end
-
-        nuke:PivotTo(cframe + Vector3.new(0, height, 0))
+        nuke:PivotTo(cframe + Vector3.new(0, data.height, 0))
         EventService:parentToObstacles(levelNum, nuke)
 
         local tweenInfo = TweenInfo.new(data.delayTime, Enum.EasingStyle.Linear)
@@ -101,7 +92,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.delayTime)
 
         if nuke.Parent ~= nil then
-            local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 200, 5))
+            local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
 
             for _, player in playersInLevel do
                 player.Character.Humanoid:TakeDamage(data.damage)
@@ -113,7 +104,7 @@ function Event.Main(levelNum, level, data)
 
             AudioService:Create(16433289, cframe.Position, {Volume = 0.8})
 
-            local goal = {Transparency = 0.9, Size = size * 1.5}
+            local goal = {Transparency = 0.9, Size = size + Vector3.new(5, 100, 5)}
             local properties = {Time = 0.15}
             TweenService.tween(particle, goal, properties)
 
