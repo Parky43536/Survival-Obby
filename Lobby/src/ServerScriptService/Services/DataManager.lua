@@ -2,6 +2,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local BadgeService = game:GetService("BadgeService")
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
@@ -98,8 +99,51 @@ end
 
 ----------------------------------------------------------------------------------
 
+function DataManager:Badges(player)
+	local level = DataManager:SetValue(player, "Level")
+	local wins = DataManager:SetValue(player, "Wins")
+
+	if level >= 1 then
+		BadgeService:AwardBadge(player.UserId, 2129871894)
+	end
+	if level >= 5 then
+		BadgeService:AwardBadge(player.UserId, 2129871896)
+	end
+	if level >= 10 then
+		BadgeService:AwardBadge(player.UserId, 2129871897)
+	end
+	if level >= 25 then
+		BadgeService:AwardBadge(player.UserId, 2129871898)
+	end
+	if level >= 50 then
+		BadgeService:AwardBadge(player.UserId, 2129871900)
+	end
+	if level >= 100 then
+		BadgeService:AwardBadge(player.UserId, 2129871901)
+	end
+	if level >= 150 then
+		BadgeService:AwardBadge(player.UserId, 2129871902)
+	end
+	if level >= 200 then
+		BadgeService:AwardBadge(player.UserId, 2129871903)
+	end
+
+	if wins >= 1 then
+		BadgeService:AwardBadge(player.UserId, 2129871886)
+	end
+	if wins >= 3 then
+		BadgeService:AwardBadge(player.UserId, 2129871890)
+	end
+	if wins >= 5 then
+		BadgeService:AwardBadge(player.UserId, 2129871891)
+	end
+	if wins >= 10 then
+		BadgeService:AwardBadge(player.UserId, 2129871892)
+	end
+end
+
 function DataManager:TeleportToLevel(player, args)
-	--if RunService:IsStudio() or PlayerValues:GetValue(player, "Level") >= args.level then
+	if RunService:IsStudio() or PlayerValues:GetValue(player, "Level") >= args.level then
 		local level = workspace.Levels:FindFirstChild(args.level)
 
 		if not level then
@@ -115,7 +159,7 @@ function DataManager:TeleportToLevel(player, args)
 			local character = player.Character
 			character:PivotTo(level.Door.PlayerSpawn.CFrame)
 		end
-	--end
+	end
 end
 
 local alertCooldowns = {}
@@ -126,16 +170,24 @@ function DataManager:SetSpawn(player, levelNum)
 	if DataManager:GetValue(player, "Level") + 1 == levelNum or (DataManager:GetValue(player, "Level") == 0 and levelNum == 2) then
 		DataManager:SetValue(player, "Level", levelNum)
 		PlayerValues:SetValue(player, "Level", levelNum, "playerOnly")
-
 		DataManager:GiveCash(player, General.LevelReward)
 
-		local stage = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
-		stage.Value = levelNum
-		if stage.Value == "0" then
-			stage.Value = "Start"
-		elseif stage.Value == tostring(General.Levels + 1) then
-			stage.Value = "Finish"
+		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
+		level.Value = levelNum
+		if level.Value == "0" then
+			level.Value = "Start"
+		elseif level.Value == tostring(General.Levels + 1) then
+			level.Value = "Finish"
 		end
+
+		if levelNum == General.Levels + 1 then
+			DataManager:IncrementValue(player, "Wins", 1)
+
+			local wins = player:FindFirstChild("leaderstats"):FindFirstChild("Wins")
+			wins.Value += 1
+		end
+
+		DataManager:Badges(player)
 	else
 		if DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
 			alertCooldowns[player] = levelNum
