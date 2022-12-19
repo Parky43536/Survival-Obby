@@ -87,7 +87,7 @@ local function levelsUi()
 end
 
 LevelsUi.LevelsFrame.Tabs.Start.Activated:Connect(function()
-    DataConnection:FireServer("TeleportToLevel", {level = 1})
+    DataConnection:FireServer("TeleportToLevel", {level = 0})
 end)
 
 LevelsUi.LevelsFrame.Tabs.Finish.Activated:Connect(function()

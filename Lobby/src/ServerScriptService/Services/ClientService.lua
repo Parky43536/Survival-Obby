@@ -139,7 +139,7 @@ function ClientService:InitializeClient(player, profile)
     stage.Name = "Level"
     stage.Value = profile.Data.Level
 
-    if stage.Value == "1" then
+    if stage.Value == "0" then
         stage.Value = "Start"
     elseif stage.Value == tostring(General.Levels + 1) then
         stage.Value = "Finish"
