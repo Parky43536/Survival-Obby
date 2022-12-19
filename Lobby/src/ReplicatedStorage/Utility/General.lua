@@ -12,7 +12,7 @@ General.EventsPerSecond = 10
 General.MusicVolume = 0.15
 
 function General.TimerCalc(levelNum)
-    return math.clamp(4 + (2 * levelNum), 0, 40)
+    return math.clamp(4 + (2 * levelNum), 0, 30)
 end
 
 --Stats---------------------------------------------

@@ -205,14 +205,14 @@ function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
 	ClientService:HealPlayer(player)
 
-	if DataManager:GetValue(player, "Level") + 1 == levelNum or (DataManager:GetValue(player, "Level") == 0 and levelNum == 2) then
+	if DataManager:GetValue(player, "Level") + 1 == levelNum then
 		DataManager:SetValue(player, "Level", levelNum)
 		PlayerValues:SetValue(player, "Level", levelNum, "playerOnly")
 		DataManager:GiveCash(player, General.LevelReward)
 
 		local level = player:FindFirstChild("leaderstats"):FindFirstChild("Level")
 		level.Value = levelNum
-		if level.Value == "0" then
+		if level.Value == "1" then
 			level.Value = "Start"
 		elseif level.Value == tostring(General.Levels + 1) then
 			level.Value = "Finish"

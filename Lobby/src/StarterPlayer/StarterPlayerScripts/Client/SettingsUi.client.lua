@@ -55,7 +55,7 @@ local function loadSettings()
         local ui = Settings:FindFirstChild(name)
         if ui then
             if data.slider then
-                ui.Value.Text = PlayerValues:GetValue(LocalPlayer, name)
+                ui.Value.Text = PlayerValues:GetValue(LocalPlayer, name) or 1
             else
                 if PlayerValues:GetValue(LocalPlayer, name) then
                     ui.Toggle.Image = "rbxassetid://4360945444"

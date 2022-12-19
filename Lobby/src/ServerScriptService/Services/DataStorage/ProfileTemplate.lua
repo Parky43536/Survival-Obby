@@ -3,7 +3,7 @@ local ProfileTemplate = {
     Products = {},
     Settings = {Music = 1, Sounds = 1},
 
-    Level = 0,
+    Level = 1,
     Wins = 0,
     Cash = 0,
 

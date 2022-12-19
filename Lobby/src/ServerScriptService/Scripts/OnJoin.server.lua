@@ -44,7 +44,7 @@ local function playerAdded(newPlayer)
                 repeat task.wait(1) until newPlayer.Character
             end
 
-            if currentLevel ~= 0 then
+            if currentLevel ~= 1 then
                 local level = workspace.Levels:FindFirstChild(currentLevel)
 
                 if not level then

@@ -178,8 +178,8 @@ function GameService.SetUpGame()
     end
 
     --set up physical levels
-    local start = workspace.Levels:FindFirstChild("0")
-    LevelService.SetUpLevelColor(0, start)
+    local start = workspace.Levels:FindFirstChild("1")
+    LevelService.SetUpLevelColor(1, start)
     local lastCFrame = start:GetPivot()
     local turnsDisabled = false
 

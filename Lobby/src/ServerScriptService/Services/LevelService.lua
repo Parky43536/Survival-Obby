@@ -115,23 +115,30 @@ end
 local requiredEvents = {}
 function LevelService.ButtonEvent(levelNum, level)
     local rng = Random.new()
+    local pickedEvent
 
-    for key, data in pairs(EventData) do
+    for event, data in pairs(EventData) do
         if data.blocked or levelNum < data.level then
             continue
         end
 
         if rng:NextNumber(0, data.chance) <= 1 then
-            task.spawn(function()
-                if not requiredEvents[key] then
-                    requiredEvents[key] = require(Events:FindFirstChild(key))
-                end
-
-                requiredEvents[key].Main(levelNum, level, data)
-            end)
-
-            break
+            if not pickedEvent then
+                pickedEvent = event
+            elseif EventData[pickedEvent].chance < data.chance then
+                pickedEvent = event
+            end
         end
+    end
+
+    if pickedEvent then
+        task.spawn(function()
+            if not requiredEvents[pickedEvent] then
+                requiredEvents[pickedEvent] = require(Events:FindFirstChild(pickedEvent))
+            end
+
+            requiredEvents[pickedEvent].Main(levelNum, level, EventData[pickedEvent])
+        end)
     end
 end
 
