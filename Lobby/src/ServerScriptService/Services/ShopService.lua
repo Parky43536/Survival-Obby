@@ -104,7 +104,7 @@ function ShopService:InitializePurchases(player)
 			if purchases[name] or MarketplaceService:UserOwnsGamePassAsync(player.UserId, data.gamepass) then
 				ShopService:GiveGamepass(player, name)
 			end
-		else
+		elseif not data.product then
 			if purchases[name] then
 				ShopService:GiveTool(player, name)
 			end
