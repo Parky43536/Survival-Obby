@@ -26,7 +26,7 @@ local ClientService = require(SerServices.ClientService)
 local ShopService = {}
 
 local function getNameById(id)
-	for name, data in (ShopData) do
+	for name, data in (ShopData.Items) do
 		if data.product and data.product == id then
 			return name
 		end
@@ -60,7 +60,7 @@ end
 function ShopService:GiveProduct(player, name)
 	DataManager:SettingToggle(player, {setting = "AutoUpgrade", off = true})
 
-	DataManager:GiveCash(player, ShopData[name].coins, true)
+	DataManager:GiveCash(player, ShopData.Items[name].coins, true)
 
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then purchases[name] = 0 end
@@ -86,7 +86,7 @@ end
 function ShopService:BuyTool(player, name)
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then
-		local toolData = ShopData[name]
+		local toolData = ShopData.Items[name]
 
 		if PlayerValues:GetValue(player, "Cash") >= toolData.cost or RunService:IsStudio() then
 			DataManager:GiveCash(player, -toolData.cost)
@@ -98,7 +98,7 @@ end
 function ShopService:InitializePurchases(player)
 	local purchases = DataManager:GetValue(player, "Purchases")
 
-	for name, data in (ShopData) do
+	for name, data in (ShopData.Items) do
 		if data.gamepass then
 			if purchases[name] or MarketplaceService:UserOwnsGamePassAsync(player.UserId, data.gamepass) then
 				ShopService:GiveGamepass(player, name)
@@ -114,11 +114,11 @@ end
 ShopConnection.OnServerEvent:Connect(function(player, action, args)
 	if not args then args = {} end
 
-	if ShopData[action] then
-		if ShopData[action].gamepass then
-			MarketplaceService:PromptGamePassPurchase(player, ShopData[action].gamepass)
-		elseif ShopData[action].product then
-			MarketplaceService:PromptProductPurchase(player, ShopData[action].product)
+	if ShopData.Items[action] then
+		if ShopData.Items[action].gamepass then
+			MarketplaceService:PromptGamePassPurchase(player, ShopData.Items[action].gamepass)
+		elseif ShopData.Items[action].product then
+			MarketplaceService:PromptProductPurchase(player, ShopData.Items[action].product)
 		else
 			ShopService:BuyTool(player, action)
 		end

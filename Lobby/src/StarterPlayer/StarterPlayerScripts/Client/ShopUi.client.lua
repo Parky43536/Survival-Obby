@@ -17,6 +17,7 @@ local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
 local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local LevelsUi = PlayerGui:WaitForChild("LevelsUi")
 local ShopUi = PlayerGui:WaitForChild("ShopUi")
+local ShopPopUi = PlayerGui:WaitForChild("ShopPopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
 local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
@@ -26,12 +27,14 @@ local ToolsShop = ShopUi.ShopFrame.ToolsScrollingFrame
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ShopConnection = Remotes:WaitForChild("ShopConnection")
+local ShopPopConnection = Remotes:WaitForChild("ShopPopConnection")
 
 local function shopUiEnable()
     if ShopUi.Enabled == true then
         ShopUi.Enabled = false
     else
         ShopUi.Enabled = true
+        ShopPopUi.Enabled = false
         LevelsUi.Enabled = false
         UpgradeUi.Enabled = false
         SettingsUi.Enabled = false
@@ -45,6 +48,10 @@ end)
 
 ShopUi.ShopFrame.TopFrame.Close.Activated:Connect(function()
     shopUiEnable()
+end)
+
+ShopPopUi.ShopPopFrame.Close.Activated:Connect(function()
+    ShopPopUi.Enabled = false
 end)
 
 local function onKeyPress(input, gameProcessedEvent)
@@ -78,10 +85,7 @@ local function comma_value(amount)
     return formatted
 end
 
-local cooldown = 0.2
-local cooldownTime = tick()
-
-for name, data in (ShopData) do
+local function createItemUi(item, data)
     local itemHolder
     if data.gamepass or data.product then
         itemHolder = Assets.Ui.Product:Clone()
@@ -89,12 +93,21 @@ for name, data in (ShopData) do
         itemHolder = Assets.Ui.Tool:Clone()
     end
 
-    itemHolder.Name = name
+    itemHolder.Name = item
     itemHolder.Buy.Image = "rbxassetid://" .. data.image
     itemHolder.Info.Cost.Text = itemHolder.Info.Cost.Text .. comma_value(data.cost)
-    itemHolder.Info.ItemName.Text = name
+    itemHolder.Info.ItemName.Text = item
     itemHolder.Desc.Text = data.desc
     itemHolder.LayoutOrder = data.order
+
+    return itemHolder
+end
+
+local cooldown = 0.2
+local cooldownTime = tick()
+
+for item, data in (ShopData.Items) do
+    local itemHolder = createItemUi(item, data)
 
     if data.gamepass or data.product then
         itemHolder.Parent = ProductsShop
@@ -105,16 +118,48 @@ for name, data in (ShopData) do
     itemHolder.Buy.Activated:Connect(function()
         if tick() - cooldownTime > cooldown then
             cooldownTime = tick()
-            ShopConnection:FireServer(name)
+            ShopConnection:FireServer(item)
         end
     end)
 end
+
+local activationConnection
+local function newShopPop(item)
+    if activationConnection ~= nil then activationConnection:Disconnect() end
+    if ShopPopUi.ShopPopFrame:FindFirstChild("Item") then ShopPopUi.ShopPopFrame:FindFirstChild("Item"):Destroy() end
+
+    local itemHolder = createItemUi(item, ShopData.Items[item])
+    itemHolder.Parent = ShopPopUi.ShopPopFrame
+    itemHolder.Name = "Item"
+
+    itemHolder.Buy.Activated:Connect(function()
+        if tick() - cooldownTime > cooldown then
+            cooldownTime = tick()
+            ShopConnection:FireServer(item)
+        end
+    end)
+
+    activationConnection = ShopPopUi.ShopPopFrame.Buy.Activated:Connect(function()
+        if tick() - cooldownTime > cooldown then
+            cooldownTime = tick()
+            ShopConnection:FireServer(item)
+        end
+    end)
+
+    ShopPopUi.Enabled = true
+end
+
+ShopPopConnection.OnClientEvent:Connect(function(item)
+    --if not PlayerValues:GetValue(LocalPlayer, item) then
+        newShopPop(item)
+    --end
+end)
 
 ------------------------------------------------------------------
 
 local function loadBought()
     local values = {}
-    for name,_ in (ShopData) do
+    for name,_ in (ShopData.Items) do
         values[name] = PlayerValues:GetValue(LocalPlayer, name)
     end
 
@@ -131,12 +176,18 @@ local function loadBought()
     end
 end
 
-for name,_ in (ShopData) do
+for name,_ in (ShopData.Items) do
     PlayerValues:SetCallback(name, function()
         loadBought()
     end)
 end
 
 loadBought()
+
+------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------
 
 UserInputService.InputBegan:Connect(onKeyPress)

@@ -1,4 +1,6 @@
-local EventData = {
+local ShopData = {}
+
+ShopData.Items = {
 	["Coin Magnet"] = {
 		gamepass = 103133843,
 		cost = 50,
@@ -123,4 +125,17 @@ local EventData = {
 		order = 9,
 	},
 }
-return EventData
+
+function ShopData:getList()
+	local indexList = {}
+
+	for name, data in (ShopData.Items) do
+		if not data.blocked then
+			table.insert(indexList, name)
+		end
+	end
+
+	return indexList
+end
+
+return ShopData

@@ -1,143 +1,24 @@
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local SerServices = ServerScriptService.Services
-local DataManager = require(SerServices.DataManager)
 local LevelService = require(SerServices.LevelService)
 
 local DataBase = ReplicatedStorage.Database
 local EventData = require(DataBase.EventData)
 local LevelData = require(DataBase.LevelData)
 
-local RepServices = ReplicatedStorage.Services
-local PlayerValues = require(RepServices.PlayerValues)
-
 local Assets = ReplicatedStorage.Assets
 
 local Utility = ReplicatedStorage:WaitForChild("Utility")
 local General = require(Utility.General)
 local EventService = require(Utility.EventService)
-local AudioService = require(Utility.AudioService)
 
 local GameService = {}
 
-local levels = {}
-local touchCooldown = {}
-
-function GameService.FinishButton(levelNum, level, win)
-    EventService:CleanLevel(levelNum, level)
-
-    if win then
-        AudioService:Create(1846252166, level.Button.Button, {Volume = 0.25})
-
-        LevelService.OpenDoors(level)
-        levels[levelNum].DoorOpened = true
-
-        local cframe, size = EventService:getBoundingBox(level.Floor)
-        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
-        for _, playerInRoom in playersInLevel do
-            DataManager:SetSpawn(playerInRoom, levelNum + 1)
-        end
-
-        task.wait(General.DoorTime)
-    else
-        AudioService:Create(9113085663, level.Button.Button, {Volume = 0.5})
-    end
-
-    levels[levelNum].DoorOpened = false
-    levels[levelNum].Timer = General.TimerCalc(levelNum)
-    levels[levelNum].Started = false
-    level.Button.Button.Top.Label.Text = "start"
-    level.Button.Button.BrickColor = BrickColor.new("Lime green")
-end
-
-function GameService.SetUpRestart(level)
-    level.Restart.Restart.Touched:Connect(function(hit)
-        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-        if player then
-            if not touchCooldown[player] then
-                touchCooldown[player] = tick() - EventService.TouchCooldown
-            end
-            if tick() - touchCooldown[player] > EventService.TouchCooldown then
-                touchCooldown[player] = tick()
-
-                DataManager:Restart(player)
-            end
-        end
-    end)
-end
-
-function GameService.SetUpButton(levelNum, level)
-    level.Button.Button.Touched:Connect(function(hit)
-        local hitPlayer = game.Players:GetPlayerFromCharacter(hit.Parent)
-        if hitPlayer and General.playerCheck(hitPlayer) and levels[levelNum].Started == false then
-            levels[levelNum].Started = true
-            PlayerValues:SetValue(hitPlayer, "CurrentLevel", levelNum, "playerOnly")
-
-            LevelService.PressButton(level.Button.Button)
-            level.Button.Button.Top.Label.Text = levels[levelNum].Timer
-            level.Button.Button.BrickColor = BrickColor.new("Really red")
-
-            local noPlayers = 0
-            for i = 1 , General.TimerCalc(levelNum) do
-                for j = 1 , General.EventsPerSecond do
-                    LevelService.ButtonEvent(levelNum, level)
-                    task.wait(1 / General.EventsPerSecond)
-                end
-
-                --area check
-                local cframe, size = EventService:getBoundingBox(level.Floor)
-                local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
-                if #playersInLevel == 0 then
-                    noPlayers += 1
-                    if noPlayers == 5 then
-                        GameService.FinishButton(levelNum, level, false)
-                        return
-                    end
-                else
-                    noPlayers = 0
-                end
-
-                --health check
-                local playersAlive = {}
-                for _, player in (Players:GetChildren()) do
-                    if PlayerValues:GetValue(player, "CurrentLevel") == levelNum and General.playerCheck(player) then
-                        table.insert(playersAlive, player)
-                    end
-                end
-                if #playersAlive == 0 then
-                    GameService.FinishButton(levelNum, level, false)
-                    return
-                end
-
-                levels[levelNum].Timer = math.clamp(levels[levelNum].Timer - 1, 0, 99e99)
-                level.Button.Button.Top.Label.Text = levels[levelNum].Timer
-            end
-
-            GameService.FinishButton(levelNum, level, true)
-        end
-    end)
-end
-
-function GameService.SetUpSpawn(levelNum, level)
-    level.Door.Checkpoint.Touched:Connect(function(hit)
-        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-        if player and levels[levelNum].DoorOpened then
-            if not touchCooldown[player] then
-                touchCooldown[player] = tick() - EventService.TouchCooldown
-            end
-            if tick() - touchCooldown[player] > EventService.TouchCooldown then
-                touchCooldown[player] = tick()
-
-                DataManager:SetSpawn(player, levelNum + 1)
-            end
-        end
-    end)
-end
-
-function GameService.SetUpGame()
+function GameService:SetUpData()
     --set up level and upgrades in eventdata and signs in general
+
     local currentLevel = General.LevelMultiple
     local currentEvent = 1
 
@@ -176,25 +57,27 @@ function GameService.SetUpGame()
             currentEvent = 1
         end
     end
+end
 
-    --set up physical levels
+function GameService:SetUpLevels()
     local start = workspace.Levels:FindFirstChild("0")
-    LevelService.SetUpLevelColor(0, start)
+    LevelService:SetUpLevelColor(0, start)
+    LevelService:SetUpAdvertisement(0, start)
+
     local lastCFrame = start:GetPivot()
     local turnsDisabled = false
 
     for levelNum = 1, General.Levels do
         task.wait()
 
-        levels[levelNum] = {Timer = General.TimerCalc(levelNum), Started = false, DoorOpened = false}
+        LevelService.Levels[levelNum] = {Timer = General.TimerCalc(levelNum), Started = false, DoorOpened = false}
 
         local rng = Random.new(levelNum * 1000)
-        local levelList = LevelData.getList()
+        local levelList = LevelData:getList()
         local name
         local data
         local level
 
-        --check if its valid
         repeat
             local valid = true
             local num = rng:NextInteger(1, #levelList)
@@ -255,19 +138,27 @@ function GameService.SetUpGame()
             level.Door.Sign:Destroy()
         end
 
-        GameService.SetUpButton(levelNum, level)
-        GameService.SetUpSpawn(levelNum, level)
-        LevelService.SetUpLevelColor(levelNum, level)
+        LevelService:SetUpButton(levelNum, level)
+        LevelService:SetUpDoor(levelNum, level)
+        LevelService:SetUpLevelColor(levelNum, level)
+        LevelService:SetUpAdvertisement(levelNum, level)
 
         level.Parent = workspace.Levels
     end
 
     local finish = Assets.Misc:FindFirstChild("Finish"):Clone()
     finish.Name = General.Levels + 1
-    LevelService.SetUpLevelColor(General.Levels + 1, finish)
+    LevelService:SetUpLevelColor(General.Levels + 1, finish)
+    LevelService:SetUpAdvertisement(General.Levels + 1, start)
+    LevelService:SetUpRestart(finish)
+
     finish:PivotTo(lastCFrame)
-    GameService.SetUpRestart(finish)
     finish.Parent = workspace.Levels
+end
+
+function GameService:SetUpGame()
+    GameService:SetUpData()
+    GameService:SetUpLevels()
 end
 
 return GameService

@@ -72,8 +72,9 @@ local currentAlertTweens = {}
 local function upgradeAlert()
     local alerts = getAlerts()
 
-    if alerts == 4 and chatAlertCooldown ~= PlayerValues:GetValue(LocalPlayer, "CurrentLevel") then
-        chatAlertCooldown = PlayerValues:GetValue(LocalPlayer, "CurrentLevel")
+    local currentLevel = PlayerValues:GetValue(LocalPlayer, "CurrentLevel")
+    if alerts == 4 and chatAlertCooldown ~= currentLevel and currentLevel > 2 then
+        chatAlertCooldown = currentLevel
         game.StarterGui:SetCore("ChatMakeSystemMessage", {Text = "[ALERT] You need to upgrade your character!", Color = Color3.fromRGB(255, 149, 19)})
     end
 

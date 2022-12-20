@@ -36,7 +36,7 @@ LevelData.Levels = {
 	},
 }
 
-function LevelData.getList()
+function LevelData:getList()
 	local indexList = {}
 
 	for name, data in (LevelData.Levels) do

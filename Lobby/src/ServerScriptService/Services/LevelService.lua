@@ -1,10 +1,16 @@
+local ServerScriptService = game:GetService("ServerScriptService")
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PhysicsService = game:GetService("PhysicsService")
+local Players = game:GetService("Players")
+
+local SerServices = ServerScriptService.Services
+local DataManager = require(SerServices.DataManager)
 
 local Events = ReplicatedStorage.Events
 local DataBase = ReplicatedStorage.Database
-local EventData = require(DataBase:WaitForChild("EventData"))
+local EventData = require(DataBase.EventData)
+local ShopData = require(DataBase.ShopData)
 
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
@@ -14,11 +20,35 @@ local General = require(Utility.General)
 local TweenService = require(Utility.TweenService)
 local ModelTweenService = require(Utility.ModelTweenService)
 local AudioService = require(Utility.AudioService)
+local EventService = require(Utility.EventService)
+
+local Remotes = ReplicatedStorage.Remotes
+local ShopPopConnection = Remotes.ShopPopConnection
 
 local LevelService = {}
 
+LevelService.Levels = {}
+local touchCooldown = {}
+
+---------------------------------------------------------------
+
+function round(num, val)
+	return math.floor(val / num) * num
+end
+
+local function shallowCopy(list)
+	local newList = {}
+	for i,v in (list) do
+		newList[i] = v
+	end
+
+	return newList
+end
+
+---------------------------------------------------------------
+
 local ButtonPositionSaver = {}
-function LevelService.PressButton(button)
+function LevelService:PressButton(button)
     if not ButtonPositionSaver[button] then ButtonPositionSaver[button] = button.Position end
 
     button.Position = ButtonPositionSaver[button]
@@ -27,7 +57,7 @@ function LevelService.PressButton(button)
     TweenService.tween(button, goal, properties)
 end
 
-function LevelService.OpenDoors(level)
+function LevelService:OpenDoors(level)
     task.spawn(function()
         local DoorR = level.Door.DoorR
         local DoorL = level.Door.DoorL
@@ -61,23 +91,161 @@ end
 
 ---------------------------------------------------------------
 
-function round(num, val)
-	return math.floor(val / num) * num
+function LevelService:FinishButton(levelNum, level, win)
+    EventService:CleanLevel(levelNum, level)
+
+    if win then
+        AudioService:Create(1846252166, level.Button.Button, {Volume = 0.25})
+
+        LevelService:OpenDoors(level)
+        LevelService.Levels[levelNum].DoorOpened = true
+
+        local cframe, size = EventService:getBoundingBox(level.Floor)
+        local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
+        for _, playerInRoom in playersInLevel do
+            DataManager:SetSpawn(playerInRoom, levelNum + 1)
+        end
+
+        task.wait(General.DoorTime)
+    else
+        AudioService:Create(9113085663, level.Button.Button, {Volume = 0.5})
+    end
+
+    LevelService.Levels[levelNum].DoorOpened = false
+    LevelService.Levels[levelNum].Timer = General.TimerCalc(levelNum)
+    LevelService.Levels[levelNum].Started = false
+    level.Button.Button.Top.Label.Text = "start"
+    level.Button.Button.BrickColor = BrickColor.new("Lime green")
 end
 
-local function shallowCopy(list)
-	local newList = {}
-	for i,v in (list) do
-		newList[i] = v
-	end
+function LevelService:SetUpButton(levelNum, level)
+    level.Button.Button.Touched:Connect(function(hit)
+        local hitPlayer = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if hitPlayer and General.playerCheck(hitPlayer) and LevelService.Levels[levelNum].Started == false then
+            LevelService.Levels[levelNum].Started = true
+            PlayerValues:SetValue(hitPlayer, "CurrentLevel", levelNum, "playerOnly")
 
-	return newList
+            LevelService:PressButton(level.Button.Button)
+            level.Button.Button.Top.Label.Text = LevelService.Levels[levelNum].Timer
+            level.Button.Button.BrickColor = BrickColor.new("Really red")
+
+            local noPlayers = 0
+            for i = 1 , General.TimerCalc(levelNum) do
+                for j = 1 , General.EventsPerSecond do
+                    LevelService:ButtonEvent(levelNum, level)
+                    task.wait(1 / General.EventsPerSecond)
+                end
+
+                --area check
+                local cframe, size = EventService:getBoundingBox(level.Floor)
+                local playersInLevel = EventService:getPlayersInSize(cframe, size + Vector3.new(5, 100, 5))
+                if #playersInLevel == 0 then
+                    noPlayers += 1
+                    if noPlayers == 5 then
+                        LevelService:FinishButton(levelNum, level, false)
+                        return
+                    end
+                else
+                    noPlayers = 0
+                end
+
+                --health check
+                local playersAlive = {}
+                for _, player in (Players:GetChildren()) do
+                    if PlayerValues:GetValue(player, "CurrentLevel") == levelNum and General.playerCheck(player) then
+                        table.insert(playersAlive, player)
+                    end
+                end
+                if #playersAlive == 0 then
+                    LevelService:FinishButton(levelNum, level, false)
+                    return
+                end
+
+                LevelService.Levels[levelNum].Timer = math.clamp(LevelService.Levels[levelNum].Timer - 1, 0, 99e99)
+                level.Button.Button.Top.Label.Text = LevelService.Levels[levelNum].Timer
+            end
+
+            LevelService:FinishButton(levelNum, level, true)
+        end
+    end)
+end
+
+function LevelService:SetUpDoor(levelNum, level)
+    level.Door.Checkpoint.Touched:Connect(function(hit)
+        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if player and LevelService.Levels[levelNum].DoorOpened then
+            if not touchCooldown[player] then
+                touchCooldown[player] = tick() - EventService.TouchCooldown
+            end
+            if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                touchCooldown[player] = tick()
+
+                DataManager:SetSpawn(player, levelNum + 1)
+            end
+        end
+    end)
+end
+
+function LevelService:SetUpRestart(level)
+    level.Floor.Restart.Restart.Touched:Connect(function(hit)
+        local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+        if player then
+            if not touchCooldown[player] then
+                touchCooldown[player] = tick() - EventService.TouchCooldown
+            end
+            if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                touchCooldown[player] = tick()
+
+                DataManager:Restart(player)
+            end
+        end
+    end)
+end
+
+function LevelService:SetUpAdvertisement(levelNum, level)
+    local rng = Random.new(levelNum * 1000)
+
+    for _, advertisement in (level:GetChildren()) do
+        if advertisement.Name == "Advertisement" then
+            local item = advertisement:FindFirstChild("Item")
+            if item then
+                item = item.Value
+            else
+                local shopList = ShopData:getList()
+                local num = rng:NextInteger(1, #shopList)
+                item = shopList[num]
+            end
+
+            local data = ShopData.Items[item]
+            advertisement.Main.BillboardGui.Label.Text = item
+            advertisement.Main.Front.Texture = "rbxassetid://".. data.image
+            advertisement.Main.Back.Texture = "rbxassetid://".. data.image
+
+            local goal = {CFrame = advertisement.Main.CFrame * CFrame.Angles(0, math.rad(180), 0)}
+            local properties = {Time = 1, Repeat = math.huge}
+            TweenService.tween(advertisement.Main, goal, properties)
+
+            advertisement.Touch.Touched:Connect(function(hit)
+                local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+                if player then
+                    if not touchCooldown[player] then
+                        touchCooldown[player] = tick() - EventService.TouchCooldown
+                    end
+                    if tick() - touchCooldown[player] > EventService.TouchCooldown then
+                        touchCooldown[player] = tick()
+
+                        ShopPopConnection:FireClient(player, item)
+                    end
+                end
+            end)
+        end
+    end
 end
 
 local possibleColors = shallowCopy(General.Colors)
 local lastRounding = 0
 local lastPick
-function LevelService.SetUpLevelColor(levelNum, level)
+function LevelService:SetUpLevelColor(levelNum, level)
     local rounding = round(General.LevelMultiple, levelNum)
 
     if lastRounding ~= rounding then
@@ -113,7 +281,7 @@ function LevelService.SetUpLevelColor(levelNum, level)
 end
 
 local requiredEvents = {}
-function LevelService.ButtonEvent(levelNum, level)
+function LevelService:ButtonEvent(levelNum, level)
     local rng = Random.new()
     local pickedEvent
 

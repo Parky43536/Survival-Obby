@@ -15,4 +15,4 @@ for _, event in ReplicatedStorage.Events:GetChildren() do
 end
 
 local GameService = require(ServerScriptService.Services.GameService)
-GameService.SetUpGame()
+GameService:SetUpGame()
