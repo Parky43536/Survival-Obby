@@ -53,6 +53,6 @@ while true do
     if length ~= 0 then
         AudioService:Create(picked, workspace.Sound, {Volume = General.MusicVolume}, {name = "Music"})
 
-        task.wait(soundForTime.TimeLength + intermissionTime)
+        task.wait(length + intermissionTime)
     end
 end
