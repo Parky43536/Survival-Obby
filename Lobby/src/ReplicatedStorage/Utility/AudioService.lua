@@ -71,7 +71,7 @@ function AudioService:Create(id, target, properties, args)
 
 		if args.name and args.name == "Music" then
 			if workspace.Sound:FindFirstChild("Music") then
-				return
+				workspace.Sound:FindFirstChild("Music"):Destroy()
 			end
 		end
 
