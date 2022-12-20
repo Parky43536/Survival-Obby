@@ -73,7 +73,7 @@ function GameService.SetUpButton(levelNum, level)
         local hitPlayer = game.Players:GetPlayerFromCharacter(hit.Parent)
         if hitPlayer and General.playerCheck(hitPlayer) and levels[levelNum].Started == false then
             levels[levelNum].Started = true
-            PlayerValues:SetValue(hitPlayer, "CurrentLevel", levelNum)
+            PlayerValues:SetValue(hitPlayer, "CurrentLevel", levelNum, "playerOnly")
 
             LevelService.PressButton(level.Button.Button)
             level.Button.Button.Top.Label.Text = levels[levelNum].Timer

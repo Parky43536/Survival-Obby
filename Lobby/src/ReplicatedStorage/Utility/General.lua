@@ -110,12 +110,12 @@ General.Signs = {
 }
 
 General.AppearanceOrder = {
-    [1] = "SpeedingWall",
-    [2] = "Spinner",
-    [3] = "Landmine",
-    [4] = "LaserWall",
-    [5] = "AcidPuddle",
-    [6] = "Rocket",
+    [1] = "Rocket",
+    [2] = "SpeedingWall",
+    [3] = "Spinner",
+    [4] = "Landmine",
+    [5] = "LaserWall",
+    [6] = "AcidPuddle",
     [7] = "TeslaCoil",
     [8] = "Nuke",
 }
@@ -125,12 +125,12 @@ General.UpgradeOrder = {
     [2] = "Spike",
     [3] = "LavaLine",
     [4] = "FallingRock",
-    [5] = "SpeedingWall",
-    [6] = "Spinner",
-    [7] = "Landmine",
-    [8] = "LaserWall",
-    [9] = "AcidPuddle",
-    [10] = "Rocket",
+    [5] = "Rocket",
+    [6] = "SpeedingWall",
+    [7] = "Spinner",
+    [8] = "Landmine",
+    [9] = "LaserWall",
+    [10] = "AcidPuddle",
     [11] = "TeslaCoil",
 }
 

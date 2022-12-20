@@ -173,7 +173,7 @@ function DataManager:Restart(player)
 			PlayerValues:SetValue(player, "God Health", nil, "playerOnly")
 		end
 		for _, tool in pairs(player.Backpack:GetChildren()) do
-			if not PlayerValues:GetValue(player, tool) then
+			if not PlayerValues:GetValue(player, tool.Name) then
 				tool:Destroy()
 			end
 		end
@@ -195,17 +195,17 @@ function DataManager:TeleportToLevel(player, args)
 		end
 
 		if General.playerCheck(player) then
-			PlayerValues:SetValue(player, "CurrentLevel", args.level)
+			PlayerValues:SetValue(player, "CurrentLevel", args.level, "playerOnly")
 
-			local character = player.Character
-			character:PivotTo(level.Door.PlayerSpawn.CFrame)
+			player:RequestStreamAroundAsync(level.Door.PlayerSpawn.Position)
+			player.Character:PivotTo(level.Door.PlayerSpawn.CFrame)
 		end
 	end
 end
 
 local alertCooldowns = {}
 function DataManager:SetSpawn(player, levelNum)
-	PlayerValues:SetValue(player, "CurrentLevel", levelNum)
+	PlayerValues:SetValue(player, "CurrentLevel", levelNum, "playerOnly")
 	ClientService:HealPlayer(player)
 
 	if DataManager:GetValue(player, "Level") + 1 == levelNum or (DataManager:GetValue(player, "Level") == 0 and levelNum == 2) then
@@ -230,7 +230,7 @@ function DataManager:SetSpawn(player, levelNum)
 	else
 		if DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
 			alertCooldowns[player] = levelNum
-			ChatConnection:FireClient(player, "[ALERT] You're level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
+			ChatConnection:FireClient(player, "[ALERT] Your level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
 		end
 	end
 

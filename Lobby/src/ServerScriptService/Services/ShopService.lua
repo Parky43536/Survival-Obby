@@ -58,15 +58,14 @@ function ShopService:GiveGamepass(player, name)
 end
 
 function ShopService:GiveProduct(player, name)
-	print'running'
+	DataManager:SettingToggle(player, {setting = "AutoUpgrade", off = true})
+
 	DataManager:GiveCash(player, ShopData[name].coins, true)
 
 	local purchases = DataManager:GetValue(player, "Purchases")
 	if not purchases[name] then purchases[name] = 0 end
 	purchases[name] += 1
 	DataManager:SetValue(player, "Purchases", purchases)
-
-	print(purchases)
 end
 
 function ShopService:GiveTool(player, name)

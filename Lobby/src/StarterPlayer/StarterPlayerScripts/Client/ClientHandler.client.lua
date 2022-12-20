@@ -21,6 +21,10 @@ local ClientConnection = Remotes:WaitForChild("ClientConnection")
 local DataConnection = Remotes:WaitForChild("DataConnection")
 local ChatConnection = Remotes:WaitForChild("ChatConnection")
 
+local alertTime = 1
+
+------------------------------------------------------------------
+
 local function comma_value(amount)
     local formatted = amount
     while true do
@@ -36,13 +40,9 @@ local function round(number, decimal)
     return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
 
-------------------------------------------------------------------
-
-local currentAlertTweens = {}
-local function shopAlert()
+local function getAlerts()
     local cash = PlayerValues:GetValue(LocalPlayer, "Cash")
-    local alertTime = 4
-    local realAlertTime = alertTime
+    local alerts = 0
 
     local health = General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health"))
     local speed = General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed"))
@@ -50,36 +50,51 @@ local function shopAlert()
     local income = General.getCost("Income", PlayerValues:GetValue(LocalPlayer, "Income"))
 
     if health and cash >= health then
-        realAlertTime /= 2
+        alerts += 1
     end
     if speed and cash >= speed then
-        realAlertTime /= 2
+        alerts += 1
     end
     if jump and cash >= jump then
-        realAlertTime /= 2
+        alerts += 1
     end
     if income and cash >= income then
-        realAlertTime /= 2
+        alerts += 1
     end
 
-    if realAlertTime < alertTime then
+    return alerts
+end
+
+------------------------------------------------------------------
+
+local chatAlertCooldown
+local currentAlertTweens = {}
+local function upgradeAlert()
+    local alerts = getAlerts()
+
+    if alerts == 4 and chatAlertCooldown ~= PlayerValues:GetValue(LocalPlayer, "CurrentLevel") then
+        chatAlertCooldown = PlayerValues:GetValue(LocalPlayer, "CurrentLevel")
+        game.StarterGui:SetCore("ChatMakeSystemMessage", {Text = "[ALERT] You need to upgrade your character!", Color = Color3.fromRGB(255, 149, 19)})
+    end
+
+    if alerts >= 1 then
         if currentAlertTweens["Background"] then currentAlertTweens["Background"]:Cancel() end
         LeftFrame.Upgrade.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
         local goal = {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}
-        local properties = {Time = realAlertTime, Reverse = true, Repeat = math.huge}
+        local properties = {Time = alertTime, Reverse = true, Repeat = math.huge}
         currentAlertTweens["Background"] = TweenService.tween(LeftFrame.Upgrade, goal, properties)
         ------
         if currentAlertTweens["Text"] then currentAlertTweens["Text"]:Cancel() end
         LeftFrame.Upgrade.ButtonText.TextColor3 = Color3.fromRGB(255, 255, 255)
         local goal = {TextColor3 = Color3.fromRGB(0, 0, 0)}
-        local properties = {Time = realAlertTime, Reverse = true, Repeat = math.huge}
+        local properties = {Time = alertTime, Reverse = true, Repeat = math.huge}
         currentAlertTweens["Text"] = TweenService.tween(LeftFrame.Upgrade.ButtonText, goal, properties)
         ------
         if currentAlertTweens["Keybind"] then currentAlertTweens["Keybind"]:Cancel() end
         LeftFrame.Upgrade.Keybind.TextColor3 = Color3.fromRGB(255, 255, 255)
         LeftFrame.Upgrade.Keybind.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
         local goal = {TextColor3 = Color3.fromRGB(0, 0, 0), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}
-        local properties = {Time = realAlertTime, Reverse = true, Repeat = math.huge}
+        local properties = {Time = alertTime, Reverse = true, Repeat = math.huge}
         currentAlertTweens["Keybind"] = TweenService.tween(LeftFrame.Upgrade.Keybind, goal, properties)
     else
         if currentAlertTweens["Background"] then currentAlertTweens["Background"]:Cancel() end
@@ -171,7 +186,7 @@ local function loadCash(value)
     end
 
     autoUpgrade()
-    shopAlert()
+    upgradeAlert()
 end
 
 PlayerValues:SetCallback("Cash", function(player, value)

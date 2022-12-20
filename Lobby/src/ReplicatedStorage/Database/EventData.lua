@@ -21,21 +21,6 @@ local EventData = {
 
 		sizeIncrease = 5,
 	},
-	["Rocket"] = {
-		name = "Rocket",
-		chance = 60,
-		upgrades = {},
-
-		faceRate = 30,
-		delayTime = 2,
-		speed = 25,
-		size = 12,
-		damage = 30,
-
-		speedIncrease = 5,
-		sizeIncrease = 4,
-		damageIncrease = 5,
-	},
 	["AcidPuddle"] = {
 		name = "Acid Puddle",
 		chance = 60,
@@ -76,7 +61,7 @@ local EventData = {
 	},
 	["Spinner"] = {
 		name = "Spinner",
-		chance = 65,
+		chance = 1,
 		upgrades = {},
 
 		despawnTime = 8,
@@ -95,6 +80,21 @@ local EventData = {
 		size = 12,
 
 		sizeIncrease = 4,
+	},
+	["Rocket"] = {
+		name = "Rocket",
+		chance = 60,
+		upgrades = {},
+
+		faceRate = 30,
+		delayTime = 2,
+		speed = 25,
+		size = 12,
+		damage = 30,
+
+		speedIncrease = 5,
+		sizeIncrease = 4,
+		damageIncrease = 5,
 	},
 	["FallingRock"] = {
 		name = "Falling Rock",

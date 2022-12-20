@@ -7,7 +7,7 @@ LevelData.Levels = {
 	["Hill"] = {
 		level = 4,
 	},
-	["Island"] = {
+	["Advertiser"] = {
 		level = 4,
 	},
 	["House"] = {
@@ -35,7 +35,6 @@ LevelData.Levels = {
 		level = 0,
 	},
 }
-
 
 function LevelData.getList()
 	local indexList = {}

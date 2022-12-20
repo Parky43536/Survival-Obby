@@ -33,17 +33,15 @@ while true do
     local picked = musicList[key]
     table.remove(musicList, key)
 
-    local length = 0
-
-    local soundForTime = Instance.new("Sound")
-    soundForTime.SoundId = "rbxassetid://".. picked
-    soundForTime.Parent = workspace.Sound
-
-    if soundForTime.TimeLength == 0 then soundForTime.Loaded:Wait() end
-    length = soundForTime.TimeLength
-    soundForTime:Destroy()
-
     AudioService:Create(picked, workspace.Sound, {Volume = General.MusicVolume}, {name = "Music"})
 
-    task.wait(length + intermissionTime)
+    local sound = Instance.new("Sound")
+    sound.Name = "FakeMusic"
+    sound.SoundId = "rbxassetid://".. picked
+    sound.Parent = workspace.Sound
+    sound.Volume = 0
+    sound:Play()
+
+    sound.Ended:Wait()
+    sound:Destroy()
 end
