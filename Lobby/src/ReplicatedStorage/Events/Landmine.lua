@@ -48,7 +48,7 @@ function Event.Main(levelNum, level, data)
                         hit = true
 
                         if landmine.Parent ~= nil then
-                            for _,player in pairs(EventService:getPlayersInRadius(landmine.PrimaryPart.Position, RV(levelNum, data, "size") / 2)) do
+                            for _,player in (EventService:getPlayersInRadius(landmine.PrimaryPart.Position, RV(levelNum, data, "size") / 2)) do
                                 if General.playerCheck(player) then
                                     player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                                 end

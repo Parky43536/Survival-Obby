@@ -185,7 +185,7 @@ end
 if isServer then
 	-- handle received
 	received.OnServerEvent:Connect(function(...)
-		for _, listener in pairs(listeners) do
+		for _, listener in (listeners) do
 			if listener(...) then return end
 		end
 	end)
@@ -201,7 +201,7 @@ if isServer then
 else
 	-- handle received
 	received.OnClientEvent:Connect(function(...)
-		for _, listener in pairs(listeners) do
+		for _, listener in (listeners) do
 			if listener(...) then return end
 		end
 	end)

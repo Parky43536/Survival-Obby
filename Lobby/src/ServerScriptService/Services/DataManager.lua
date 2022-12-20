@@ -172,7 +172,7 @@ function DataManager:Restart(player)
 			PlayerValues:SetValue(player, "Flight", nil, "playerOnly")
 			PlayerValues:SetValue(player, "God Health", nil, "playerOnly")
 		end
-		for _, tool in pairs(player.Backpack:GetChildren()) do
+		for _, tool in (player.Backpack:GetChildren()) do
 			if not PlayerValues:GetValue(player, tool.Name) then
 				tool:Destroy()
 			end

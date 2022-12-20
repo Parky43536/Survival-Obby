@@ -39,7 +39,7 @@ LevelData.Levels = {
 function LevelData.getList()
 	local indexList = {}
 
-	for name, data in pairs(LevelData.Levels) do
+	for name, data in (LevelData.Levels) do
 		if not data.blocked then
 			table.insert(indexList, name)
 		end

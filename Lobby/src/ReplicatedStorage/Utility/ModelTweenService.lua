@@ -20,7 +20,7 @@ function module.TweenModulePosition(Model,Tweeninfo,PPosition)
 
 		local TW = TS:Create(Primary,Tweeninfo,{Position = PPosition})
 		
-		for _,v in pairs(Model:GetDescendants()) do
+		for _,v in (Model:GetDescendants()) do
 			if v:IsA("BasePart") and v ~= Primary then
 				local T = TS:Create(v,Tweeninfo,{Position = PPosition + CalculatePosition(Primary,v)})
 				T:Play()
@@ -84,7 +84,7 @@ function module.TweenModuleScale(Model,Tweeninfo,Size)
 
 		local TW = TS:Create(Primary,Tweeninfo,{Size = Primary.Size * Size})
 
-		for _,v in pairs(Model:GetDescendants()) do
+		for _,v in (Model:GetDescendants()) do
 			if v:IsA("BasePart") and v ~= Primary then
 				local state = v.Anchored
 				v.Anchored = true
@@ -132,7 +132,7 @@ function module.TweenModuleOrientation(Model,Tweeninfo,oOrinetation)
 
 		local TW = TS:Create(Primary,Tweeninfo,{CFrame = Primary.CFrame * CFrame.Angles(math.rad(oOrinetation.X),math.rad(oOrinetation.Y),math.rad(oOrinetation.Z))})
 
-		for _,v in pairs(Model:GetDescendants()) do
+		for _,v in (Model:GetDescendants()) do
 			if v:IsA("BasePart") and v ~= Primary then
 				local weld
 				if not v:FindFirstChild("TweenWeld") then
@@ -184,7 +184,7 @@ end
 function module.TweenModuleTransparency(Model,Tweeninfo,Transparency)
 	if typeof(Model) ~= "Instance" then error(Model.." isnt a instance") end
 	if not Model:IsA("Model") then error(Model.Name.." isnt a model") end
-	for _,v in ipairs(Model:GetDescendants()) do
+	for _,v in (Model:GetDescendants()) do
 		if v:IsA("BasePart") and not CollectionService:HasTag(v, "IgnoreTransparency") then
 			TS:Create(v,Tweeninfo,{Transparency = Transparency}):Play()
 		end
@@ -194,7 +194,7 @@ end
 function module.TweenModuleColor(Model,Tweeninfo,ColorR)
 	if typeof(Model) ~= "Instance" then error(Model.." isnt a instance") end
 	if not Model:IsA("Model") then error(Model.Name.." isnt a model") end
-	for _,v in ipairs(Model:GetDescendants()) do
+	for _,v in (Model:GetDescendants()) do
 		if v:IsA("BasePart") then
 			TS:Create(v,Tweeninfo,{Color = ColorR}):Play()
 		end

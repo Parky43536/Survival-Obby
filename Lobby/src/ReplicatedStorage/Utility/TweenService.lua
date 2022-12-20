@@ -9,7 +9,7 @@ local module = {}
                         Reverse = false,
                         Delay = 0}
     
-        for p, v in pairs(properties) do
+        for p, v in (properties) do
             tweenData[p] = v
         end
     

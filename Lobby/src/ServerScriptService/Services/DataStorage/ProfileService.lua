@@ -142,7 +142,7 @@
 		Profile:GetMetaTag(tag_name) --> value [any]
 			tag_name   [string]
 		
-		Profile:Reconcile() -- Fills in missing (nil) [string_key] = [value] pairs to the Profile.Data structure
+		Profile:Reconcile() -- Fills in missing (nil) [string_key] = [value]  to the Profile.Data structure
 		
 		Profile:ListenToRelease(listener) --> [ScriptConnection] (place_id / nil, game_job_id / nil)
 			-- WARNING: Profiles can be released externally if another session force-loads
@@ -490,7 +490,7 @@ local CustomWriteQueue = {
 
 local function DeepCopyTable(t)
 	local copy = {}
-	for key, value in pairs(t) do
+	for key, value in (t) do
 		if type(value) == "table" then
 			copy[key] = DeepCopyTable(value)
 		else
@@ -501,7 +501,7 @@ local function DeepCopyTable(t)
 end
 
 local function ReconcileTable(target, template)
-	for k, v in pairs(template) do
+	for k, v in (template) do
 		if type(k) == "string" then -- Only string keys will be reconciled
 			if target[k] == nil then
 				if type(v) == "table" then
@@ -887,10 +887,10 @@ local function CheckForNewGlobalUpdates(profile, old_global_updates_data, new_gl
 	local pending_update_lock = global_updates_object._pending_update_lock -- {update_id, ...}
 	local pending_update_clear = global_updates_object._pending_update_clear -- {update_id, ...}
 	-- "old_" or "new_" global_updates_data = {update_index, {{update_id, version_id, update_locked, update_data}, ...}}
-	for _, new_global_update in ipairs(new_global_updates_data[2]) do
+	for _, new_global_update in (new_global_updates_data[2]) do
 		-- Find old global update with the same update_id:
 		local old_global_update
-		for _, global_update in ipairs(old_global_updates_data[2]) do
+		for _, global_update in (old_global_updates_data[2]) do
 			if global_update[1] == new_global_update[1] then
 				old_global_update = global_update
 				break
@@ -906,7 +906,7 @@ local function CheckForNewGlobalUpdates(profile, old_global_updates_data, new_gl
 			if new_global_update[3] == false then
 				-- Check if update is not pending to be locked: (Preventing firing new active update listeners more than necessary)
 				local is_pending_lock = false
-				for _, update_id in ipairs(pending_update_lock) do
+				for _, update_id in (pending_update_lock) do
 					if new_global_update[1] == update_id then
 						is_pending_lock = true
 						break
@@ -921,7 +921,7 @@ local function CheckForNewGlobalUpdates(profile, old_global_updates_data, new_gl
 			if new_global_update[3] == true then
 				-- Check if update is not pending to be cleared: (Preventing firing new locked update listeners after marking a locked update for clearing)
 				local is_pending_clear = false
-				for _, update_id in ipairs(pending_update_clear) do
+				for _, update_id in (pending_update_clear) do
 					if new_global_update[1] == update_id then
 						is_pending_clear = true
 						break
@@ -1006,7 +1006,7 @@ local function SaveProfileAsync(profile, release_from_session, is_overwriting)
 							local pending_update_clear = global_updates_object._pending_update_clear -- {update_id, ...}
 							-- Active update locking:
 							for i = 1, #latest_global_updates_list do
-								for _, lock_id in ipairs(pending_update_lock) do
+								for _, lock_id in (pending_update_lock) do
 									if latest_global_updates_list[i][1] == lock_id then
 										latest_global_updates_list[i][3] = true
 										break
@@ -1014,7 +1014,7 @@ local function SaveProfileAsync(profile, release_from_session, is_overwriting)
 								end
 							end
 							-- Locked update clearing:
-							for _, clear_id in ipairs(pending_update_clear) do
+							for _, clear_id in (pending_update_clear) do
 								for i = 1, #latest_global_updates_list do
 									if latest_global_updates_list[i][1] == clear_id and latest_global_updates_list[i][3] == true then
 										table.remove(latest_global_updates_list, i)
@@ -1063,7 +1063,7 @@ local function SaveProfileAsync(profile, release_from_session, is_overwriting)
 			-- Setting MetaData:
 			local session_meta_data = profile.MetaData
 			local latest_meta_data = loaded_data.MetaData
-			for key in pairs(SETTINGS.MetaTagsUpdatedValues) do
+			for key in (SETTINGS.MetaTagsUpdatedValues) do
 				session_meta_data[key] = latest_meta_data[key]
 			end
 			session_meta_data.MetaTagsLatest = latest_meta_data.MetaTags
@@ -1128,11 +1128,11 @@ GlobalUpdates.__index = GlobalUpdates
 -- ALWAYS PUBLIC:
 function GlobalUpdates:GetActiveUpdates() --> [table] {{update_id, update_data}, ...}
 	local query_list = {}
-	for _, global_update in ipairs(self._updates_latest[2]) do
+	for _, global_update in (self._updates_latest[2]) do
 		if global_update[3] == false then
 			local is_pending_lock = false
 			if self._pending_update_lock ~= nil then
-				for _, update_id in ipairs(self._pending_update_lock) do
+				for _, update_id in (self._pending_update_lock) do
 					if global_update[1] == update_id then
 						is_pending_lock = true -- Exclude global updates pending to be locked
 						break
@@ -1149,11 +1149,11 @@ end
 
 function GlobalUpdates:GetLockedUpdates() --> [table] {{update_id, update_data}, ...}
 	local query_list = {}
-	for _, global_update in ipairs(self._updates_latest[2]) do
+	for _, global_update in (self._updates_latest[2]) do
 		if global_update[3] == true then
 			local is_pending_clear = false
 			if self._pending_update_clear ~= nil then
-				for _, update_id in ipairs(self._pending_update_clear) do
+				for _, update_id in (self._pending_update_clear) do
 					if global_update[1] == update_id then
 						is_pending_clear = true -- Exclude global updates pending to be cleared
 						break
@@ -1219,7 +1219,7 @@ function GlobalUpdates:LockActiveUpdate(update_id)
 	end
 	-- Check if global update exists with given update_id
 	local global_update_exists = nil
-	for _, global_update in ipairs(self._updates_latest[2]) do
+	for _, global_update in (self._updates_latest[2]) do
 		if global_update[1] == update_id then
 			global_update_exists = global_update
 			break
@@ -1227,7 +1227,7 @@ function GlobalUpdates:LockActiveUpdate(update_id)
 	end
 	if global_update_exists ~= nil then
 		local is_pending_lock = false
-		for _, lock_update_id in ipairs(self._pending_update_lock) do
+		for _, lock_update_id in (self._pending_update_lock) do
 			if update_id == lock_update_id then
 				is_pending_lock = true -- Exclude global updates pending to be locked
 				break
@@ -1255,7 +1255,7 @@ function GlobalUpdates:ClearLockedUpdate(update_id)
 	end
 	-- Check if global update exists with given update_id
 	local global_update_exists = nil
-	for _, global_update in ipairs(self._updates_latest[2]) do
+	for _, global_update in (self._updates_latest[2]) do
 		if global_update[1] == update_id then
 			global_update_exists = global_update
 			break
@@ -1263,7 +1263,7 @@ function GlobalUpdates:ClearLockedUpdate(update_id)
 	end
 	if global_update_exists ~= nil then
 		local is_pending_clear = false
-		for _, clear_update_id in ipairs(self._pending_update_clear) do
+		for _, clear_update_id in (self._pending_update_clear) do
 			if update_id == clear_update_id then
 				is_pending_clear = true -- Exclude global updates pending to be cleared
 				break
@@ -1310,7 +1310,7 @@ function GlobalUpdates:ChangeActiveUpdate(update_id, update_data)
 	-- self._updates_latest = {}, -- [table] {update_index, {{update_id, version_id, update_locked, update_data}, ...}}
 	local updates_latest = self._updates_latest
 	local get_global_update = nil
-	for _, global_update in ipairs(updates_latest[2]) do
+	for _, global_update in (updates_latest[2]) do
 		if update_id == global_update[1] then
 			get_global_update = global_update
 			break
@@ -1340,7 +1340,7 @@ function GlobalUpdates:ClearActiveUpdate(update_id)
 	local updates_latest = self._updates_latest
 	local get_global_update_index = nil
 	local get_global_update = nil
-	for index, global_update in ipairs(updates_latest[2]) do
+	for index, global_update in (updates_latest[2]) do
 		if update_id == global_update[1] then
 			get_global_update_index = index
 			get_global_update = global_update
@@ -1734,7 +1734,7 @@ function ProfileStore:LoadProfileAsync(profile_key, not_released_handler, _use_m
 	local is_user_mock = _use_mock == UseMockTag
 
 	-- Check if profile with profile_key isn't already loaded in this session:
-	for _, profile_store in ipairs(ActiveProfileStores) do
+	for _, profile_store in (ActiveProfileStores) do
 		if profile_store._profile_store_lookup == self._profile_store_lookup then
 			local loaded_profiles = is_user_mock == true and profile_store._mock_loaded_profiles or profile_store._loaded_profiles
 			if loaded_profiles[profile_key] ~= nil then
@@ -2391,11 +2391,11 @@ task.spawn(function()
 			-- Clone AutoSaveList to a new table because AutoSaveList changes when profiles are released:
 			local on_close_save_job_count = 0
 			local active_profiles = {}
-			for index, profile in ipairs(AutoSaveList) do
+			for index, profile in (AutoSaveList) do
 				active_profiles[index] = profile
 			end
 			-- Release the profiles; Releasing profiles can trigger listeners that release other profiles, so check active state:
-			for _, profile in ipairs(active_profiles) do
+			for _, profile in (active_profiles) do
 				if profile:IsActive() == true then
 					on_close_save_job_count = on_close_save_job_count + 1
 					task.spawn(function() -- Save profile on new thread

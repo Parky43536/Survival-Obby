@@ -33,7 +33,7 @@ local function destroyRocket(rocket, touchConnection, levelNum, data)
             touchConnection:Disconnect()
         end
 
-        for _,player in pairs(EventService:getPlayersInRadius(rocket.Position, RV(levelNum, data, "size") / 2)) do
+        for _,player in (EventService:getPlayersInRadius(rocket.Position, RV(levelNum, data, "size") / 2)) do
             if General.playerCheck(player) then
                 player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
             end

@@ -25,7 +25,7 @@ AudioService.CurrentMusic = {}
 
 local function shallowCopy(list)
 	local newList = {}
-	for i,v in pairs(list) do
+	for i,v in (list) do
 		newList[i] = v
 	end
 
@@ -81,9 +81,9 @@ function AudioService:Create(id, target, properties, args)
 		newSoundObject.SoundId = "rbxassetid://".. id
 
 		if args.effects then
-			for effect, properties in pairs(args.effects) do
+			for effect, properties in (args.effects) do
 				local newEffect = Instance.new(effect)
-				for property, value in pairs(properties or {}) do
+				for property, value in (properties or {}) do
 					newEffect[property] = value
 				end
 
@@ -92,7 +92,7 @@ function AudioService:Create(id, target, properties, args)
 		end
 
 		newSoundObject["Volume"] = 0.2
-		for property, value in pairs(properties or {}) do
+		for property, value in (properties or {}) do
 			if property ~= "Delay" and property ~= "Duration" then
 				newSoundObject[property] = value
 			elseif property == "LoopDuration" then

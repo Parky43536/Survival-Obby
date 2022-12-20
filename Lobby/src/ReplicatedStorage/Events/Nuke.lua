@@ -32,7 +32,7 @@ function Event.Main(levelNum, level, data)
         end
 
         local checkForOtherLevels = workspace.Levels:GetChildren()
-        for i, otherLevel in pairs(checkForOtherLevels) do
+        for i, otherLevel in (checkForOtherLevels) do
             if otherLevel.Name == level.Name then
                 table.remove(checkForOtherLevels, i)
                 break

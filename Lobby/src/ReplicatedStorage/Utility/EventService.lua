@@ -33,7 +33,7 @@ local obstacleSpawners = {}
 function EventService:totalUpgrades(levelNum, upgrades)
     local totalUpgrades = 0
 
-    for _, level in pairs(upgrades) do
+    for _, level in (upgrades) do
         if levelNum >= level then
             totalUpgrades += 1
         end
@@ -59,7 +59,7 @@ function EventService:randomObstacleSpawner(levelNum, level)
     local rng = Random.new()
     local obstacleSpawnerList = {}
 
-    for _, part in pairs(level:GetDescendants()) do
+    for _, part in (level:GetDescendants()) do
         if CollectionService:HasTag(part, "ObstacleSpawner") then
             table.insert(obstacleSpawnerList, part)
         end
@@ -95,7 +95,7 @@ function EventService:getBoundingBox(model, orientation)
 	local minx, miny, minz = inf, inf, inf
 	local maxx, maxy, maxz = -inf, -inf, -inf
 
-	for _, obj in pairs(model) do
+	for _, obj in (model) do
 		if obj:IsA("BasePart") then
 			local cf = obj.CFrame
 			cf = orientation:ToObjectSpace(cf)
@@ -201,7 +201,7 @@ function EventService:getPlayersInRadius(position, radius, players)
     local currentPlayers = Players:GetChildren()
     local playersInRadius = {}
 
-    for _, player in pairs(players or currentPlayers) do
+    for _, player in (players or currentPlayers) do
         if General.playerCheck(player) then
             if (player.Character.PrimaryPart.Position - position).Magnitude <= radius then
                 table.insert(playersInRadius, player)
@@ -216,11 +216,11 @@ function EventService:getPlayersInSize(cframe, size, players)
     local currentPlayers = Players:GetChildren()
     local playersInSize = {}
 
-    for _,player in pairs(players or currentPlayers) do
+    for _,player in (players or currentPlayers) do
         if General.playerCheck(player) then
             local relativePoint = cframe:Inverse() * player.Character.PrimaryPart.Position
             local isInsideHitbox = true
-            for _,axis in ipairs{"X","Y","Z"} do
+            for _,axis in {"X","Y","Z"} do
                 if math.abs(relativePoint[axis]) > size[axis]/2 then
                     isInsideHitbox = false
                     break
@@ -240,7 +240,7 @@ function EventService:getClosestPlayer(position, players)
     local currentPlayers = Players:GetChildren()
     local closestPlayer
 
-    for _, player in pairs(players or currentPlayers) do
+    for _, player in (players or currentPlayers) do
         if General.playerCheck(player) then
             if not closestPlayer then
                 closestPlayer = player
@@ -284,7 +284,7 @@ end
 function EventService:CleanLevel(levelNum, level)
     local obstacles = workspace.Obstacles:FindFirstChild(levelNum)
     if obstacles then
-        for _, part in pairs(obstacles:GetDescendants()) do
+        for _, part in (obstacles:GetDescendants()) do
             part:Destroy()
         end
     end

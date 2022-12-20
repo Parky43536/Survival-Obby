@@ -67,7 +67,7 @@ end
 
 local function shallowCopy(list)
 	local newList = {}
-	for i,v in pairs(list) do
+	for i,v in (list) do
 		newList[i] = v
 	end
 
@@ -95,7 +95,7 @@ function LevelService.SetUpLevelColor(levelNum, level)
  
     local SecondaryColor = PrimaryColor:Lerp(Color3.fromRGB(255,255,255), General.SecondaryColorLerp)
 
-    for _, part in pairs(level:GetDescendants()) do
+    for _, part in (level:GetDescendants()) do
         if CollectionService:HasTag(part, "PrimaryColor") then
             part.Color = PrimaryColor
         elseif CollectionService:HasTag(part, "SecondaryColor") then
@@ -117,7 +117,7 @@ function LevelService.ButtonEvent(levelNum, level)
     local rng = Random.new()
     local pickedEvent
 
-    for event, data in pairs(EventData) do
+    for event, data in (EventData) do
         if data.blocked or levelNum < data.level then
             continue
         end

@@ -54,7 +54,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.laserDelayTime)
 
         if laserWall.Parent ~= nil then
-            for _, beam in pairs(laserWall:GetDescendants()) do
+            for _, beam in (laserWall:GetDescendants()) do
                 if beam.Name == "Beam" then
                     beam.Enabled = true
                 end

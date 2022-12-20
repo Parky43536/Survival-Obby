@@ -95,7 +95,7 @@ function ClientService:SetPlayerStats(player)
 end
 
 function ClientService:CheckFriends(player)
-    for _, checkPlayer in pairs(Players:GetChildren()) do
+    for _, checkPlayer in (Players:GetChildren()) do
         if checkPlayer:IsFriendsWith(player.UserId) then
             PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
             ChatConnection:FireClient(checkPlayer, "[ALERT] Your friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
@@ -124,7 +124,7 @@ function ClientService:InitializeLife(player)
         end
     end
 
-    for _, characterPart in pairs(player.Character:GetChildren()) do
+    for _, characterPart in (player.Character:GetChildren()) do
         if characterPart:IsA("BasePart") then
             PhysicsService:SetPartCollisionGroup(characterPart, "Player")
         end

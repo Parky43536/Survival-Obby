@@ -34,7 +34,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.delayTime)
 
         if coil.Parent ~= nil then
-            for _,particle in pairs(coil.Effect.Attachment:GetChildren()) do
+            for _,particle in (coil.Effect.Attachment:GetChildren()) do
                 particle.Enabled = true
                 particle.Enabled = true
             end
@@ -42,7 +42,7 @@ function Event.Main(levelNum, level, data)
             local cframe, size = EventService:getBoundingBox(level.Floor)
             for i = 1 , data.damageTicks do
                 if coil.Parent ~= nil then
-                    for _,player in pairs(EventService:getPlayersInRadius(coil.Effect.Position, RV(levelNum, data, "size") / 2)) do
+                    for _,player in (EventService:getPlayersInRadius(coil.Effect.Position, RV(levelNum, data, "size") / 2)) do
                         if General.playerCheck(player) then
                             local laser = Obstacle.Laser:Clone()
                             laser.Beam.Position = coil.Effect.Position

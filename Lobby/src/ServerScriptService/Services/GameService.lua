@@ -101,7 +101,7 @@ function GameService.SetUpButton(levelNum, level)
 
                 --health check
                 local playersAlive = {}
-                for _, player in pairs(Players:GetChildren()) do
+                for _, player in (Players:GetChildren()) do
                     if PlayerValues:GetValue(player, "CurrentLevel") == levelNum and General.playerCheck(player) then
                         table.insert(playersAlive, player)
                     end
@@ -141,7 +141,7 @@ function GameService.SetUpGame()
     local currentLevel = General.LevelMultiple
     local currentEvent = 1
 
-    for _, event in pairs(General.AppearanceOrder) do
+    for _, event in (General.AppearanceOrder) do
         if not EventData[event].blocked then
             EventData[event].level = currentLevel
 

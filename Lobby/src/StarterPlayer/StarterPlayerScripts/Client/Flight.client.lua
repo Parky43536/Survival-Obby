@@ -53,7 +53,7 @@ local function setFlying(flying)
 		flyAnim = humanoid:LoadAnimation(Assets.Misc.FlightIdleAnim)
 		flyAnim:Play()
 
-		for _, characterPart in pairs(LocalPlayer.Character:GetChildren()) do
+		for _, characterPart in (LocalPlayer.Character:GetChildren()) do
 			if characterPart:IsA("BasePart") then
 				PhysicsService:SetPartCollisionGroup(characterPart, "FlyingPlayer")
 			end
@@ -71,7 +71,7 @@ local function setFlying(flying)
 			bodyGyro:Destroy()
 		end
 
-		for _, characterPart in pairs(LocalPlayer.Character:GetChildren()) do
+		for _, characterPart in (LocalPlayer.Character:GetChildren()) do
 			if characterPart:IsA("BasePart") then
 				PhysicsService:SetPartCollisionGroup(characterPart, "Player")
 			end
@@ -117,7 +117,7 @@ local function processFlight()
     if not PlayerValues:GetValue(LocalPlayer, "Flight") then
         return
     end
-    for i, v in pairs(humanoid:GetPlayingAnimationTracks()) do
+    for i, v in (humanoid:GetPlayingAnimationTracks()) do
         v:Stop()
     end
 

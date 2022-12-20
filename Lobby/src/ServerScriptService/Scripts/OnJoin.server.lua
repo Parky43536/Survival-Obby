@@ -88,6 +88,6 @@ end
 Players.PlayerAdded:Connect(playerAdded)
 Players.PlayerRemoving:Connect(playerRemoved)
 
-for _,currentPlayers in pairs(Players:GetChildren()) do
+for _,currentPlayers in (Players:GetChildren()) do
     playerAdded(currentPlayers)
 end

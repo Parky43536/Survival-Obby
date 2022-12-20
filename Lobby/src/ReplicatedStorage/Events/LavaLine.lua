@@ -44,7 +44,7 @@ function Event.Main(levelNum, level, data)
             Params.FilterDescendantsInstances = {EventService:getFloorGroup(rp.Instance)}
 
             local directions = {0, 180}
-            for i, direction in pairs(directions) do
+            for i, direction in (directions) do
                 local directionCFrame = originCFrame * CFrame.Angles(0, math.rad(direction), 0)
                 local RayOrigin = (directionCFrame + directionCFrame.LookVector * 100).Position
                 local RayDirection = directionCFrame.LookVector * -1000
@@ -59,7 +59,7 @@ function Event.Main(levelNum, level, data)
             end
 
             local directions = {90, 270}
-            for i, direction in pairs(directions) do
+            for i, direction in (directions) do
                 local directionCFrame = originCFrame * CFrame.Angles(0, math.rad(direction), 0)
                 local RayOrigin = (directionCFrame + directionCFrame.LookVector * 100).Position
                 local RayDirection = directionCFrame.LookVector * -1000

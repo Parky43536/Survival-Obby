@@ -21,7 +21,7 @@ local StoredCallbacks = {}
 
 local function checkCallbacks(player, property, value)
 	if StoredCallbacks[property] then
-		for _,callbackObject in pairs(StoredCallbacks[property]) do
+		for _,callbackObject in (StoredCallbacks[property]) do
 			task.spawn(callbackObject.callback, player, value)
 		end
 	end
@@ -106,7 +106,7 @@ function PlayerValues:RemoveCallback(property, id)
 
 	if not StoredCallbacks[property] then return end
 
-	for i,callbackObject in pairs(StoredCallbacks[property]) do
+	for i,callbackObject in (StoredCallbacks[property]) do
 		if callbackObject.id == id then
 			removeIndex = i
 			break
@@ -121,7 +121,7 @@ end
 function PlayerValues:GetCallback(property, id)
 	if not StoredCallbacks[property] then return end
 	
-	for i,callbackObject in pairs(StoredCallbacks[property]) do
+	for i,callbackObject in (StoredCallbacks[property]) do
 		if callbackObject.id == id then
 			return callbackObject
 		end
@@ -133,7 +133,7 @@ end
 -- Updates everyone in the table with the given property's current value
 -- Used for when players join in late, so they don't have any data on their client
 function PlayerValues:SyncProperty(syncPlayer, property)
-	for player, values in pairs(StoredValues) do
+	for player, values in (StoredValues) do
 		if player ~= syncPlayer then
 			if values[property] then
 				PlayerValuesConnection:FireClient(syncPlayer, player, property, values[property])

@@ -15,7 +15,7 @@ local Music = {
 
 local function shallowCopy(list)
 	local newList = {}
-	for i,v in pairs(list) do
+	for i,v in (list) do
 		newList[i] = v
 	end
 

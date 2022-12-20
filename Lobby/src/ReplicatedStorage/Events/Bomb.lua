@@ -36,7 +36,7 @@ function Event.Main(levelNum, level, data)
         task.wait(data.delayTime)
 
         if bomb.Parent ~= nil then
-            for _,player in pairs(EventService:getPlayersInRadius(bomb.Position, RV(levelNum, data, "size") / 2)) do
+            for _,player in (EventService:getPlayersInRadius(bomb.Position, RV(levelNum, data, "size") / 2)) do
                 if General.playerCheck(player) then
                     player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                 end

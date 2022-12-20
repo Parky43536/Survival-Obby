@@ -38,7 +38,7 @@ function Event.Main(levelNum, level, data)
             Params.FilterDescendantsInstances = {level.Floor:GetChildren()}
 
             local directions = {0, 90, 180, 270}
-            for i, direction in pairs(directions) do
+            for i, direction in (directions) do
                 local directionCFrame = spinner.Beam.CFrame * CFrame.Angles(0, 0, math.rad(direction))
                 local RayOrigin = spinner.Beam.Position
                 local RayDirection = directionCFrame.RightVector * 100
