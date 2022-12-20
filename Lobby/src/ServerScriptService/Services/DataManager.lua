@@ -208,7 +208,8 @@ function DataManager:SetSpawn(player, levelNum)
 	PlayerValues:SetValue(player, "CurrentLevel", levelNum, "playerOnly")
 	ClientService:HealPlayer(player)
 
-	if DataManager:GetValue(player, "Level") + 1 == levelNum or (DataManager:GetValue(player, "Level") == 0 and levelNum == 2) then
+	local level = DataManager:GetValue(player, "Level")
+	if level and level + 1 == levelNum or (level == 0 and levelNum == 2) then
 		DataManager:SetValue(player, "Level", levelNum)
 		PlayerValues:SetValue(player, "Level", levelNum, "playerOnly")
 		DataManager:GiveCash(player, General.LevelReward)

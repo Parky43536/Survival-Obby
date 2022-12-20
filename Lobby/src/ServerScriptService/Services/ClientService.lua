@@ -96,7 +96,7 @@ end
 
 function ClientService:CheckFriends(player)
     for _, checkPlayer in (Players:GetChildren()) do
-        if checkPlayer:IsFriendsWith(player.UserId) then
+        if checkPlayer and player and checkPlayer:IsFriendsWith(player.UserId) then
             PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
             ChatConnection:FireClient(checkPlayer, "[ALERT] Your friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
 
