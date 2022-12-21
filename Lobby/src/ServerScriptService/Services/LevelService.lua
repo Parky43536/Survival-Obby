@@ -209,14 +209,16 @@ function LevelService:SetUpChest(levelNum, level)
             chest.Touch.Touched:Connect(function(hit)
                 local player = game.Players:GetPlayerFromCharacter(hit.Parent)
                 if player then
-                    local chests = DataManager:GetValue(player, "Chests")
-	                if not chests[levelNum] then
-                        DataManager:GiveCash(player, levelNum * General.ChestMulti, true)
+                    if DataManager:GetValue(player, "Level") >= levelNum then
+                        local chests = DataManager:GetValue(player, "Chests")
+                        if not chests[tostring(levelNum)] then
+                            DataManager:GiveCash(player, levelNum * General.ChestMulti, true)
 
-                        chestScript.Main(player, levelNum)
+                            chestScript.Main(player, levelNum, 3)
 
-                        chests[levelNum] = true
-                        DataManager:SetValue(player, "Chests", chests)
+                            chests[tostring(levelNum)] = true
+                            DataManager:SetValue(player, "Chests", chests)
+                        end
                     end
                 end
             end)

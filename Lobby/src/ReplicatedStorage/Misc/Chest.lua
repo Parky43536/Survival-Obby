@@ -18,25 +18,26 @@ end
 
 local Event = {}
 
-function Event.Main(player, levelNum)
-    task.spawn(function()
-        local level = workspace.Levels:FindFirstChild(levelNum)
-
-        if not level then
-            repeat
-                level = workspace.Levels:FindFirstChild(levelNum)
-                task.wait()
-            until level
-        end
-
-        if level:FindFirstChild("Chest") then
-            Signal:FireClient(player, level:FindFirstChild("Chest").Chest)
-        end
-    end)
+function Event.Main(player, levelNum, despawnTime)
+    Signal:FireClient(player, levelNum, despawnTime)
 end
 
-function Event.Client(chest)
-    local despawnTime = 3
+function Event.Client(levelNum, despawnTime)
+    local level = workspace.Levels:FindFirstChild(levelNum)
+    if not level then
+        repeat
+            level = workspace.Levels:FindFirstChild(levelNum)
+            task.wait()
+        until level
+    end
+
+    local chest = level:FindFirstChild("Chest"):FindFirstChild("Chest")
+    if not chest then
+        repeat
+            chest = level:FindFirstChild("Chest"):FindFirstChild("Chest")
+            task.wait()
+        until chest
+    end
 
     local goal = {Orientation = chest.Orientation + Vector3.new(0, 180, 0)}
     local properties = {Time = 1/despawnTime, Repeat = despawnTime * despawnTime}
@@ -46,8 +47,10 @@ function Event.Client(chest)
     local properties2 = {Time = despawnTime}
     TweenService.tween(chest, goal2, properties2)
 
-    AudioService:Create(9048777613, chest.Position, {Volume = 0.5})
-    AudioService:Create(9125361557, chest.Position, {Pitch = math.random(10, 20) / 10, Volume = 0.15})
+    if despawnTime > 0 then
+        AudioService:Create(9048777613, chest.Position, {Volume = 0.5})
+        AudioService:Create(9125361557, chest.Position, {Pitch = math.random(10, 20) / 10, Volume = 0.15})
+    end
 
     task.wait(despawnTime)
     chest:Destroy()

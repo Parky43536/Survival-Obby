@@ -164,7 +164,7 @@ function ClientService:InitializeClient(player, profile)
     PlayerValues:SetValue(player, "Income", profile.Data.Income, "playerOnly")
 
     for levelNum, _ in profile.Data.Chests do
-        chestScript.Main(player, levelNum)
+        chestScript.Main(player, levelNum, 0)
     end
 
 	for setting, value in profile.Data.Settings do
