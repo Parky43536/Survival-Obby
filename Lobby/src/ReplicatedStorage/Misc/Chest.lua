@@ -39,6 +39,8 @@ function Event.Client(levelNum, despawnTime)
         until chest
     end
 
+    chest:FindFirstChild("BillboardGui"):Destroy()
+
     local goal = {Orientation = chest.Orientation + Vector3.new(0, 180, 0)}
     local properties = {Time = 1/despawnTime, Repeat = despawnTime * despawnTime}
     TweenService.tween(chest, goal, properties)
