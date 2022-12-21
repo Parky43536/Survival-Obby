@@ -39,7 +39,9 @@ function Event.Client(levelNum, despawnTime)
         until chest
     end
 
-    chest:FindFirstChild("BillboardGui"):Destroy()
+    chest.BillboardGui:Destroy()
+    chest.Parent.Effect:Destroy()
+    chest.Parent.Touch:Destroy()
 
     local goal = {Orientation = chest.Orientation + Vector3.new(0, 180, 0)}
     local properties = {Time = 1/despawnTime, Repeat = despawnTime * despawnTime}
