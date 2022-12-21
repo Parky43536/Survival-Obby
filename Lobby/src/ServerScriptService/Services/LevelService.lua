@@ -202,6 +202,28 @@ function LevelService:SetUpRestart(level)
     end)
 end
 
+local chestScript = require(ReplicatedStorage.Misc:FindFirstChild("Chest"))
+function LevelService:SetUpChest(levelNum, level)
+    for _, chest in (level:GetChildren()) do
+        if chest.Name == "Chest" then
+            chest.Touch.Touched:Connect(function(hit)
+                local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+                if player then
+                    local chests = DataManager:GetValue(player, "Chests")
+	                if not chests[levelNum] then
+                        DataManager:GiveCash(player, levelNum * General.ChestMulti, true)
+
+                        chestScript.Main(player, levelNum)
+
+                        chests[levelNum] = true
+                        DataManager:SetValue(player, "Chests", chests)
+                    end
+                end
+            end)
+        end
+    end
+end
+
 function LevelService:SetUpAdvertisement(levelNum, level)
     local rng = Random.new(levelNum * 1000)
 

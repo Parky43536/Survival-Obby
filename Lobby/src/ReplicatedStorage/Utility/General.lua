@@ -10,6 +10,7 @@ General.LevelReward = 50
 General.LevelMultiple = 5
 General.EventsPerSecond = 10
 General.MusicVolume = 0.15
+General.ChestMulti = 20
 
 function General.TimerCalc(levelNum)
     return math.clamp(4 + (2 * levelNum), 0, 30)
@@ -107,6 +108,11 @@ General.Signs = {
     [1] = "Step on the button and survive to open the door",
     [2] = "Collect coins to buy upgrades and tools in the shop",
     [3] = "One person must be alive or the button will start over",
+}
+
+General.LevelOrder = {
+    [2] = "Advertiser",
+    [3] = "Chest",
 }
 
 General.AppearanceOrder = {

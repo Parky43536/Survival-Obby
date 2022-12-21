@@ -1,6 +1,9 @@
 local LevelData = {}
 
 LevelData.Levels = {
+	["Chest"] = {
+		level = 4,
+	},
 	["Wall"] = {
 		level = 4,
 	},
@@ -22,10 +25,6 @@ LevelData.Levels = {
 	["Ramp"] = {
 		level = 4,
 		elevationChange = true,
-	},
-	["Left"] = {
-		level = 4,
-		turn = true
 	},
 	["Right"] = {
 		level = 4,

@@ -96,6 +96,10 @@ function GameService:SetUpLevels()
             end
 
             if valid then
+                if General.LevelOrder[levelNum] then
+                    name = General.LevelOrder[levelNum]
+                end
+
                 if level then level:Destroy() end
                 level = Assets.Levels:FindFirstChild(name):Clone()
                 level:PivotTo(lastCFrame)
@@ -141,6 +145,7 @@ function GameService:SetUpLevels()
         LevelService:SetUpButton(levelNum, level)
         LevelService:SetUpDoor(levelNum, level)
         LevelService:SetUpLevelColor(levelNum, level)
+        LevelService:SetUpChest(levelNum, level)
         LevelService:SetUpAdvertisement(levelNum, level)
 
         level.Parent = workspace.Levels

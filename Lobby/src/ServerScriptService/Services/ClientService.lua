@@ -131,6 +131,7 @@ function ClientService:InitializeLife(player)
     end
 end
 
+local chestScript = require(ReplicatedStorage.Misc:FindFirstChild("Chest"))
 function ClientService:InitializeClient(player, profile)
     local stats = Instance.new("Folder")
     stats.Name = "leaderstats"
@@ -161,6 +162,10 @@ function ClientService:InitializeClient(player, profile)
     PlayerValues:SetValue(player, "Speed", profile.Data.Speed, "playerOnly")
     PlayerValues:SetValue(player, "Jump", profile.Data.Jump, "playerOnly")
     PlayerValues:SetValue(player, "Income", profile.Data.Income, "playerOnly")
+
+    for levelNum, _ in profile.Data.Chests do
+        chestScript.Main(player, levelNum)
+    end
 
 	for setting, value in profile.Data.Settings do
         PlayerValues:SetValue(player, setting, value, "playerOnly")

@@ -1,6 +1,7 @@
 local ProfileTemplate = {
     Purchases = {},
     Products = {},
+    Chests = {},
     Settings = {Music = 1, Sounds = 1},
 
     Level = 0,
