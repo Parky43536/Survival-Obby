@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local SocialService = game:GetService("SocialService")
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -15,6 +16,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
 local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local RightFrame = PlayerUi:WaitForChild("RightFrame")
+local TopFrame = PlayerUi:WaitForChild("TopFrame")
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ClientConnection = Remotes:WaitForChild("ClientConnection")
@@ -196,6 +198,37 @@ end)
 
 PlayerValues:SetCallback("AutoUpgrade", function()
     autoUpgrade()
+end)
+
+------------------------------------------------------------------
+
+task.spawn(function()
+    while true do
+        for _, ui in (TopFrame:GetChildren()) do
+            ui.Visible = true
+            task.wait(20)
+            ui.Visible = false
+            task.wait(10)
+        end
+    end
+end)
+
+local cooldown = 1
+local cooldownTime = tick()
+
+TopFrame.Friends.Invite.Activated:Connect(function()
+    if tick() - cooldownTime > cooldown then
+        cooldownTime = tick()
+
+        local canInvite = SocialService:CanSendGameInviteAsync(LocalPlayer)
+        if canInvite then
+            SocialService:PromptGameInvite(LocalPlayer)
+        elseif not canInvite then
+            TopFrame.Friends.Invite.Text = "Failed"
+            task.wait(cooldown)
+            TopFrame.Friends.Invite.Text = "Invite"
+        end
+    end
 end)
 
 ------------------------------------------------------------------
