@@ -30,7 +30,7 @@ local EventData = {
 		growTime = 6,
 		delayTime = 1,
 		size = 24,
-		damage = 20,
+		damage = 15,
 
 		sizeIncrease = 6,
 	},
@@ -87,7 +87,7 @@ local EventData = {
 	["Spinner"] = {
 		name = "Spinner",
 		chance = 55,
-		
+		level = 1,
 		upgrades = {},
 
 		despawnTime = 8,
@@ -121,7 +121,7 @@ local EventData = {
 		despawnTime = 6,
 		delayTime = 1,
 		size = 4,
-		damage = 20,
+		damage = 15,
 
 		sizeIncrease = 4,
 	},
