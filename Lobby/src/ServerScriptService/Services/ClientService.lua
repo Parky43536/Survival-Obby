@@ -97,8 +97,9 @@ end
 function ClientService:CheckFriends(player)
     for _, checkPlayer in (Players:GetChildren()) do
         if checkPlayer and player and checkPlayer:IsFriendsWith(player.UserId) then
-            PlayerValues:SetValue(checkPlayer, "FriendHasJoined", true)
             ChatConnection:FireClient(checkPlayer, "[ALERT] Your friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
+
+            PlayerValues:SetValue(player, "Speed Coil", "NotBought", "playerOnly")
 
             if not checkPlayer.Backpack:FindFirstChild("Speed Coil") then
                 local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
@@ -116,13 +117,6 @@ function ClientService:InitializeLife(player)
 		PlayerValues:SetValue(player, "Flight", nil, "playerOnly")
         PlayerValues:SetValue(player, "God Health", nil, "playerOnly")
 	end
-
-    if PlayerValues:GetValue(player, "FriendHasJoined") then
-        if not player.Backpack:FindFirstChild("Speed Coil") then
-            local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
-            Tool.Parent = player.Backpack
-        end
-    end
 
     for _, characterPart in (player.Character:GetChildren()) do
         if characterPart:IsA("BasePart") then

@@ -161,6 +161,9 @@ local function loadBought()
     local values = {}
     for name,_ in (ShopData.Items) do
         values[name] = PlayerValues:GetValue(LocalPlayer, name)
+        if values[name] == "NotBought" then
+            values[name] = nil
+        end
     end
 
     for name,_ in (values) do

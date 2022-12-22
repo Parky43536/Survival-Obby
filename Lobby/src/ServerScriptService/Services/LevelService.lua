@@ -7,6 +7,9 @@ local Players = game:GetService("Players")
 local SerServices = ServerScriptService.Services
 local DataManager = require(SerServices.DataManager)
 
+local Assets = ReplicatedStorage.Assets
+local Tools = Assets.Tools
+
 local Events = ReplicatedStorage.Events
 local DataBase = ReplicatedStorage.Database
 local EventData = require(DataBase.EventData)
@@ -213,6 +216,28 @@ function LevelService:SetUpChest(levelNum, level)
                         local chests = DataManager:GetValue(player, "Chests")
                         if not chests[tostring(levelNum)] then
                             DataManager:GiveCash(player, levelNum * General.ChestMulti, true)
+
+                            local rng = Random.new()
+                            local shopList = ShopData:getList()
+                            local item
+                            local timeout = 0
+                            repeat
+                                local num = rng:NextInteger(1, #shopList)
+                                item = shopList[num]
+                                timeout += 1
+                            until timeout >= 100 or (ShopData.Items[item].chest and not PlayerValues:GetValue(player, item))
+                            if timeout >= 100 then
+                                item = nil
+                            end
+
+                            if item then
+                                PlayerValues:SetValue(player, item, "NotBought", "playerOnly")
+
+                                if not player.Backpack:FindFirstChild(item) then
+                                    local Tool = Tools:FindFirstChild(item):Clone()
+                                    Tool.Parent = player.Backpack
+                                end
+                            end
 
                             chestScript.Main(player, levelNum, 3)
 
