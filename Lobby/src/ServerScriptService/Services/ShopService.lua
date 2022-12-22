@@ -111,6 +111,17 @@ function ShopService:InitializePurchases(player)
 	end
 end
 
+function ShopService:InitializeTools(player)
+	for name, data in (ShopData.Items) do
+		if not data.product and not data.gamepass and PlayerValues:GetValue(player, name) then
+			if not player.Backpack:FindFirstChild(name) then
+				local Tool = Tools:FindFirstChild(name):Clone()
+				Tool.Parent = player.Backpack
+			end
+		end
+	end
+end
+
 ShopConnection.OnServerEvent:Connect(function(player, action, args)
 	if not args then args = {} end
 

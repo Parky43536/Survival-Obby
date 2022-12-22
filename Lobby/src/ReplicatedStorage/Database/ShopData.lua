@@ -109,7 +109,6 @@ ShopData.Items = {
 		image = 99170415,
 		desc = "Makes you run faster while you have it out 💨",
 		order = 6,
-		chest = true,
 	},
 	["Gravity Coil"] = {
 		cost = 50000,

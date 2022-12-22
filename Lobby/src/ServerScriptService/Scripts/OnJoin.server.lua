@@ -67,6 +67,7 @@ local function playerAdded(newPlayer)
             ClientService:InitializeLife(newPlayer)
             ClientService:SetPlayerStats(newPlayer)
             ShopService:InitializePurchases(newPlayer)
+            ShopService:InitializeTools(newPlayer)
         end)
     end
 

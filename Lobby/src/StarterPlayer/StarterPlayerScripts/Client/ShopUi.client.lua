@@ -150,7 +150,7 @@ local function newShopPop(item)
 end
 
 ShopPopConnection.OnClientEvent:Connect(function(item)
-    if not PlayerValues:GetValue(LocalPlayer, item) then
+    if not PlayerValues:GetValue(LocalPlayer, item) or PlayerValues:GetValue(LocalPlayer, item) == "NotBought" then
         newShopPop(item)
     end
 end)
