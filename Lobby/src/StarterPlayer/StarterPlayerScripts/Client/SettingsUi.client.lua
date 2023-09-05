@@ -104,7 +104,7 @@ for name, data in (SettingsData) do
         settingHolder.Toggle.Activated:Connect(function()
             if tick() - cooldownTime > toggleCooldown then
                 cooldownTime = tick()
-                DataConnection:FireServer("SettingToggle", {setting = name})
+                DataConnection:FireServer("SettingToggle", {settingName = name})
             end
         end)
     end

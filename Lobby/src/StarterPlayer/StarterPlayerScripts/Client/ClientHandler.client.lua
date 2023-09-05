@@ -112,8 +112,11 @@ local function upgradeAlert()
     end
 end
 
+local running = false
 local function autoUpgrade()
-    if PlayerValues:GetValue(LocalPlayer, "AutoUpgrade") then
+    if PlayerValues:GetValue(LocalPlayer, "AutoUpgrade") and running == false then
+        running = true
+
         local upgrades = {"Health", "Speed", "Jump", "Income"}
 
         local lowestCost = false
@@ -132,6 +135,8 @@ local function autoUpgrade()
             while lowestCost and PlayerValues:GetValue(LocalPlayer, "Cash") >= lowestCost do
                 for _, upgrade in upgrades do
                     DataConnection:FireServer(upgrade)
+
+                    task.wait(0.5)
                 end
 
                 lowestCost = false
@@ -145,10 +150,10 @@ local function autoUpgrade()
                         end
                     end
                 end
-
-                task.wait()
             end
         end
+
+        running = false
     end
 end
 

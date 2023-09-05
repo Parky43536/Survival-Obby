@@ -58,7 +58,7 @@ function ShopService:GiveGamepass(player, name)
 end
 
 function ShopService:GiveProduct(player, name)
-	DataManager:SettingToggle(player, {setting = "AutoUpgrade", off = true})
+	DataManager:SettingToggle(player, {settingName = "AutoUpgrade", setting = "off"})
 
 	DataManager:GiveCash(player, ShopData.Items[name].coins, true)
 

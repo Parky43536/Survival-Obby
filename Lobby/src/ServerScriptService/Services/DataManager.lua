@@ -270,21 +270,26 @@ function DataManager:BuyUpgrade(player, upgrade)
 end
 
 function DataManager:SettingToggle(player, args)
-	local on = true
+	local toggle = args.setting or "on"
 
-	if PlayerValues:GetValue(player, args.setting) then
-		on = nil
+	if not args.setting then
+		if PlayerValues:GetValue(player, args.settingName) then
+			toggle = "off"
+		end
 	end
 
-	if args.setting == "AutoUpgrade" and not PlayerValues:GetValue(player, "VIP") then
-		on = nil
+	if toggle == "on" and args.settingName == "AutoUpgrade" and not PlayerValues:GetValue(player, "VIP") then
+		toggle = "off"
 	end
+
+	if toggle == "on" then toggle = true end
+	if toggle == "off" then toggle = false end
 
 	local settings = DataManager:GetValue(player, "Settings")
-	settings[args.setting] = on
+	settings[args.settingName] = toggle
 	DataManager:SetValue(player, "Settings", settings)
 
-	PlayerValues:SetValue(player, args.setting, on, "playerOnly")
+	PlayerValues:SetValue(player, args.settingName, toggle, "playerOnly")
 
 	ClientService:SetPlayerStats(player)
 end
