@@ -55,7 +55,7 @@ local function setFlying(flying)
 
 		for _, characterPart in (LocalPlayer.Character:GetChildren()) do
 			if characterPart:IsA("BasePart") then
-				PhysicsService:SetPartCollisionGroup(characterPart, "FlyingPlayer")
+				characterPart.CollisionGroup = "FlyingPlayer"
 			end
 		end
 	else
@@ -73,7 +73,7 @@ local function setFlying(flying)
 
 		for _, characterPart in (LocalPlayer.Character:GetChildren()) do
 			if characterPart:IsA("BasePart") then
-				PhysicsService:SetPartCollisionGroup(characterPart, "Player")
+				characterPart.CollisionGroup = "Player"
 			end
 		end
 	end

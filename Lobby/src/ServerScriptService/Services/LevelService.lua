@@ -324,7 +324,7 @@ function LevelService:SetUpLevelColor(levelNum, level)
         end
 
         if CollectionService:HasTag(part, "Wall") then
-            PhysicsService:SetPartCollisionGroup(part, "Wall")
+            part.CollisionGroup = "Wall"
         end
     end
 end

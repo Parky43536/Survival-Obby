@@ -120,7 +120,7 @@ function ClientService:InitializeLife(player)
 
     for _, characterPart in (player.Character:GetChildren()) do
         if characterPart:IsA("BasePart") then
-            PhysicsService:SetPartCollisionGroup(characterPart, "Player")
+            characterPart.CollisionGroup = "Player"
         end
     end
 end
