@@ -115,14 +115,7 @@ local function newShopPop(item)
     itemHolder.Parent = ShopPopUi.ShopPopFrame
     itemHolder.Name = "Item"
 
-    itemHolder.Buy.Activated:Connect(function()
-        if tick() - cooldownTime > cooldown then
-            cooldownTime = tick()
-            ShopConnection:FireServer(item)
-        end
-    end)
-
-    activationConnection = ShopPopUi.ShopPopFrame.Buy.Activated:Connect(function()
+    itemHolder.Frame.Buy.Activated:Connect(function()
         if tick() - cooldownTime > cooldown then
             cooldownTime = tick()
             ShopConnection:FireServer(item)
