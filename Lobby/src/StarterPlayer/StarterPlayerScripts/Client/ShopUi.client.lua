@@ -81,11 +81,12 @@ local function createItemUi(item, data)
     end
 
     itemHolder.Name = item
-    itemHolder.Buy.Image = "rbxassetid://" .. data.image
-    itemHolder.Info.Cost.Text = itemHolder.Info.Cost.Text .. comma_value(data.cost)
-    itemHolder.Info.ItemName.Text = item
-    itemHolder.Desc.Text = data.desc
     itemHolder.LayoutOrder = data.order
+
+    itemHolder.Frame.Image.Image = "rbxassetid://" .. data.image
+    itemHolder.Frame.Stats.Cost.Text = itemHolder.Frame.Stats.Cost.Text .. comma_value(data.cost)
+    itemHolder.Frame.Title.Text = " ".. item .. " "
+    itemHolder.Frame.Desc.Text = data.desc
 
     return itemHolder
 end
@@ -97,7 +98,7 @@ for item, data in (ShopData.Items) do
     local itemHolder = createItemUi(item, data)
     itemHolder.Parent = Shop
 
-    itemHolder.Buy.Activated:Connect(function()
+    itemHolder.Frame.Buy.Activated:Connect(function()
         if tick() - cooldownTime > cooldown then
             cooldownTime = tick()
             ShopConnection:FireServer(item)
@@ -151,7 +152,10 @@ local function loadBought()
     for name,_ in (values) do
         if Shop:FindFirstChild(name) then
             local holderUi = Shop:FindFirstChild(name)
-            holderUi.Bought.Visible = true
+            holderUi.Frame.Buy.Active = false
+            holderUi.Frame.Buy.BackgroundColor3 = Color3.fromRGB(145, 145, 145)
+            holderUi.Frame.Buy.AutoButtonColor = false
+            holderUi.Frame.Buy.Text = "Bought"
         end
     end
 end
