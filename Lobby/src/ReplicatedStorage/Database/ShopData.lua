@@ -75,21 +75,18 @@ ShopData.Items = {
 		image = 10472127,
 		desc = "A cool refreshing drink that heals you 🥤",
 		order = 1,
-		chest = true,
 	},
 	["Banana Peel"] = {
 		cost = 5000,
 		image = 28937264,
 		desc = "Drop banana peels on the ground for players to slip on 🍌",
 		order = 3,
-		chest = true,
 	},
 	["Bloxiade"] = {
 		cost = 10000,
 		image = 17237572,
 		desc = "An energetic drink that increases your speed for a bit 🔋",
 		order = 5,
-		chest = true,
 	},
 	["Invisibility Cape"] = {
 		cost = 10000,
@@ -102,7 +99,6 @@ ShopData.Items = {
 		image = 118870588,
 		desc = "Passively heals you while you have it out 🩹",
 		order = 9,
-		chest = true,
 	},
 	["Speed Coil"] = {
 		cost = 25000,
@@ -115,14 +111,12 @@ ShopData.Items = {
 		image = 16619617,
 		desc = "Makes you jump higher while you have it out 🌙",
 		order = 13,
-		chest = true,
 	},
 	["Rolling Pin"] = {
 		cost = 75000,
 		image = 11845896,
 		desc = "Smack other players to make them fall over 💥",
 		order = 15,
-		chest = true,
 	},
 	["Golden Glove"] = {
 		cost = 100000,

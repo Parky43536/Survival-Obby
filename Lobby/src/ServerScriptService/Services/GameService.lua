@@ -145,7 +145,6 @@ function GameService:SetUpLevels()
         LevelService:SetUpButton(levelNum, level)
         LevelService:SetUpDoor(levelNum, level)
         LevelService:SetUpLevelColor(levelNum, level)
-        LevelService:SetUpChest(levelNum, level)
         LevelService:SetUpAdvertisement(levelNum, level)
 
         level.Parent = workspace.Levels

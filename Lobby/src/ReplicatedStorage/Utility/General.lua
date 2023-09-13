@@ -10,7 +10,6 @@ General.LevelReward = 50
 General.LevelMultiple = 5
 General.EventsPerSecond = 10
 General.MusicVolume = 0.15
-General.ChestMulti = 20
 
 function General.TimerCalc(levelNum)
     return math.clamp(4 + (2 * levelNum), 0, 30)
@@ -112,7 +111,6 @@ General.Signs = {
 
 General.LevelOrder = {
     [2] = "Advertiser",
-    [3] = "Chest",
 }
 
 General.AppearanceOrder = {

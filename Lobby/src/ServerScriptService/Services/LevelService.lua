@@ -205,52 +205,6 @@ function LevelService:SetUpRestart(level)
     end)
 end
 
-local chestScript = require(ReplicatedStorage.Misc:FindFirstChild("Chest"))
-function LevelService:SetUpChest(levelNum, level)
-    for _, chest in (level:GetChildren()) do
-        if chest.Name == "Chest" then
-            chest.Touch.Touched:Connect(function(hit)
-                local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-                if player then
-                    if DataManager:GetValue(player, "Level") >= levelNum then
-                        local chests = DataManager:GetValue(player, "Chests")
-                        if not chests[tostring(levelNum)] then
-                            DataManager:GiveCash(player, levelNum * General.ChestMulti, true)
-
-                            local rng = Random.new()
-                            local shopList = ShopData:getList()
-                            local item
-                            local timeout = 0
-                            repeat
-                                local num = rng:NextInteger(1, #shopList)
-                                item = shopList[num]
-                                timeout += 1
-                            until timeout >= 100 or (ShopData.Items[item].chest and not PlayerValues:GetValue(player, item))
-                            if timeout >= 100 then
-                                item = nil
-                            end
-
-                            if item then
-                                PlayerValues:SetValue(player, item, "NotBought", "playerOnly")
-
-                                if not player.Backpack:FindFirstChild(item) then
-                                    local Tool = Tools:FindFirstChild(item):Clone()
-                                    Tool.Parent = player.Backpack
-                                end
-                            end
-
-                            chestScript.Main(player, levelNum, 3)
-
-                            chests[tostring(levelNum)] = true
-                            DataManager:SetValue(player, "Chests", chests)
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end
-
 function LevelService:SetUpAdvertisement(levelNum, level)
     local rng = Random.new(levelNum * 1000)
 

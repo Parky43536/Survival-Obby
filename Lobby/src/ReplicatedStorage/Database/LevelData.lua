@@ -1,9 +1,6 @@
 local LevelData = {}
 
 LevelData.Levels = {
-	["Chest"] = {
-		level = 4,
-	},
 	["Wall"] = {
 		level = 4,
 	},
