@@ -20,7 +20,7 @@ local ShopPopUi = PlayerGui:WaitForChild("ShopPopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
 local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
-local Upgrade = UpgradeUi.UpgradeFrame.ScrollingFrame
+local Upgrade = UpgradeUi.UpgradeFrame.Upgrades
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local UpgradeConnection = Remotes:WaitForChild("UpgradeConnection")
@@ -43,7 +43,7 @@ LeftFrame.Upgrade.Activated:Connect(function()
     upgradeUiEnable()
 end)
 
-UpgradeUi.UpgradeFrame.TopFrame.Close.Activated:Connect(function()
+UpgradeUi.UpgradeFrame.Title.Close.Activated:Connect(function()
     upgradeUiEnable()
 end)
 
@@ -109,7 +109,7 @@ local function loadCosts()
     for i, stat in (stats) do
         local statCost = General.getCost(stat, PlayerValues:GetValue(LocalPlayer, stat))
         if statCost then
-            statCost = "C " .. comma_value(statCost)
+            statCost = "Cost: " .. comma_value(statCost)
         else
             statCost = "MAX"
         end
@@ -120,8 +120,8 @@ local function loadCosts()
         end
 
         local ui = Upgrade:FindFirstChild(stat)
-        ui.Cost.Amount.Text = statCost
-        ui.Total.Amount.Text = round(General.getValue(stat, PlayerValues:GetValue(LocalPlayer, stat)), rounding)
+        ui.Stats.Cost.Text = statCost
+        ui.Stats.Total.Text = "Current: " .. round(General.getValue(stat, PlayerValues:GetValue(LocalPlayer, stat)), rounding)
     end
 end
 

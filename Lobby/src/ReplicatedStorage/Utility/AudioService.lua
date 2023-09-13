@@ -2,6 +2,9 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
+local DataBase = ReplicatedStorage.Database
+local SettingsData = require(DataBase:WaitForChild("SettingsData"))
+
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
@@ -101,9 +104,9 @@ function AudioService:Create(id, target, properties, args)
 		end
 
 		if args.name and args.name == "Music" then
-			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Music") or 1)
+			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Music") or SettingsData.Music.default)
 		else
-			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Sounds") or 1)
+			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Sounds") or SettingsData.Sounds.default)
 		end
 
 		local container

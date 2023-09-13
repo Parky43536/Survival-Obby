@@ -57,7 +57,7 @@ local function loadSettings()
         local ui = Settings:FindFirstChild(name)
         if ui then
             if data.slider then
-                ui.Value.Text = PlayerValues:GetValue(LocalPlayer, name) or 1
+                ui.Value.Text = " " .. (PlayerValues:GetValue(LocalPlayer, name) or data.value) .. " "
             else
                 if PlayerValues:GetValue(LocalPlayer, name) then
                     ui.Toggle.Image = "rbxassetid://4360945444"
@@ -90,14 +90,14 @@ for name, data in (SettingsData) do
         settingHolder.Plus.Activated:Connect(function()
             if tick() - cooldownTime > sliderCooldown then
                 cooldownTime = tick()
-                DataConnection:FireServer("SettingSlider", {setting = name, value = data.value, min = data.min, max = data.max})
+                DataConnection:FireServer("SettingSlider", {setting = name, value = data.sliderValue, min = data.min, max = data.max})
             end
         end)
 
         settingHolder.Minus.Activated:Connect(function()
             if tick() - cooldownTime > sliderCooldown then
                 cooldownTime = tick()
-                DataConnection:FireServer("SettingSlider", {setting = name, value = -data.value, min = data.min, max = data.max})
+                DataConnection:FireServer("SettingSlider", {setting = name, value = -data.sliderValue, min = data.min, max = data.max})
             end
         end)
     else

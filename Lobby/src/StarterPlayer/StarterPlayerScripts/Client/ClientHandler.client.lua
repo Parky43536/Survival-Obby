@@ -136,7 +136,7 @@ local function autoUpgrade()
                 for _, upgrade in upgrades do
                     DataConnection:FireServer(upgrade)
 
-                    task.wait(0.5)
+                    task.wait(0.25)
                 end
 
                 lowestCost = false
