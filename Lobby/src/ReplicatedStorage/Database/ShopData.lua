@@ -27,7 +27,7 @@ ShopData.Items = {
 		coins = 500,
 		cost = 5,
 		image = 11829053433,
-		desc = "More coins to buy upgrades and tools 💰 (Unaffected by Income and VIP)",
+		desc = "More coins to buy upgrades and tools 💰",
 		order = 8,
 	},
 	["2,500 Coins"] = {
@@ -35,7 +35,7 @@ ShopData.Items = {
 		coins = 2500,
 		cost = 25,
 		image = 11829053433,
-		desc = "More coins to buy upgrades and tools 💰 (Unaffected by Income and VIP)",
+		desc = "More coins to buy upgrades and tools 💰",
 		order = 10,
 	},
 	["5,000 Coins"] = {
@@ -43,7 +43,7 @@ ShopData.Items = {
 		coins = 5000,
 		cost = 50,
 		image = 11829053433,
-		desc = "More coins to buy upgrades and tools 💰 (Unaffected by Income and VIP)",
+		desc = "More coins to buy upgrades and tools 💰",
 		order = 12,
 	},
 	["10,000 Coins"] = {
@@ -51,7 +51,7 @@ ShopData.Items = {
 		coins = 10000,
 		cost = 100,
 		image = 11829053433,
-		desc = "More coins to buy upgrades and tools 💰 (Unaffected by Income and VIP)",
+		desc = "More coins to buy upgrades and tools 💰",
 		order = 14,
 	},
 	["50,000 Coins"] = {
@@ -59,7 +59,7 @@ ShopData.Items = {
 		coins = 50000,
 		cost = 450,
 		image = 11829053433,
-		desc = "More coins to buy upgrades and tools 💰 (Unaffected by Income and VIP)",
+		desc = "More coins to buy upgrades and tools 💰",
 		order = 16,
 	},
 	["100,000 Coins"] = {
@@ -67,7 +67,7 @@ ShopData.Items = {
 		coins = 100000,
 		cost = 800,
 		image = 11829053433,
-		desc = "More coins to buy upgrades and tools 💰 (Unaffected by Income and VIP)",
+		desc = "More coins to buy upgrades and tools 💰",
 		order = 18,
 	},
 	["Bloxy Cola"] = {
@@ -85,7 +85,7 @@ ShopData.Items = {
 	["Bloxiade"] = {
 		cost = 10000,
 		image = 17237572,
-		desc = "An energetic drink that increases your speed for a bit 🔋",
+		desc = "An energy drink that increases your speed for a bit 🔋",
 		order = 5,
 	},
 	["Invisibility Cape"] = {
@@ -121,7 +121,7 @@ ShopData.Items = {
 	["Golden Glove"] = {
 		cost = 100000,
 		image = 17386312,
-		desc = "Smack other players to launch them off the level ✋😈",
+		desc = "Smack other players to hit them off the level ✋😈",
 		order = 17,
 	},
 }

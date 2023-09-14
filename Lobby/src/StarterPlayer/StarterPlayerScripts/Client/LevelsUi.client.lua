@@ -24,7 +24,7 @@ local ShopPopUi = PlayerGui:WaitForChild("ShopPopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
 local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
-local Levels = LevelsUi.LevelsFrame.ScrollingFrame
+local Levels = LevelsUi.LevelsFrame.Levels
 
 local function levelsUiEnable()
     if LevelsUi.Enabled == true then
@@ -43,7 +43,7 @@ LeftFrame.Levels.Activated:Connect(function()
     levelsUiEnable()
 end)
 
-LevelsUi.LevelsFrame.TopFrame.Close.Activated:Connect(function()
+LevelsUi.LevelsFrame.Title.Close.Activated:Connect(function()
     levelsUiEnable()
 end)
 
@@ -58,16 +58,27 @@ end
 local function levelsUi()
     local currentLevel = PlayerValues:GetValue(LocalPlayer, "Level") or 0
 
-    for levelNum = 1 , General.Levels do
+    
+
+    for levelNum = 0 , General.Levels + 1 do
         local level
 
         if not Levels:FindFirstChild(levelNum) then
-            level = Assets.Ui.Level:Clone()
+            if levelNum == 0 then
+                level = Assets.Ui.LevelInvert:Clone()
+                level.Level.Text = " Start "
+            elseif levelNum == General.Levels + 1 then
+                level = Assets.Ui.LevelInvert:Clone()
+                level.Level.Text = " Finish "
+            else
+                level = Assets.Ui.Level:Clone()
+                level.Level.Text = " " .. levelNum .. " "
+            end
+
             level.Name = levelNum
-            level.Text = levelNum
             level.Parent = Levels
 
-            level.Activated:Connect(function()
+            level.Level.Activated:Connect(function()
                 DataConnection:FireServer("TeleportToLevel", {level = levelNum})
             end)
         else
@@ -75,9 +86,13 @@ local function levelsUi()
         end
 
         if currentLevel >= levelNum then
-            level.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+            if levelNum == 0 or levelNum == General.Levels + 1 then
+                level.Level.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            else
+                level.Level.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+            end
         else
-            level.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+            level.Level.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
         end
     end
 
@@ -88,13 +103,13 @@ local function levelsUi()
     end
 end
 
-LevelsUi.LevelsFrame.Tabs.Start.Activated:Connect(function()
+--[[LevelsUi.LevelsFrame.Tabs.Start.Activated:Connect(function()
     DataConnection:FireServer("TeleportToLevel", {level = 0})
 end)
 
 LevelsUi.LevelsFrame.Tabs.Finish.Activated:Connect(function()
     DataConnection:FireServer("TeleportToLevel", {level = General.Levels + 1})
-end)
+end)]]
 
 PlayerValues:SetCallback("Level", function()
     levelsUi()
