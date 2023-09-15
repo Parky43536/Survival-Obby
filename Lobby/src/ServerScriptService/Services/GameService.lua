@@ -62,7 +62,6 @@ end
 function GameService:SetUpLevels()
     local start = workspace.Levels:FindFirstChild("0")
     LevelService:SetUpLevelColor(0, start)
-    LevelService:SetUpAdvertisement(0, start)
 
     local lastCFrame = start:GetPivot()
     local turnsDisabled = false
@@ -153,7 +152,6 @@ function GameService:SetUpLevels()
     local finish = Assets.Misc:FindFirstChild("Finish"):Clone()
     finish.Name = General.Levels + 1
     LevelService:SetUpLevelColor(General.Levels + 1, finish)
-    LevelService:SetUpAdvertisement(General.Levels + 1, start)
     LevelService:SetUpRestart(finish)
 
     finish:PivotTo(lastCFrame)

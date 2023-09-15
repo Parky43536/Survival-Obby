@@ -107,10 +107,10 @@ end
 local activationConnection
 local function newShopPop(item)
     if activationConnection ~= nil then activationConnection:Disconnect() end
-    if ShopPopUi.ShopPopFrame:FindFirstChild("Item") then ShopPopUi.ShopPopFrame:FindFirstChild("Item"):Destroy() end
+    if ShopPopUi.ShopPopFrame.ShopPop:FindFirstChild("Item") then ShopPopUi.ShopPopFrame.ShopPop:FindFirstChild("Item"):Destroy() end
 
     local itemHolder = createItemUi(item, ShopData.Items[item])
-    itemHolder.Parent = ShopPopUi.ShopPopFrame
+    itemHolder.Parent = ShopPopUi.ShopPopFrame.ShopPop
     itemHolder.Name = "Item"
 
     itemHolder.Frame.Buy.Activated:Connect(function()

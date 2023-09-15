@@ -12,7 +12,7 @@ ShopData.Items = {
 		gamepass = 103133738,
 		cost = 250,
 		image = 11829052997,
-		desc = "Double coins, auto upgrades, and the VIP staff tool 🌟",
+		desc = "Double coins, Auto upgrade setting, and the VIP wand 🌟",
 		order = 4,
 	},
 	["God Powers"] = {
@@ -79,7 +79,7 @@ ShopData.Items = {
 	["Banana Peel"] = {
 		cost = 5000,
 		image = 28937264,
-		desc = "Drop banana peels on the ground for players to slip on 🍌",
+		desc = "Drop banana peels on the ground to trip players 🍌",
 		order = 3,
 	},
 	["Bloxiade"] = {

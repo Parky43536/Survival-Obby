@@ -105,11 +105,23 @@ local stats = {"Health", "Speed", "Jump", "Income"}
 
 local function loadCosts()
     for i, stat in (stats) do
+        local ui = Upgrade:FindFirstChild(stat)
+
         local statCost = General.getCost(stat, PlayerValues:GetValue(LocalPlayer, stat))
         if statCost then
             statCost = "Cost: " .. comma_value(statCost)
+
+            ui.Buy.Active = true
+            ui.Buy.BackgroundColor3 = Color3.fromRGB(50, 202, 33)
+            ui.Buy.AutoButtonColor = true
+            ui.Buy.Text = "Buy"
         else
-            statCost = "MAX"
+            statCost = "Cost: n/a"
+
+            ui.Buy.Active = false
+            ui.Buy.BackgroundColor3 = Color3.fromRGB(145, 145, 145)
+            ui.Buy.AutoButtonColor = false
+            ui.Buy.Text = "MAX"
         end
 
         local rounding = 0
@@ -117,7 +129,6 @@ local function loadCosts()
             rounding = 1
         end
 
-        local ui = Upgrade:FindFirstChild(stat)
         ui.Stats.Cost.Text = statCost
         ui.Stats.Total.Text = "Current: " .. round(General.getValue(stat, PlayerValues:GetValue(LocalPlayer, stat)), rounding)
     end
