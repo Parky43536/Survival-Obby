@@ -94,21 +94,6 @@ function ClientService:SetPlayerStats(player)
     end
 end
 
-function ClientService:CheckFriends(player)
-    for _, checkPlayer in (Players:GetChildren()) do
-        if checkPlayer and player and checkPlayer:IsFriendsWith(player.UserId) then
-            ChatConnection:FireClient(checkPlayer, "[ALERT] Your friend joined! Have a Speed Coil!", Color3.fromRGB(240, 128, 255))
-
-            PlayerValues:SetValue(player, "Speed Coil", "NotBought", "playerOnly")
-
-            if not checkPlayer.Backpack:FindFirstChild("Speed Coil") then
-                local Tool = Tools:FindFirstChild("Speed Coil"):Clone()
-                Tool.Parent = checkPlayer.Backpack
-            end
-        end
-    end
-end
-
 function ClientService:InitializeLife(player)
     PlayerValues:SetValue(player, "LifeId", tick())
     PlayerValues:SetValue(player, "SpeedBoost", 0)
@@ -163,8 +148,6 @@ function ClientService:InitializeClient(player, profile)
     ClientConnection:FireClient(player)
     UpgradeConnection:FireClient(player)
     SettingsConnection:FireClient(player)
-
-    ClientService:CheckFriends(player)
 end
 
 return ClientService

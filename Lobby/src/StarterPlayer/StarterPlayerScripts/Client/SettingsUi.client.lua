@@ -22,8 +22,7 @@ local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local ShopPopUi = PlayerGui:WaitForChild("ShopPopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
-local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
-local Settings = SettingsUi.SettingsFrame.ScrollingFrame
+local Settings = SettingsUi.SettingsFrame.Settings
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local SettingsConnection = Remotes:WaitForChild("SettingsConnection")
@@ -38,7 +37,6 @@ local function settingsUiEnable()
         ShopPopUi.Enabled = false
         LevelsUi.Enabled = false
         SettingsUi.Enabled = true
-        FriendsUi.Enabled = false
     end
 end
 
@@ -46,7 +44,7 @@ RightFrame.Frame.Settings.Activated:Connect(function()
     settingsUiEnable()
 end)
 
-SettingsUi.SettingsFrame.TopFrame.Close.Activated:Connect(function()
+SettingsUi.SettingsFrame.Title.Close.Activated:Connect(function()
     settingsUiEnable()
 end)
 
@@ -57,7 +55,7 @@ local function loadSettings()
         local ui = Settings:FindFirstChild(name)
         if ui then
             if data.slider then
-                ui.Value.Text = " " .. ((PlayerValues:GetValue(LocalPlayer, name) or data.value) or " ") .. " "
+                ui.Slider.Value.Text = " " .. ((PlayerValues:GetValue(LocalPlayer, name) or data.value) or " ") .. " "
             else
                 if PlayerValues:GetValue(LocalPlayer, name) then
                     ui.Toggle.Image = "rbxassetid://4360945444"
@@ -87,14 +85,14 @@ for name, data in (SettingsData) do
     settingHolder.Parent = Settings
 
     if data.slider then
-        settingHolder.Plus.Activated:Connect(function()
+        settingHolder.Slider.Plus.Activated:Connect(function()
             if tick() - cooldownTime > sliderCooldown then
                 cooldownTime = tick()
                 DataConnection:FireServer("SettingSlider", {setting = name, value = data.sliderValue, min = data.min, max = data.max})
             end
         end)
 
-        settingHolder.Minus.Activated:Connect(function()
+        settingHolder.Slider.Minus.Activated:Connect(function()
             if tick() - cooldownTime > sliderCooldown then
                 cooldownTime = tick()
                 DataConnection:FireServer("SettingSlider", {setting = name, value = -data.sliderValue, min = data.min, max = data.max})

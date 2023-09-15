@@ -19,7 +19,6 @@ local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local ShopPopUi = PlayerGui:WaitForChild("ShopPopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
-local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
 local Upgrade = UpgradeUi.UpgradeFrame.Upgrades
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -35,7 +34,6 @@ local function upgradeUiEnable()
         ShopPopUi.Enabled = false
         LevelsUi.Enabled = false
         SettingsUi.Enabled = false
-        FriendsUi.Enabled = false
     end
 end
 

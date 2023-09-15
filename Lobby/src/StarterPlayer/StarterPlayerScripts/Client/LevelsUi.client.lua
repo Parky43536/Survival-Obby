@@ -23,7 +23,6 @@ local ShopUi = PlayerGui:WaitForChild("ShopUi")
 local ShopPopUi = PlayerGui:WaitForChild("ShopPopUi")
 local UpgradeUi = PlayerGui:WaitForChild("UpgradeUi")
 local SettingsUi = PlayerGui:WaitForChild("SettingsUi")
-local FriendsUi = PlayerGui:WaitForChild("FriendsUi")
 local Levels = LevelsUi.LevelsFrame.Levels
 
 local function levelsUiEnable()
@@ -35,7 +34,6 @@ local function levelsUiEnable()
         ShopPopUi.Enabled = false
         UpgradeUi.Enabled = false
         SettingsUi.Enabled = false
-        FriendsUi.Enabled = false
     end
 end
 
