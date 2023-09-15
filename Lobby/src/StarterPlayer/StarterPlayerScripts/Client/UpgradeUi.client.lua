@@ -25,6 +25,8 @@ local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local UpgradeConnection = Remotes:WaitForChild("UpgradeConnection")
 local DataConnection = Remotes:WaitForChild("DataConnection")
 
+local stats = {"Health", "Speed", "Jump", "Income"}
+
 local function upgradeUiEnable()
     if UpgradeUi.Enabled == true then
         UpgradeUi.Enabled = false
@@ -49,6 +51,32 @@ local function onKeyPress(input, gameProcessedEvent)
 	if input.KeyCode == Enum.KeyCode.E and gameProcessedEvent == false then
 		upgradeUiEnable()
 	end
+end
+
+------------------------------------------------------------------
+
+local function check()
+    local cash = PlayerValues:GetValue(LocalPlayer, "Cash")
+    local openUpgrades = false
+
+    --prevents upgrades from popping up for players saving cash
+    if cash > 2500 then
+        return
+    end
+
+    for i, stat in (stats) do
+        local statCost = General.getCost(stat, PlayerValues:GetValue(LocalPlayer, stat))
+        if statCost and cash >= statCost then
+            openUpgrades = true
+            break
+        end
+    end
+
+    if openUpgrades then
+        task.wait(1)
+
+        upgradeUiEnable()
+    end
 end
 
 ------------------------------------------------------------------
@@ -101,8 +129,6 @@ local function round(number, decimal)
     return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
 
-local stats = {"Health", "Speed", "Jump", "Income"}
-
 local function loadCosts()
     for i, stat in (stats) do
         local ui = Upgrade:FindFirstChild(stat)
@@ -140,8 +166,14 @@ for i, stat in (stats) do
     end)
 end
 
-UpgradeConnection.OnClientEvent:Connect(function()
-    loadCosts()
+------------------------------------------------------------------
+
+UpgradeConnection.OnClientEvent:Connect(function(func)
+    if func == "init" then
+        loadCosts()
+    elseif func == "check" then
+        check()
+    end
 end)
 
 UserInputService.InputBegan:Connect(onKeyPress)

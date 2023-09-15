@@ -16,7 +16,6 @@ local Remotes = ReplicatedStorage.Remotes
 local ClientConnection = Remotes.ClientConnection
 local UpgradeConnection = Remotes.UpgradeConnection
 local SettingsConnection = Remotes.SettingsConnection
-local ChatConnection = Remotes.ChatConnection
 
 local ClientService = {}
 
@@ -146,7 +145,7 @@ function ClientService:InitializeClient(player, profile)
     end
 
     ClientConnection:FireClient(player)
-    UpgradeConnection:FireClient(player)
+    UpgradeConnection:FireClient(player, "init")
     SettingsConnection:FireClient(player)
 end
 

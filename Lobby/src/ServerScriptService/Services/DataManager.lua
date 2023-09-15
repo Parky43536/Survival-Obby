@@ -15,7 +15,6 @@ local General = require(Utility.General)
 
 local Remotes = ReplicatedStorage.Remotes
 local DataConnection = Remotes.DataConnection
-local ChatConnection = Remotes.ChatConnection
 
 local SerServices = ServerScriptService.Services
 local ClientService = require(SerServices.ClientService)
@@ -231,7 +230,7 @@ function DataManager:SetSpawn(player, levelNum)
 	else
 		if DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
 			alertCooldowns[player] = levelNum
-			ChatConnection:FireClient(player, "[ALERT] Your level didn't progress! Go back!", Color3.fromRGB(255, 0, 0))
+			--[ALERT] Your level didn't progress! Go back!"
 		end
 	end
 

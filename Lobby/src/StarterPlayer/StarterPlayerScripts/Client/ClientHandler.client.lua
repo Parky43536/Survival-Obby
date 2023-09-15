@@ -20,7 +20,6 @@ local RightFrame = PlayerUi:WaitForChild("RightFrame")
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ClientConnection = Remotes:WaitForChild("ClientConnection")
 local DataConnection = Remotes:WaitForChild("DataConnection")
-local ChatConnection = Remotes:WaitForChild("ChatConnection")
 
 local alertTime = 1
 
@@ -41,75 +40,7 @@ local function round(number, decimal)
     return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
 
-local function getAlerts()
-    local cash = PlayerValues:GetValue(LocalPlayer, "Cash")
-    local alerts = 0
-
-    local health = General.getCost("Health", PlayerValues:GetValue(LocalPlayer, "Health"))
-    local speed = General.getCost("Speed", PlayerValues:GetValue(LocalPlayer, "Speed"))
-    local jump = General.getCost("Jump", PlayerValues:GetValue(LocalPlayer, "Jump"))
-    local income = General.getCost("Income", PlayerValues:GetValue(LocalPlayer, "Income"))
-
-    if health and cash >= health then
-        alerts += 1
-    end
-    if speed and cash >= speed then
-        alerts += 1
-    end
-    if jump and cash >= jump then
-        alerts += 1
-    end
-    if income and cash >= income then
-        alerts += 1
-    end
-
-    return alerts
-end
-
 ------------------------------------------------------------------
-
-local chatAlertCooldown
-local currentAlertTweens = {}
-local function upgradeAlert()
-    local alerts = getAlerts()
-
-    local currentLevel = PlayerValues:GetValue(LocalPlayer, "CurrentLevel")
-    if alerts == 4 and chatAlertCooldown ~= currentLevel and currentLevel > 2 then
-        chatAlertCooldown = currentLevel
-        game.StarterGui:SetCore("ChatMakeSystemMessage", {Text = "[ALERT] You need to upgrade your character!", Color = Color3.fromRGB(255, 149, 19)})
-    end
-
-    if alerts >= 1 then
-        if currentAlertTweens["Background"] then currentAlertTweens["Background"]:Cancel() end
-        LeftFrame.Upgrade.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
-        local goal = {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}
-        local properties = {Time = alertTime, Reverse = true, Repeat = math.huge}
-        currentAlertTweens["Background"] = TweenService.tween(LeftFrame.Upgrade, goal, properties)
-        ------
-        if currentAlertTweens["Text"] then currentAlertTweens["Text"]:Cancel() end
-        LeftFrame.Upgrade.ButtonText.TextColor3 = Color3.fromRGB(255, 255, 255)
-        local goal = {TextColor3 = Color3.fromRGB(0, 0, 0)}
-        local properties = {Time = alertTime, Reverse = true, Repeat = math.huge}
-        currentAlertTweens["Text"] = TweenService.tween(LeftFrame.Upgrade.ButtonText, goal, properties)
-        ------
-        if currentAlertTweens["Keybind"] then currentAlertTweens["Keybind"]:Cancel() end
-        LeftFrame.Upgrade.Keybind.TextColor3 = Color3.fromRGB(255, 255, 255)
-        LeftFrame.Upgrade.Keybind.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
-        local goal = {TextColor3 = Color3.fromRGB(0, 0, 0), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}
-        local properties = {Time = alertTime, Reverse = true, Repeat = math.huge}
-        currentAlertTweens["Keybind"] = TweenService.tween(LeftFrame.Upgrade.Keybind, goal, properties)
-    else
-        if currentAlertTweens["Background"] then currentAlertTweens["Background"]:Cancel() end
-        LeftFrame.Upgrade.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
-        ------
-        if currentAlertTweens["Text"] then currentAlertTweens["Text"]:Cancel() end
-        LeftFrame.Upgrade.ButtonText.TextColor3 = Color3.fromRGB(255, 255, 255)
-        ------
-        if currentAlertTweens["Keybind"] then currentAlertTweens["Keybind"]:Cancel() end
-        LeftFrame.Upgrade.Keybind.TextColor3 = Color3.fromRGB(255, 255, 255)
-        LeftFrame.Upgrade.Keybind.BackgroundColor3 = Color3.fromRGB(255, 149, 19)
-    end
-end
 
 local running = false
 local function autoUpgrade()
@@ -193,7 +124,6 @@ local function loadCash(value)
     end
 
     autoUpgrade()
-    upgradeAlert()
 end
 
 PlayerValues:SetCallback("Cash", function(player, value)
@@ -244,10 +174,6 @@ end)
 mobileUi()
 
 ------------------------------------------------------------------
-
-ChatConnection.OnClientEvent:Connect(function(text, color)
-    game.StarterGui:SetCore("ChatMakeSystemMessage", {Text = text, Color = color})
-end)
 
 ClientConnection.OnClientEvent:Connect(function()
     loadCash(PlayerValues:GetValue(LocalPlayer, "Cash"))

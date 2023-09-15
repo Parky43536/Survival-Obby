@@ -27,6 +27,7 @@ local EventService = require(Utility.EventService)
 
 local Remotes = ReplicatedStorage.Remotes
 local ShopPopConnection = Remotes.ShopPopConnection
+local UpgradeConnection = Remotes.UpgradeConnection
 
 local LevelService = {}
 
@@ -184,6 +185,7 @@ function LevelService:SetUpDoor(levelNum, level)
                 touchCooldown[player] = tick()
 
                 DataManager:SetSpawn(player, levelNum + 1)
+                UpgradeConnection:FireClient(player, "check")
             end
         end
     end)
