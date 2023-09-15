@@ -95,21 +95,7 @@ local function levelsUi()
             level.Level.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
         end
     end
-
-    if currentLevel >= General.Levels + 1 then
-        LevelsUi.LevelsFrame.Tabs.Finish.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-    else
-        LevelsUi.LevelsFrame.Tabs.Finish.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-    end
 end
-
---[[LevelsUi.LevelsFrame.Tabs.Start.Activated:Connect(function()
-    DataConnection:FireServer("TeleportToLevel", {level = 0})
-end)
-
-LevelsUi.LevelsFrame.Tabs.Finish.Activated:Connect(function()
-    DataConnection:FireServer("TeleportToLevel", {level = General.Levels + 1})
-end)]]
 
 PlayerValues:SetCallback("Level", function()
     levelsUi()
