@@ -111,7 +111,7 @@ for name, data in (SettingsData) do
         if name == "Music" then
             local music = workspace.Sound:FindFirstChild("Music")
             if music then
-                music.Volume = General.MusicVolume * PlayerValues:GetValue(LocalPlayer, "Music")
+                music.Volume = General.MusicScale * (PlayerValues:GetValue(LocalPlayer, "Music") or SettingsData.Music.default)
             end
         end
 

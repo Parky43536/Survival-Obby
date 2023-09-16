@@ -1,19 +1,19 @@
 local SettingsData = {
 	["Music"] = {
-		desc = "Music",
+		desc = "Music volume",
 		order = 1,
 		slider = true,
 		sliderValue = 0.1,
-		default = 0.5,
+		default = 1,
 		min = 0,
 		max = 2,
 	},
 	["Sounds"] = {
-		desc = "Sounds",
+		desc = "Sound volume",
 		order = 2,
 		slider = true,
 		sliderValue = 0.1,
-		default = 0.5,
+		default = 1,
 		min = 0,
 		max = 2,
 	},

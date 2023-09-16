@@ -43,7 +43,7 @@ local function destroyRocket(rocket, touchConnection, levelNum, data)
         particle:PivotTo(rocket.CFrame)
         particle.Parent = workspace
 
-        AudioService:Create(16433289, rocket.Position, {Volume = 0.8})
+        AudioService:Create(16433289, rocket.Position, {Volume =1})
 
         local growsize = Vector3.new(1, 1, 1) * RV(levelNum, data, "size")
         local goal = {Transparency = 0.9, Size = growsize}

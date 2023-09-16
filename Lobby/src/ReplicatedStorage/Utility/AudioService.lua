@@ -5,6 +5,9 @@ local Players = game:GetService("Players")
 local DataBase = ReplicatedStorage.Database
 local SettingsData = require(DataBase:WaitForChild("SettingsData"))
 
+local Utility = ReplicatedStorage:WaitForChild("Utility")
+local General = require(Utility.General)
+
 local RepServices = ReplicatedStorage.Services
 local PlayerValues = require(RepServices.PlayerValues)
 
@@ -94,7 +97,6 @@ function AudioService:Create(id, target, properties, args)
 			end
 		end
 
-		newSoundObject["Volume"] = 0.2
 		for property, value in (properties or {}) do
 			if property ~= "Delay" and property ~= "Duration" then
 				newSoundObject[property] = value
@@ -104,9 +106,9 @@ function AudioService:Create(id, target, properties, args)
 		end
 
 		if args.name and args.name == "Music" then
-			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Music") or SettingsData.Music.default)
+			newSoundObject["Volume"] = General.MusicScale * (PlayerValues:GetValue(LocalPlayer, "Music") or SettingsData.Music.default)
 		else
-			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Sounds") or SettingsData.Sounds.default)
+			newSoundObject["Volume"] = General.SoundScale * (PlayerValues:GetValue(LocalPlayer, "Sounds") or SettingsData.Sounds.default)
 		end
 
 		local container
