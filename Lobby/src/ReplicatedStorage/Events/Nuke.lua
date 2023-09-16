@@ -102,7 +102,7 @@ function Event.Main(levelNum, level, data)
             particle:PivotTo(cframe)
             particle.Parent = workspace
 
-            AudioService:Create(16433289, cframe.Position, {Volume =1})
+            AudioService:Create(16433289, cframe.Position, {Volume = 0.8})
 
             local goal = {Transparency = 0.9, Size = size + Vector3.new(5, 100, 5)}
             local properties = {Time = 0.15}

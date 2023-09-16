@@ -9,10 +9,13 @@ General.DoorTime = 20
 General.LevelReward = 50
 General.LevelMultiple = 5
 General.EventsPerSecond = 10
-General.MusicVolume = 0.15
+
+General.MusicScale = 0.1
+General.SoundScale = 0.2
+
 
 function General.TimerCalc(levelNum)
-    return math.clamp(4 + (2 * levelNum), 0, 30)
+    return math.clamp(8 + (2 * levelNum), 0, 30)
 end
 
 --Stats---------------------------------------------
@@ -21,31 +24,31 @@ General.PlayerHealth = 100
 General.PlayerSpeed = 16
 General.PlayerJump = 50.145
 
-General.HealthCost = 50
-General.HealthIncrease = 50
+General.HealthCost = 100
+General.HealthIncrease = 100
 General.HealthDefault = 0
-General.HealthValue = 5
+General.HealthValue = 10
 General.HealthMax = 300
 General.HealthColor = Color3.fromRGB(255, 0, 0)
 
-General.SpeedCost = 50
-General.SpeedIncrease = 50
+General.SpeedCost = 100
+General.SpeedIncrease = 100
 General.SpeedDefault = 0
-General.SpeedValue = 0.5
+General.SpeedValue = 1
 General.SpeedMax = 35
 General.SpeedColor = Color3.fromRGB(0, 187, 255)
 
-General.JumpCost = 50
-General.JumpIncrease = 50
+General.JumpCost = 100
+General.JumpIncrease = 100
 General.JumpDefault = 0
-General.JumpValue = 1
+General.JumpValue = 2
 General.JumpMax = 75
 General.JumpColor = Color3.fromRGB(212, 0, 255)
 
-General.IncomeCost = 50
-General.IncomeIncrease = 50
+General.IncomeCost = 100
+General.IncomeIncrease = 100
 General.IncomeDefault = 0
-General.IncomeValue = 0.1
+General.IncomeValue = 0.2
 General.IncomeMax = 4
 General.IncomeColor = Color3.fromRGB(4, 255, 0)
 

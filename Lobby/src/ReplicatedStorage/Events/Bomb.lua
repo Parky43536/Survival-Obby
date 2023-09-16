@@ -46,7 +46,7 @@ function Event.Main(levelNum, level, data)
             particle:PivotTo(bomb.CFrame)
             particle.Parent = workspace
 
-            AudioService:Create(16433289, bomb.Position, {Volume =1})
+            AudioService:Create(16433289, bomb.Position, {Volume = 0.8})
 
             local growsize = Vector3.new(1, 1, 1) * RV(levelNum, data, "size")
             local goal = {Transparency = 0.9, Size = growsize}

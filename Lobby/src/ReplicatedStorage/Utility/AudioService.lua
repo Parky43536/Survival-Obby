@@ -97,6 +97,12 @@ function AudioService:Create(id, target, properties, args)
 			end
 		end
 
+		if args.name and args.name == "Music" then
+			newSoundObject["Volume"] = General.MusicScale
+		else
+			newSoundObject["Volume"] = General.SoundScale
+		end
+
 		for property, value in (properties or {}) do
 			if property ~= "Delay" and property ~= "Duration" then
 				newSoundObject[property] = value
@@ -106,9 +112,9 @@ function AudioService:Create(id, target, properties, args)
 		end
 
 		if args.name and args.name == "Music" then
-			newSoundObject["Volume"] = General.MusicScale * (PlayerValues:GetValue(LocalPlayer, "Music") or SettingsData.Music.default)
+			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Music") or SettingsData.Music.default)
 		else
-			newSoundObject["Volume"] = General.SoundScale * (PlayerValues:GetValue(LocalPlayer, "Sounds") or SettingsData.Sounds.default)
+			newSoundObject["Volume"] *= (PlayerValues:GetValue(LocalPlayer, "Sounds") or SettingsData.Sounds.default)
 		end
 
 		local container
