@@ -17,7 +17,7 @@ local AudioService = require(Utility.AudioService)
 
 local DataBase = ReplicatedStorage.Database
 local EventData = require(DataBase:WaitForChild("EventData"))
-local data = EventData[script.Name]
+local data = EventData.Events[script.Name]
 
 local LocalPlayer
 

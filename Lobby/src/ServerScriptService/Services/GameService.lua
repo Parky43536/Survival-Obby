@@ -23,11 +23,11 @@ function GameService:SetUpData()
     local currentEvent = 1
 
     for _, event in (General.AppearanceOrder) do
-        if not EventData[event].blocked then
-            EventData[event].level = currentLevel
+        if not EventData.Events[event].blocked then
+            EventData.Events[event].level = currentLevel
 
             if not General.Signs[currentLevel] then
-                General.Signs[currentLevel] = EventData[event].name .. "s will now appear"
+                General.Signs[currentLevel] = EventData.Events[event].name .. "s will now appear"
             end
 
             currentLevel += General.LevelMultiple
@@ -36,19 +36,21 @@ function GameService:SetUpData()
 
     for levelNum = currentLevel, General.Levels, General.LevelMultiple do
         local event = General.UpgradeOrder[currentEvent]
-        if EventData[event].blocked then
+        if EventData.Events[event].blocked then
             repeat
                 currentEvent += 1
                 if currentEvent > #General.UpgradeOrder then
                     currentEvent = 1
                 end
                 event = General.UpgradeOrder[currentEvent]
-            until not EventData[event].blocked
+            until not EventData.Events[event].blocked
         end
-        table.insert(EventData[event].upgrades, currentLevel)
+
+        if not EventData.Events[event].upgrades then EventData.Events[event].upgrades = {} end
+        table.insert(EventData.Events[event].upgrades, currentLevel)
 
         if not General.Signs[currentLevel] then
-            General.Signs[currentLevel] = EventData[event].name .. "s have been upgraded"
+            General.Signs[currentLevel] = EventData.Events[event].name .. "s have been upgraded"
         end
 
         currentLevel += General.LevelMultiple

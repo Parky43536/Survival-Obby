@@ -80,7 +80,7 @@ function Event.Main(levelNum, level, data)
                                 local delta = player.Character.PrimaryPart.Position - spinner.Beam.Position
                                 local bv = Instance.new("BodyVelocity")
                                 bv.maxForce = Vector3.new(1e9, 1e9, 1e9)
-                                bv.velocity = delta.unit * 15
+                                bv.velocity = delta.unit * data.force
                                 bv.Parent = player.Character.PrimaryPart
                                 game:GetService("Debris"):AddItem(bv, 0.05)
 

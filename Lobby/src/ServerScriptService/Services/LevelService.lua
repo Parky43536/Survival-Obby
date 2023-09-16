@@ -288,31 +288,39 @@ end
 local requiredEvents = {}
 function LevelService:ButtonEvent(levelNum, level)
     local rng = Random.new()
-    local pickedEvent
+    local eventList = EventData:getList()
+    local name
+    local data
 
-    for event, data in (EventData) do
+    repeat
+        local valid = true
+        local num = rng:NextInteger(1, #eventList)
+
+        name = eventList[num]
+        data = EventData.Events[name]
+
         if data.blocked or levelNum < data.level then
-            continue
+            valid = false
         end
 
-        if rng:NextNumber(0, data.chance) <= 1 then
-            if not pickedEvent then
-                pickedEvent = event
-            elseif EventData[pickedEvent].chance < data.chance then
-                pickedEvent = event
+        if valid then
+           task.spawn(function()
+                if not requiredEvents[name] then
+                    requiredEvents[name] = require(Events:FindFirstChild(name))
+                end
+
+                requiredEvents[name].Main(levelNum, level, EventData.Events[name])
+            end)
+
+            if data.pickAgain then
+                valid = false
             end
         end
-    end
 
-    if pickedEvent then
-        task.spawn(function()
-            if not requiredEvents[pickedEvent] then
-                requiredEvents[pickedEvent] = require(Events:FindFirstChild(pickedEvent))
-            end
-
-            requiredEvents[pickedEvent].Main(levelNum, level, EventData[pickedEvent])
-        end)
-    end
+        if not valid then
+            table.remove(eventList, num)
+        end
+    until valid
 end
 
 return LevelService
