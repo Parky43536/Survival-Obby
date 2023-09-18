@@ -137,7 +137,6 @@ EventData.Events = {
 	["Heal"] = {
 		name = "Heal",
 		level = 1,
-		pickAgain = true,
 
 		heal = 0.1,
 		despawnTime = 30,
@@ -145,8 +144,7 @@ EventData.Events = {
 	["Coin"] = {
 		name = "Coin",
 		level = 1,
-		chances = 3,
-		pickAgain = true,
+		blocked = true,
 
 		value = 10,
 		despawnTime = 30,
@@ -158,9 +156,7 @@ function EventData:getList()
 
 	for name, data in (EventData.Events) do
 		if not data.blocked then
-			for i = 1 , data.chances or 1 do
-				table.insert(indexList, name)
-			end
+			table.insert(indexList, name)
 		end
 	end
 

@@ -8,7 +8,6 @@ General.Levels = 200
 General.DoorTime = 20
 General.LevelReward = 50
 General.LevelMultiple = 5
-General.EventsPerSecond = 1
 
 General.MusicScale = 0.1
 General.SoundScale = 0.2

@@ -135,10 +135,8 @@ function LevelService:SetUpButton(levelNum, level)
 
             local noPlayers = 0
             for i = 1 , General.TimerCalc(levelNum) do
-                for j = 1 , General.EventsPerSecond do
-                    LevelService:ButtonEvent(levelNum, level)
-                    task.wait(1 / General.EventsPerSecond)
-                end
+                LevelService:ButtonEvent(levelNum, level)
+                task.wait(1)
 
                 --area check
                 local cframe, size = EventService:getBoundingBox(level.Floor)
@@ -311,16 +309,23 @@ function LevelService:ButtonEvent(levelNum, level)
 
                 requiredEvents[name].Main(levelNum, level, EventData.Events[name])
             end)
-
-            if data.pickAgain then
-                valid = false
-            end
         end
 
         if not valid then
             table.remove(eventList, num)
         end
     until valid
+
+    local num = rng:NextInteger(1, 2)
+    if num == 1 then
+        task.spawn(function()
+            if not requiredEvents["Coin"] then
+                requiredEvents["Coin"] = require(Events:FindFirstChild("Coin"))
+            end
+
+            requiredEvents["Coin"].Main(levelNum, level, EventData.Events["Coin"])
+        end)
+    end
 end
 
 return LevelService
