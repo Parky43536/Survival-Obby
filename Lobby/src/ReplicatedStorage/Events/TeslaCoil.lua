@@ -16,6 +16,9 @@ local Event = {}
 local function RV(levelNum, data, value)
     local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
+    if value == "damage" then
+        return data.damage + data.damageIncrease * upgrades
+    end
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
     end
@@ -56,7 +59,7 @@ function Event.Main(levelNum, level, data)
 
                             AudioService:Create(9117877055, player.Character.PrimaryPart, {Pitch = math.random(10, 20) / 10, Volume = 0.5})
 
-                            player.Character.Humanoid:TakeDamage(data.damage)
+                            player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                         end
                     end
                 end

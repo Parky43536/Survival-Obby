@@ -18,6 +18,9 @@ local touchCooldown = {}
 local function RV(levelNum, data, value)
     local upgrades = EventService:totalUpgrades(levelNum, data.upgrades)
 
+    if value == "damage" then
+        return data.damage + data.damageIncrease * upgrades
+    end
     if value == "size" then
         return data.size + data.sizeIncrease * upgrades
     end
@@ -102,7 +105,7 @@ function Event.Main(levelNum, level, data)
 
                                 AudioService:Create(9118908929, player.Character.PrimaryPart, {TimePosition = 1.5, Pitch = math.random(10, 20) / 10, Volume = 0.75})
 
-                                player.Character.Humanoid:TakeDamage(data.damage)
+                                player.Character.Humanoid:TakeDamage(RV(levelNum, data, "damage"))
                             end
                         end
                     end)

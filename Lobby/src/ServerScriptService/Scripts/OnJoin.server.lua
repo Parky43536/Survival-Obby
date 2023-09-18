@@ -37,38 +37,46 @@ local function playerAdded(newPlayer)
     end
 
     local function loadPlayer()
-        local currentLevel = PlayerValues:GetValue(newPlayer, "CurrentLevel") or DataManager:GetValue(newPlayer, "Level")
+        local loadCooldown = 2
+        if not PlayerValues:GetValue(newPlayer, "LifeId") then
+            PlayerValues:SetValue(newPlayer, "LifeId", tick()- loadCooldown)
+        end
+        if tick() - PlayerValues:GetValue(newPlayer, "LifeId") > loadCooldown then
+            PlayerValues:SetValue(newPlayer, "LifeId", tick())
 
-        task.spawn(function()
-            if not newPlayer.Character then
-                repeat task.wait(1) until newPlayer.Character
-            end
+            local currentLevel = PlayerValues:GetValue(newPlayer, "CurrentLevel") or DataManager:GetValue(newPlayer, "Level")
 
-            if currentLevel ~= 0 then
-                local level = workspace.Levels:FindFirstChild(currentLevel)
-
-                if not level then
-                    repeat
-                        level = workspace.Levels:FindFirstChild(currentLevel)
-                        task.wait()
-                    until level
+            task.spawn(function()
+                if not newPlayer.Character then
+                    repeat task.wait() until newPlayer.Character
                 end
 
-                repeat
-                    newPlayer.Character:PivotTo(level.Door.PlayerSpawn.CFrame)
-                    task.wait()
-                until General.playerCheck(newPlayer) and (newPlayer.Character:GetPivot().Position - level.Door.PlayerSpawn.Position).Magnitude < 10
-            else
-                repeat
-                    task.wait()
-                until General.playerCheck(newPlayer)
-            end
+                if currentLevel ~= 0 then
+                    local level = workspace.Levels:FindFirstChild(currentLevel)
 
-            ClientService:InitializeLife(newPlayer)
-            ClientService:SetPlayerStats(newPlayer)
-            ShopService:InitializePurchases(newPlayer)
-            ShopService:InitializeTools(newPlayer)
-        end)
+                    if not level then
+                        repeat
+                            level = workspace.Levels:FindFirstChild(currentLevel)
+                            task.wait()
+                        until level
+                    end
+
+                    repeat
+                        newPlayer.Character:PivotTo(level.Door.PlayerSpawn.CFrame)
+                        task.wait()
+                    until General.playerCheck(newPlayer) and (newPlayer.Character:GetPivot().Position - level.Door.PlayerSpawn.Position).Magnitude < 10
+                else
+                    repeat
+                        task.wait()
+                    until General.playerCheck(newPlayer)
+                end
+
+                ClientService:InitializeLife(newPlayer)
+                ClientService:SetPlayerStats(newPlayer)
+                ShopService:InitializePurchases(newPlayer)
+                ShopService:InitializeTools(newPlayer)
+            end)
+        end
     end
 
     loadPlayer()

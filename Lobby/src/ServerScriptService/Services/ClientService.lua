@@ -94,7 +94,6 @@ function ClientService:SetPlayerStats(player)
 end
 
 function ClientService:InitializeLife(player)
-    PlayerValues:SetValue(player, "LifeId", tick())
     PlayerValues:SetValue(player, "SpeedBoost", 0)
 
 	if not PlayerValues:GetValue(player, "God Powers") then
@@ -107,6 +106,37 @@ function ClientService:InitializeLife(player)
             characterPart.CollisionGroup = "Player"
         end
     end
+
+    local jumping = false
+    local currentJump
+    player.Character.Humanoid:GetPropertyChangedSignal("Jump"):Connect(function()
+        if not jumping then
+            jumping = true
+
+            local jump = tick()
+            currentJump = jump
+            PlayerValues:SetValue(player, "Jumping", true)
+
+            local jumpConnect
+            jumpConnect = player.Character.Humanoid.StateChanged:connect(function(old, new)
+                if new ~= Enum.HumanoidStateType.Freefall and
+                new ~= Enum.HumanoidStateType.Jumping and
+                new ~= Enum.HumanoidStateType.FallingDown and
+                new ~= Enum.HumanoidStateType.PlatformStanding then
+                    jumping = false
+                    jumpConnect:Disconnect()
+
+                    if new ~= Enum.HumanoidStateType.Physics and
+                    new ~= Enum.HumanoidStateType.GettingUp then
+                        task.wait(0.25)
+                        if currentJump == jump then
+                            PlayerValues:SetValue(player, "Jumping", nil)
+                        end
+                    end
+                end
+            end)
+        end
+    end)
 end
 
 function ClientService:InitializeClient(player, profile)

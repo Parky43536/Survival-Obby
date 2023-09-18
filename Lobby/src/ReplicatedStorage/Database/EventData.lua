@@ -18,6 +18,7 @@ EventData.Events = {
 		damage = 20,
 
 		sizeIncrease = 5,
+		damageIncrease = 10,
 	},
 	["AcidPuddle"] = {
 		name = "Acid Puddle",
@@ -26,9 +27,10 @@ EventData.Events = {
 		growTime = 6,
 		delayTime = 1,
 		size = 30,
-		damage = 25,
+		damage = 20,
 
 		sizeIncrease = 5,
+		damageIncrease = 10,
 	},
 	["LaserWall"] = {
 		name = "Laser Wall",
@@ -38,7 +40,7 @@ EventData.Events = {
 		laserDelayTime = 1,
 		damage = 60,
 
-		damageIncrease = 5,
+		damageIncrease = 10,
 	},
 	["Landmine"] = {
 		name = "Landmine",
@@ -48,7 +50,7 @@ EventData.Events = {
 		damage = 50,
 
 		sizeIncrease = 4,
-		damageIncrease = 5,
+		damageIncrease = 10,
 	},
 	["FallingRock"] = {
 		name = "Falling Rock",
@@ -61,6 +63,7 @@ EventData.Events = {
 		damage = 30,
 
 		sizeIncrease = 2,
+		damageIncrease = 10,
 	},
 	["SpeedingWall"] = {
 		name = "Speeding Wall",
@@ -75,13 +78,13 @@ EventData.Events = {
 
 		faceRate = 30,
 		delayTime = 2,
-		speed = 50,
+		speed = 40,
 		size = 20,
 		damage = 50,
 
-		speedIncrease = 2,
+		speedIncrease = 5,
 		sizeIncrease = 4,
-		damageIncrease = 5,
+		damageIncrease = 10,
 	},
 	["ButtonBot"] = {
 		name = "Button Bot",
@@ -91,6 +94,7 @@ EventData.Events = {
 		damage = 20,
 
 		speedIncrease = 3,
+		damageIncrease = 10,
 	},
 	["Spinner"] = {
 		name = "Spinner",
@@ -100,9 +104,9 @@ EventData.Events = {
 		delayTime = 1,
 		tripTime = 0.5,
 		force = 25,
-		size = 20,
+		size = 18,
 
-		sizeIncrease = 5,
+		sizeIncrease = 4,
 	},
 	["LavaLine"] = {
 		name = "Lava Line",
@@ -111,9 +115,10 @@ EventData.Events = {
 		despawnTime = 6,
 		delayTime = 1,
 		size = 8,
-		damage = 25,
+		damage = 20,
 
 		sizeIncrease = 4,
+		damageIncrease = 10,
 	},
 	["Spike"] = {
 		name = "Spike",
@@ -121,7 +126,7 @@ EventData.Events = {
 
 		despawnTime = 10,
 		delayTime = 0.5,
-		damage = 75,
+		damage = 80,
 	},
 	["Bomb"] = {
 		name = "Bomb",
@@ -132,7 +137,7 @@ EventData.Events = {
 		damage = 50,
 
 		sizeIncrease = 4,
-		damageIncrease = 5,
+		damageIncrease = 10,
 	},
 	["Heal"] = {
 		name = "Heal",
