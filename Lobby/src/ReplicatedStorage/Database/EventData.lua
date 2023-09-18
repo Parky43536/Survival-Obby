@@ -43,7 +43,6 @@ EventData.Events = {
 	["Landmine"] = {
 		name = "Landmine",
 
-		despawnTime = 60,
 		delayTime = 1.5,
 		size = 25,
 		damage = 50,
@@ -69,7 +68,7 @@ EventData.Events = {
 		speed = 25,
 		size = 18,
 
-		sizeIncrease = 4,
+		sizeIncrease = 2,
 	},
 	["Rocket"] = {
 		name = "Rocket",
@@ -84,6 +83,15 @@ EventData.Events = {
 		sizeIncrease = 4,
 		damageIncrease = 5,
 	},
+	["ButtonBot"] = {
+		name = "Button Bot",
+		level = 1,
+
+		speed = 13,
+		damage = 20,
+
+		speedIncrease = 3,
+	},
 	["Spinner"] = {
 		name = "Spinner",
 		level = 1,
@@ -92,7 +100,7 @@ EventData.Events = {
 		delayTime = 1,
 		tripTime = 0.5,
 		force = 25,
-		size = 25,
+		size = 20,
 
 		sizeIncrease = 5,
 	},

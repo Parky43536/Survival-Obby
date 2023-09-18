@@ -13,7 +13,6 @@ General.EventsPerSecond = 1
 General.MusicScale = 0.1
 General.SoundScale = 0.2
 
-
 function General.TimerCalc(levelNum)
     return math.clamp(8 + (2 * levelNum), 0, 30)
 end
@@ -132,13 +131,14 @@ General.UpgradeOrder = {
     [2] = "Spike",
     [3] = "LavaLine",
     [4] = "Spinner",
-    [5] = "Rocket",
-    [6] = "SpeedingWall",
-    [7] = "FallingRock",
-    [8] = "Landmine",
-    [9] = "LaserWall",
-    [10] = "AcidPuddle",
-    [11] = "TeslaCoil",
+    [5] = "ButtonBot",
+    [6] = "Rocket",
+    [7] = "SpeedingWall",
+    [8] = "FallingRock",
+    [9] = "Landmine",
+    [10] = "LaserWall",
+    [11] = "AcidPuddle",
+    [12] = "TeslaCoil",
 }
 
 --Colors---------------------------------------------

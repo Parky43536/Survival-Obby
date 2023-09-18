@@ -36,11 +36,6 @@ function Event.Main(levelNum, level, data)
 
             task.wait(data.delayTime)
             if landmine.Parent ~= nil then
-                --[[if levelNum >= data.upgrade then
-                    local tweenInfo = TweenInfo.new(data.delayTime)
-                    ModelTweenService.TweenModuleTransparency(landmine, tweenInfo, 0.9)
-                end]]
-
                 local hit = false
                 local touchConnection
                 touchConnection = landmine.PrimaryPart.Touched:Connect(function()
@@ -75,12 +70,6 @@ function Event.Main(levelNum, level, data)
                         end
                     end
                 end)
-
-                task.wait(data.despawnTime)
-                if landmine.Parent ~= nil then
-                    touchConnection:Disconnect()
-                    landmine:Destroy()
-                end
             end
         end
     end
