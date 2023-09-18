@@ -91,7 +91,7 @@ EventData.Events = {
 		despawnTime = 8,
 		delayTime = 1,
 		tripTime = 0.5,
-		force = 30,
+		force = 25,
 		size = 25,
 
 		sizeIncrease = 5,
@@ -120,7 +120,7 @@ EventData.Events = {
 		level = 1,
 
 		delayTime = 2,
-		size = 40,
+		size = 30,
 		damage = 50,
 
 		sizeIncrease = 4,

@@ -31,7 +31,8 @@ function Event.Main(levelNum, level, data)
         bomb.Position = rp.Position + Vector3.new(0, 3.5, 0)
         EventService:parentToObstacles(levelNum, bomb)
 
-        AudioService:Create(11565378, bomb, {Volume = 0.8, Duration = 2})
+        task.wait()
+        AudioService:Create(11565378, bomb, {Volume = 0.8, Duration = data.delayTime})
 
         task.wait(data.delayTime)
 
