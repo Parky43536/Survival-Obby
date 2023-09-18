@@ -17,6 +17,7 @@ local AudioService = require(Utility.AudioService)
 local Event = {}
 
 local touchCooldown = {}
+local killCooldown = {}
 local bots = {}
 
 local walk = Instance.new("Animation")
@@ -90,12 +91,37 @@ function Event.Main(levelNum, level, data)
         touchConnection = bot.Hitbox.Touched:Connect(function(hit)
             local player = game.Players:GetPlayerFromCharacter(hit.Parent)
             if player and player.Character then
-                if player.Character.PrimaryPart.Position.Y > bot.PrimaryPart.Position.Y + 3 then
-                    --AudioService:Create(9118908929, player.Character.PrimaryPart, {TimePosition = 1.5, Pitch = math.random(10, 20) / 10, Volume = 0.75})
+                if not killCooldown[player] then
+                    killCooldown[player] = tick() - EventService.TouchCooldown / 2
+                end
+                if tick() - killCooldown[player] > EventService.TouchCooldown / 2 then
+                    killCooldown[player] = tick()
 
-                    bot:Destroy()
-                    touchConnection:Disconnect()
-                    return
+                    if player.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Running and
+                        player.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Climbing and
+                        player.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Dead then
+
+                        local particle = Obstacle.Explosion:Clone()
+                        particle:PivotTo(bot.PrimaryPart.CFrame)
+                        particle.Parent = workspace
+
+                        AudioService:Create(16433289, bot.PrimaryPart.Position, {Volume = 0.4})
+
+                        local growsize = Vector3.new(1, 1, 1) * 4
+                        local goal = {Transparency = 0.9, Size = growsize}
+                        local properties = {Time = 0.15}
+                        TweenService.tween(particle, goal, properties)
+
+                        local goal = {Transparency = 1}
+                        local properties = {Time = 1.35}
+                        TweenService.tween(particle, goal, properties)
+
+                        game.Debris:AddItem(particle, 1.5)
+
+                        bot:Destroy()
+                        touchConnection:Disconnect()
+                        return
+                    end
                 end
 
                 if not touchCooldown[player] then
@@ -104,26 +130,12 @@ function Event.Main(levelNum, level, data)
                 if tick() - touchCooldown[player] > EventService.TouchCooldown then
                     touchCooldown[player] = tick()
 
-                    if player.Character.PrimaryPart.Position.Y < bot.PrimaryPart.Position.Y + 3 then
-                        --AudioService:Create(9118908929, player.Character.PrimaryPart, {TimePosition = 1.5, Pitch = math.random(10, 20) / 10, Volume = 0.75})
+                    AudioService:Create(45428486, player.Character.PrimaryPart, {Pitch = 5 + (math.random(0, 20) / 10), Volume = 0.5})
 
-                        player.Character.Humanoid:TakeDamage(data.damage)
-                    end
+                    player.Character.Humanoid:TakeDamage(data.damage)
                 end
             end
         end)
-
-        --[[local killConnection
-        killConnection = bot.Killbox.Touched:Connect(function(hit)
-            local player = game.Players:GetPlayerFromCharacter(hit.Parent)
-            if player and player.Character then
-                --AudioService:Create(9118908929, player.Character.PrimaryPart, {TimePosition = 1.5, Pitch = math.random(10, 20) / 10, Volume = 0.75})
-
-                bot:Destroy()
-                touchConnection:Disconnect()
-                killConnection:Disconnect()
-            end
-        end)]]
 
         Event.MoveBot(bot, level)
 
