@@ -56,8 +56,6 @@ end
 local function levelsUi()
     local currentLevel = PlayerValues:GetValue(LocalPlayer, "Level") or 0
 
-    
-
     for levelNum = 0 , General.Levels + 1 do
         local level
 

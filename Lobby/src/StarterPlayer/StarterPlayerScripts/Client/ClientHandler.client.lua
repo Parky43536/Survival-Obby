@@ -16,6 +16,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local PlayerUi = PlayerGui:WaitForChild("PlayerUi")
 local LeftFrame = PlayerUi:WaitForChild("LeftFrame")
 local RightFrame = PlayerUi:WaitForChild("RightFrame")
+local Warning = PlayerUi:WaitForChild("Warning")
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ClientConnection = Remotes:WaitForChild("ClientConnection")
@@ -34,10 +35,6 @@ local function comma_value(amount)
         end
     end
     return formatted
-end
-
-local function round(number, decimal)
-    return math.round(number * 10 ^ decimal) / (10 ^ decimal)
 end
 
 ------------------------------------------------------------------
@@ -134,6 +131,10 @@ PlayerValues:SetCallback("AutoUpgrade", function()
     autoUpgrade()
 end)
 
+ClientConnection.OnClientEvent:Connect(function()
+    loadCash(PlayerValues:GetValue(LocalPlayer, "Cash"))
+end)
+
 ------------------------------------------------------------------
 
 local mobile = false
@@ -175,6 +176,11 @@ mobileUi()
 
 ------------------------------------------------------------------
 
-ClientConnection.OnClientEvent:Connect(function()
-    loadCash(PlayerValues:GetValue(LocalPlayer, "Cash"))
+Warning.Activated:Connect(function()
+    Warning.Visible = false
+    DataConnection:FireServer("TeleportToLevel", {level = PlayerValues:GetValue(LocalPlayer, "Level") or 0})
+end)
+
+DataConnection.OnClientEvent:Connect(function()
+    Warning.Visible = true
 end)

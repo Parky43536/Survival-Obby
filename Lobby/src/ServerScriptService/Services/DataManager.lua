@@ -230,7 +230,7 @@ function DataManager:SetSpawn(player, levelNum)
 	else
 		if DataManager:GetValue(player, "Level") + 1 < levelNum and alertCooldowns[player] ~= levelNum then
 			alertCooldowns[player] = levelNum
-			--[ALERT] Your level didn't progress! Go back!"
+			DataConnection:FireClient(player)
 		end
 	end
 
