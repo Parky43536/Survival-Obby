@@ -16,6 +16,10 @@ local EventService = require(Utility.EventService)
 
 local GameService = {}
 
+local signBot = Instance.new("Animation")
+signBot.AnimationId = "rbxassetid://14820795173"
+signBot.Parent = script
+
 function GameService:SetUpData()
     --set up level and upgrades in eventdata and signs in general
 
@@ -137,18 +141,20 @@ function GameService:SetUpLevels()
         level.Door.Level.Front.Label.Text = levelNum
         level.Door.Level.Back.Label.Text = levelNum
 
-        if General.Signs[levelNum] then
-            level.Door.Sign.Top.Label.Text = General.Signs[levelNum]
-        else
-            level.Door.Sign:Destroy()
-        end
-
         LevelService:SetUpButton(levelNum, level)
         LevelService:SetUpDoor(levelNum, level)
         LevelService:SetUpLevelColor(levelNum, level)
         LevelService:SetUpAdvertisement(levelNum, level)
 
         level.Parent = workspace.Levels
+
+        if General.Signs[levelNum] then
+            level.Door.SignBot.Sign.Top.Label.Text = General.Signs[levelNum]
+            local signBotTrack = level.Door.SignBot.AnimationController:LoadAnimation(signBot)
+            signBotTrack:Play()
+        else
+            level.Door.SignBot:Destroy()
+        end
     end
 
     local finish = Assets.Misc:FindFirstChild("Finish"):Clone()
