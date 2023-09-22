@@ -7,7 +7,7 @@ local General = {}
 General.Levels = 200
 General.DoorTime = 20
 General.LevelReward = 50
-General.LevelMultiple = 5
+General.LevelMultiple = 3
 
 General.MusicScale = 0.1
 General.SoundScale = 0.2
@@ -106,12 +106,10 @@ end
 
 General.Signs = {
     [1] = "Step on the button and survive to open the door",
-    [2] = "Collect coins to buy upgrades and tools in the shop",
-    [3] = "One person must be alive or the button will start over",
+    [2] = "Collect coins to buy upgrades and tools",
 }
 
 General.LevelOrder = {
-    [2] = "Advertiser",
 }
 
 General.AppearanceOrder = {
@@ -123,6 +121,7 @@ General.AppearanceOrder = {
     [6] = "AcidPuddle",
     [7] = "TeslaCoil",
     [8] = "Nuke",
+    [9] = "HomingRocket",
 }
 
 General.UpgradeOrder = {
@@ -138,6 +137,7 @@ General.UpgradeOrder = {
     [10] = "LaserWall",
     [11] = "AcidPuddle",
     [12] = "TeslaCoil",
+    [13] = "HomingRocket",
 }
 
 --Colors---------------------------------------------

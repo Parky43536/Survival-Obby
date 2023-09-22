@@ -289,6 +289,7 @@ function LevelService:ButtonEvent(levelNum, level)
     local eventList = EventData:getList()
     local name
     local data
+    local scriptName
 
     repeat
         local valid = true
@@ -296,6 +297,11 @@ function LevelService:ButtonEvent(levelNum, level)
 
         name = eventList[num]
         data = EventData.Events[name]
+        scriptName = name
+
+        if data.copyOf then
+            scriptName = data.copyOf
+        end
 
         if data.blocked or levelNum < data.level then
             valid = false
@@ -303,11 +309,11 @@ function LevelService:ButtonEvent(levelNum, level)
 
         if valid then
            task.spawn(function()
-                if not requiredEvents[name] then
-                    requiredEvents[name] = require(Events:FindFirstChild(name))
+                if not requiredEvents[scriptName] then
+                    requiredEvents[scriptName] = require(Events:FindFirstChild(scriptName))
                 end
 
-                requiredEvents[name].Main(levelNum, level, EventData.Events[name])
+                requiredEvents[scriptName].Main(levelNum, level, data, name)
             end)
         end
 

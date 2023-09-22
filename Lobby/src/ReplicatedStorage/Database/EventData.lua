@@ -73,11 +73,18 @@ EventData.Events = {
 
 		sizeIncrease = 2,
 	},
+	["HomingRocket"] = {
+		name = "Homing Rocket",
+		copyOf = "Rocket",
+
+		speed = 20,
+	},
 	["Rocket"] = {
 		name = "Rocket",
 
-		faceRate = 30,
+		rate = 30,
 		delayTime = 2,
+		distance = 100,
 		speed = 40,
 		size = 20,
 		damage = 50,
@@ -162,6 +169,10 @@ function EventData:getList()
 	for name, data in (EventData.Events) do
 		if not data.blocked then
 			table.insert(indexList, name)
+		end
+
+		if data.TESTING then
+			return {name}
 		end
 	end
 

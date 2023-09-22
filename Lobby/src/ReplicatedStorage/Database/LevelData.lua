@@ -1,6 +1,12 @@
 local LevelData = {}
 
 LevelData.Levels = {
+	["Split"] = {
+		level = 4,
+	},
+	["Dip"] = {
+		level = 4,
+	},
 	["Wall"] = {
 		level = 4,
 	},
@@ -8,9 +14,6 @@ LevelData.Levels = {
 		level = 4,
 	},
 	["Advertiser"] = {
-		level = 4,
-	},
-	["House"] = {
 		level = 4,
 	},
 	["Wide"] = {
@@ -22,10 +25,12 @@ LevelData.Levels = {
 	["Ramp"] = {
 		level = 4,
 		elevationChange = true,
+		chances = 8,
 	},
 	["Right"] = {
 		level = 4,
-		turn = true
+		turn = true,
+		chances = 8,
 	},
 	["Default"] = {
 		level = 0,
@@ -37,7 +42,9 @@ function LevelData:getList()
 
 	for name, data in (LevelData.Levels) do
 		if not data.blocked then
-			table.insert(indexList, name)
+			for _= 1, data.chances or 1 do
+				table.insert(indexList, name)
+			end
 		end
 	end
 

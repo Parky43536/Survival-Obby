@@ -60,10 +60,23 @@ local function destroyRocket(rocket, touchConnection, levelNum, data)
     end
 end
 
-function Event.Main(levelNum, level, data)
+local function homingRocket(rocket, targetPlayer, levelNum, data)
+    local target = targetPlayer.Character.PrimaryPart.Position + rocket.CFrame.LookVector * (data.distance / 2)
+    local timeToTarget = (rocket.Position - target).Magnitude / RV(levelNum, data, "speed")
+
+    rocket.CFrame = CFrame.new(rocket.Position, target)
+
+    local goal = {Position = target}
+    local properties = {Time = timeToTarget}
+    local travelTween = TweenService.tween(rocket, goal, properties)
+
+    return travelTween
+end
+
+function Event.Main(levelNum, level, data, name)
     local rOS = EventService:randomObstacleSpawner(levelNum, level)
     if rOS then
-        local rocket = Obstacle.Rocket:Clone()
+        local rocket = Obstacle:FindFirstChild(name):Clone()
         rocket:SetPrimaryPartCFrame(rOS.CFrame)
 
         local cframe, size = EventService:getBoundingBox(level.Floor)
@@ -74,7 +87,7 @@ function Event.Main(levelNum, level, data)
         if targetPlayer then
             EventService:parentToObstacles(levelNum, rocket)
 
-            for i = 1 , data.faceRate do
+            for _ = 1 , data.rate do
                 if rocket.Parent ~= nil and General.playerCheck(targetPlayer) then
                     local rocketPos = rocket.Stand.PrimaryPart.Position
                     local targetPos = targetPlayer.Character.PrimaryPart.Position
@@ -82,7 +95,7 @@ function Event.Main(levelNum, level, data)
                     rocket.Stand:SetPrimaryPartCFrame(CFrame.new(rocketPos, targetPos))
                 end
 
-                task.wait(data.delayTime/data.faceRate)
+                task.wait(data.delayTime/data.rate)
             end
 
             if rocket.Parent ~= nil then
@@ -92,7 +105,7 @@ function Event.Main(levelNum, level, data)
                 rocket = realRocket
                 rocket.Attachment.Fire.Enabled = true
 
-                local target = rocket.CFrame + rocket.CFrame.LookVector * 100
+                local target = rocket.CFrame + rocket.CFrame.LookVector * data.distance
                 local timeToTarget = (rocket.Position - target.Position).Magnitude / RV(levelNum, data, "speed")
 
                 local Params = RaycastParams.new()
@@ -100,7 +113,7 @@ function Event.Main(levelNum, level, data)
                 Params.FilterDescendantsInstances = {workspace.Levels:GetChildren()}
 
                 local RayOrigin = rocket.Position
-                local RayDirection = rocket.CFrame.LookVector * 100
+                local RayDirection = rocket.CFrame.LookVector * data.distance
                 local Result = workspace:Raycast(RayOrigin, RayDirection, Params)
                 if Result then
                     target = Result
@@ -109,7 +122,7 @@ function Event.Main(levelNum, level, data)
 
                 local goal = {Position = target.Position}
                 local properties = {Time = timeToTarget}
-                TweenService.tween(rocket, goal, properties)
+                local travelTween = TweenService.tween(rocket, goal, properties)
 
                 touchConnection = rocket.Touched:Connect(function()
                     destroyRocket(rocket, touchConnection, levelNum, data)
@@ -118,15 +131,21 @@ function Event.Main(levelNum, level, data)
                 Params = RaycastParams.new()
                 Params.FilterType = Enum.RaycastFilterType.Blacklist
                 Params.FilterDescendantsInstances = {rocket}
-                for i = 1 , 10 do
+                for _ = 1 , data.rate do
                     if rocket.Parent ~= nil then
+                        if name == "HomingRocket" and General.playerCheck(targetPlayer) then
+                            travelTween:Pause()
+                            travelTween = homingRocket(rocket, targetPlayer, levelNum, data)
+                        end
+
                         RayOrigin = rocket.Position
-                        RayDirection = rocket.CFrame.LookVector * rocket.Size.Z / 2
+                        RayDirection = rocket.CFrame.LookVector * rocket.Size.Z
                         Result = workspace:Raycast(RayOrigin, RayDirection, Params)
                         if Result then
                             destroyRocket(rocket, touchConnection, levelNum, data)
                         end
-                        task.wait(timeToTarget/10)
+
+                        task.wait(timeToTarget / data.rate)
                     else
                         break
                     end

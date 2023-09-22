@@ -26,6 +26,18 @@ function GameService:SetUpData()
     local currentLevel = General.LevelMultiple
     local currentEvent = 1
 
+    --copyOf
+    for _, data in (EventData.Events) do
+        if data.copyOf then
+            for variable, value in (EventData.Events[data.copyOf]) do
+                if not data[variable] then
+                    data[variable] = value
+                end
+            end
+        end
+    end
+
+    --apperance
     for _, event in (General.AppearanceOrder) do
         if not EventData.Events[event].blocked then
             EventData.Events[event].level = currentLevel
@@ -38,6 +50,7 @@ function GameService:SetUpData()
         end
     end
 
+    --upgrades
     for levelNum = currentLevel, General.Levels, General.LevelMultiple do
         local event = General.UpgradeOrder[currentEvent]
         if EventData.Events[event].blocked then
@@ -70,7 +83,7 @@ function GameService:SetUpLevels()
     LevelService:SetUpLevelColor(0, start)
 
     local lastCFrame = start:GetPivot()
-    local turnsDisabled = false
+    local turnCooldown = 0
 
     for levelNum = 1, General.Levels do
         task.wait()
@@ -91,7 +104,7 @@ function GameService:SetUpLevels()
             data = LevelData.Levels[name]
 
             if data.turn then
-                if turnsDisabled == true then
+                if turnCooldown ~= 0 then
                     valid = false
                 end
             end
@@ -130,9 +143,9 @@ function GameService:SetUpLevels()
         until valid
 
         if data.elevationChange then
-            turnsDisabled = false
+            turnCooldown = math.clamp(turnCooldown - 1, 0, 1)
         elseif data.turn then
-            turnsDisabled = true
+            turnCooldown = 2
         end
 
         lastCFrame = level.Door.PrimaryPart.Attachment.WorldCFrame
